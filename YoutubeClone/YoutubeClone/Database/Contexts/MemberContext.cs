@@ -6,7 +6,7 @@ using YoutubeClone.Entities;
 
 namespace YoutubeClone.Database.Contexts 
 {
-    public class MemberContext 
+    public class MemberContext  
     {  
         public static ISession OpenSession()
         {
