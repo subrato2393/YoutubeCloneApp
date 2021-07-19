@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Autofac;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHibernate;
 using System;
@@ -31,7 +32,7 @@ namespace YoutubeClone.Controllers
         {
             try
             {
-                using (ISession session = NHibernateHelper.OpenSession())
+                using (ISession session = MemberContext.OpenSession())
                 {
                     using (ITransaction transaction = session.BeginTransaction())
                     {

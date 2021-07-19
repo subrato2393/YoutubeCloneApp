@@ -2,16 +2,12 @@
 using FluentNHibernate.Cfg.Db;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using YoutubeClone.Entities;
 
 namespace YoutubeClone.Database.Contexts 
 {
-    public class NHibernateHelper
-    { 
+    public class MemberContext 
+    {  
         public static ISession OpenSession()
         {
             ISessionFactory sessionFactory = Fluently.Configure()
