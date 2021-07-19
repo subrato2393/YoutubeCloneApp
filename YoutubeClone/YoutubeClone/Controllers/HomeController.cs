@@ -7,8 +7,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using YoutubeClone.Database.Contexts;
 using YoutubeClone.Entities;
+using YoutubeClone.Foundation.Database.Contexts;
 using YoutubeClone.Models;
 
 namespace YoutubeClone.Controllers
@@ -45,6 +45,7 @@ namespace YoutubeClone.Controllers
             }
             catch (Exception exception)
             {
+                _logger.LogError(exception, "error");
                 return View();
             }
         }
