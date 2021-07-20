@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using YoutubeClone.Models;
 
 namespace YoutubeClone.Controllers
@@ -18,6 +15,25 @@ namespace YoutubeClone.Controllers
             _logger = logger;
         }
 
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(ChannelModel model) 
+        {
+            try
+            {
+                model.AddChannelInformation(model);
+                return RedirectToAction("Index");
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "error");
+                return View();
+            }
+        }
         public IActionResult Index()
         {
             return View();

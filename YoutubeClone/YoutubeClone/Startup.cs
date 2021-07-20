@@ -1,3 +1,5 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using YoutubeClone.Data;
+using YoutubeClone.Foundation;
 
 namespace YoutubeClone
 {
@@ -23,6 +26,8 @@ namespace YoutubeClone
         }
 
         public IConfiguration Configuration { get; }
+        public static ILifetimeScope AutofacContainer { get; private set; }
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -30,15 +35,25 @@ namespace YoutubeClone
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
 
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            // This will all go in the ROOT CONTAINER and is NOT TENANT SPECIFIC.
+            builder.RegisterModule(new WebModule());
+            builder.RegisterModule(new FoundationModule());
+        }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            AutofacContainer = app.ApplicationServices.GetAutofacRoot();
+           
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
