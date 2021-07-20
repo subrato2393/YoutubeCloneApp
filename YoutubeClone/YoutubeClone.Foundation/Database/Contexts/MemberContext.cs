@@ -9,9 +9,9 @@ namespace YoutubeClone.Foundation.Database.Contexts
 {
     public class MemberContext  
     {  
-        public static ISession OpenSession()
+        public static ISessionFactory CreateSessionFactory() 
         {
-            ISessionFactory sessionFactory = Fluently.Configure()
+             ISessionFactory sessionFactory = Fluently.Configure()
             .Database(MsSqlConfiguration.MsSql2012
             .ConnectionString(@"Server=DESKTOP-FUMUVLC\SQLEXPRESS;Database=YoutubeDB;Integrated Security=True;")
             .ShowSql())
@@ -23,7 +23,11 @@ namespace YoutubeClone.Foundation.Database.Contexts
 
             .ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(false, true))
             .BuildSessionFactory();
-            return sessionFactory.OpenSession();
+             return sessionFactory;
+        }
+        public static ISession OpenSession()
+        {
+           return CreateSessionFactory().OpenSession();
         }
     }
 }

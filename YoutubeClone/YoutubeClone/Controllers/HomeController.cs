@@ -1,14 +1,7 @@
-﻿using Autofac;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHibernate;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using YoutubeClone.Entities;
-using YoutubeClone.Foundation.Database.Contexts;
 using YoutubeClone.Models;
 
 namespace YoutubeClone.Controllers
@@ -28,19 +21,11 @@ namespace YoutubeClone.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Channel channel)
+        public IActionResult Create(ChannelModel model) 
         {
             try
             {
-                using (ISession session = MemberContext.OpenSession())
-                {
-                    using (ITransaction transaction = session.BeginTransaction())
-                    {
-                        session.Save(channel);
-                        transaction.Commit();
-                    }
-                }
-
+                model.AddChannelInformation(model);
                 return RedirectToAction("Index");
             }
             catch (Exception exception)

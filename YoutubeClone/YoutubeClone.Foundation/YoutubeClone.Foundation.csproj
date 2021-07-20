@@ -6,13 +6,15 @@
 
   <ItemGroup>
     <Folder Include="BusinessObjects\" />
-    <Folder Include="Services\" />
-    <Folder Include="UnitOfWorks\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
     <PackageReference Include="FluentNHibernate" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\YoutubeClone.DataAccessLayer\YoutubeClone.DataAccessLayer.csproj" />
   </ItemGroup>
 
 </Project>

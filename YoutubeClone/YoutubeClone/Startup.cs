@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using YoutubeClone.Data;
+using YoutubeClone.Foundation;
 
 namespace YoutubeClone
 {
@@ -45,6 +46,7 @@ namespace YoutubeClone
         {
             // This will all go in the ROOT CONTAINER and is NOT TENANT SPECIFIC.
             builder.RegisterModule(new WebModule());
+            builder.RegisterModule(new FoundationModule());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

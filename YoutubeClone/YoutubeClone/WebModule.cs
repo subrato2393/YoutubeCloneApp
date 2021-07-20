@@ -1,8 +1,6 @@
 ﻿using Autofac;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using YoutubeClone.Foundation.Services;
+using YoutubeClone.Models;
 
 namespace YoutubeClone
 {
@@ -10,8 +8,10 @@ namespace YoutubeClone
     {
         protected override void Load(ContainerBuilder builder)
         {
-            //builder.RegisterType<TestServices>().As<ITestServices>()
-            //    .InstancePerLifetimeScope();
+            builder.RegisterType<ChannelService>().As<IChannelService>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<ChannelModel>().AsSelf();
 
             base.Load(builder);
         }

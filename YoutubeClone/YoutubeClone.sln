@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YoutubeClone", "YoutubeClon
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutubeClone.Foundation", "YoutubeClone.Foundation\YoutubeClone.Foundation.csproj", "{E9193A8D-2382-4396-9A6A-EB07658F79C8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutubeClone.DataAccessLayer", "YoutubeClone.DataAccessLayer\YoutubeClone.DataAccessLayer.csproj", "{8725E343-0910-4217-BFEE-37BD41676DB8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{E9193A8D-2382-4396-9A6A-EB07658F79C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9193A8D-2382-4396-9A6A-EB07658F79C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9193A8D-2382-4396-9A6A-EB07658F79C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8725E343-0910-4217-BFEE-37BD41676DB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8725E343-0910-4217-BFEE-37BD41676DB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8725E343-0910-4217-BFEE-37BD41676DB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8725E343-0910-4217-BFEE-37BD41676DB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
