@@ -4,13 +4,12 @@ using Microsoft.Extensions.Configuration;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
 using System;
-using YoutubeClone.Entities;
-using YoutubeClone.Foundation.Entities;
+using System.Collections.Generic;
 using YoutubeClone.Membership.Entities;
 
-namespace YoutubeClone.Foundation.Database.Contexts
+namespace YoutubeClone.Membership.Database.Contexts
 {
-    public class MemberContext
+    public class IdentityContext
     {
         public static ISessionFactory CreateSessionFactory()
         {
@@ -25,17 +24,11 @@ namespace YoutubeClone.Foundation.Database.Contexts
             .Database(MsSqlConfiguration.MsSql2012
             .ConnectionString(connectionString)
             .ShowSql())
-            .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Channel>())
-            .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Likes>())
-            .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Subscriber>())
-            .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Views>())
-            .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Video>())
             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ApplicationUser>())
-
             .ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(false, true))
             .BuildSessionFactory();
-            
-             return sessionFactory;
+
+            return sessionFactory;
         }
         public static ISession OpenSession()
         {

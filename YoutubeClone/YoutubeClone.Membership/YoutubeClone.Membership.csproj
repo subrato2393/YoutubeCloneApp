@@ -5,18 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="BusinessObjects\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
     <PackageReference Include="FluentNHibernate" Version="3.1.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\YoutubeClone.DataAccessLayer\YoutubeClone.DataAccessLayer.csproj" />
-    <ProjectReference Include="..\YoutubeClone.Membership\YoutubeClone.Membership.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.0.0" />
   </ItemGroup>
 
 </Project>
