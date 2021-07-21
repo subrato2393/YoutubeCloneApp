@@ -10,7 +10,6 @@ namespace YoutubeClone.DataAccessLayer
         public UnitOfWork(ISession session)
         {
             _session = session;
-            _transaction = _session.BeginTransaction();
         }
         public void Commit()
         {
@@ -44,6 +43,11 @@ namespace YoutubeClone.DataAccessLayer
             {
                 _transaction.Dispose();
             }
+        }
+
+        public void BeginTransaction()
+        {
+            _transaction = _session.BeginTransaction();
         }
     }
 }

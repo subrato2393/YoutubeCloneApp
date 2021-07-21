@@ -13,6 +13,8 @@ namespace YoutubeClone.Foundation.Services
         }
         public void AddChannelInfo(Channel channel)
         {
+            _channelUnitOfWork.BeginTransaction();
+
             _channelUnitOfWork.ChannelRepository.Add(channel);
 
             _channelUnitOfWork.Commit();

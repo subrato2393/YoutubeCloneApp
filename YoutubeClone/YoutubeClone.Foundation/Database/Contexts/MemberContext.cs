@@ -1,19 +1,28 @@
 ﻿using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
+using Microsoft.Extensions.Configuration;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
+using System;
 using YoutubeClone.Entities;
 using YoutubeClone.Foundation.Entities;
 
-namespace YoutubeClone.Foundation.Database.Contexts 
+namespace YoutubeClone.Foundation.Database.Contexts
 {
-    public class MemberContext  
-    {  
-        public static ISessionFactory CreateSessionFactory() 
+    public class MemberContext
+    {
+        public static ISessionFactory CreateSessionFactory()
         {
-             ISessionFactory sessionFactory = Fluently.Configure()
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+           .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+           .AddJsonFile("appsettings.json")
+           .Build();
+
+            string connectionString = configuration.GetConnectionString("DefaultConnection");
+
+            ISessionFactory sessionFactory = Fluently.Configure()
             .Database(MsSqlConfiguration.MsSql2012
-            .ConnectionString(@"Server=DESKTOP-FUMUVLC\SQLEXPRESS;Database=YoutubeDB;Integrated Security=True;")
+            .ConnectionString(connectionString)
             .ShowSql())
             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Channel>())
             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Likes>())
@@ -23,11 +32,12 @@ namespace YoutubeClone.Foundation.Database.Contexts
 
             .ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(false, true))
             .BuildSessionFactory();
+            
              return sessionFactory;
         }
         public static ISession OpenSession()
         {
-           return CreateSessionFactory().OpenSession();
+            return CreateSessionFactory().OpenSession();
         }
     }
 }
