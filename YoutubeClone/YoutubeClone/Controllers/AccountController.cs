@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using YoutubeClone.Membership.Constant;
 using YoutubeClone.Membership.Entities;
 using YoutubeClone.Models;
 
@@ -49,7 +50,7 @@ namespace YoutubeClone.Controllers
                 {
                     _logger.LogInformation("User created a new account with password.");
                   
-                    await _userManager.AddToRoleAsync(user, "Member");
+                    await _userManager.AddToRoleAsync(user, MemberRole.UserRole);
                   
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                  

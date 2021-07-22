@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using YoutubeClone.Membership.Seed;
 
 namespace YoutubeClone.Membership
 {
@@ -6,6 +7,9 @@ namespace YoutubeClone.Membership
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<UserDataSeed>().As<IUserDataSeed>()
+                .InstancePerLifetimeScope();
+
             base.Load(builder);
         }
     }
