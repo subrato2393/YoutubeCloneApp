@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace YoutubeClone.Membership.Entities
 {
-    public class ApplicationUser : IdentityUser<string> 
+    public class ApplicationUser : IdentityUser<Guid> 
     {
         public virtual long? LockoutEndUnixTimeSeconds { get; set; }
         public override DateTimeOffset? LockoutEnd

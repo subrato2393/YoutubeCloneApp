@@ -11,7 +11,7 @@ using YoutubeClone.Membership.Entities;
 
 namespace YoutubeClone.Membership.IdentityStores
 {
-    public class UserOnlyStore<TUser> : UserStoreBase<TUser, string, UserClaim, UserLogin, UserToken>,
+    public class UserOnlyStore<TUser> : UserStoreBase<TUser, Guid, UserClaim, UserLogin, UserToken>,
         IProtectedUserStore<TUser> where TUser : ApplicationUser
     {
 
@@ -113,7 +113,7 @@ namespace YoutubeClone.Membership.IdentityStores
         }
 
         protected override async Task<TUser> FindUserAsync(
-            string userId,
+            Guid userId,
             CancellationToken cancellationToken
         ) {
             cancellationToken.ThrowIfCancellationRequested();
@@ -126,7 +126,7 @@ namespace YoutubeClone.Membership.IdentityStores
         }
 
         protected override async Task<UserLogin> FindUserLoginAsync(
-            string userId,
+            Guid userId,
             string loginProvider,
             string providerKey,
             CancellationToken cancellationToken

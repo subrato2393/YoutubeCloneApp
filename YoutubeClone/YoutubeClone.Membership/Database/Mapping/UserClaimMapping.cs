@@ -1,38 +1,17 @@
-using NHibernate;
-using NHibernate.Mapping.ByCode;
-using NHibernate.Mapping.ByCode.Conformist;
+using FluentNHibernate.Mapping;
 using YoutubeClone.Membership.Entities;
 
 namespace YoutubeClone.IdentityMapping 
 {
-    public class UserClaimMapping : ClassMapping<UserClaim> 
+    public class UserClaimMapping : ClassMap<UserClaim> 
     {
-        public UserClaimMapping() {
-            Schema("dbo");
+        public UserClaimMapping() 
+        {
+            Id(x => x.Id);
+            Map(x => x.ClaimType);
+            Map(x => x.ClaimValue);
+            Map(x => x.UserId);
             Table("AspNetUserClaims");
-            Id(e => e.Id, id => {
-                id.Column("id");
-                id.Type(NHibernateUtil.Int32);
-                id.Generator(Generators.Identity);
-            });
-            Property(e => e.ClaimType, prop => {
-                prop.Column("ClaimType");
-                prop.Type(NHibernateUtil.String);
-                prop.Length(1024);
-                prop.NotNullable(true);
-            });
-            Property(e => e.ClaimValue, prop => {
-                prop.Column("ClaimValue");
-                prop.Type(NHibernateUtil.String);
-                prop.Length(1024);
-                prop.NotNullable(true);
-            });
-            Property(e => e.UserId, prop => {
-                prop.Column("UserId");
-                prop.Type(NHibernateUtil.String);
-                prop.Length(32);
-                prop.NotNullable(true);
-            });
         }
     }
 }

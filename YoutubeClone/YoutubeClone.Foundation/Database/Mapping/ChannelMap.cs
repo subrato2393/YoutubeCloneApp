@@ -1,8 +1,4 @@
 ﻿using FluentNHibernate.Mapping;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using YoutubeClone.Entities;
  
 namespace YoutubeClone.Foundation.Database.Mapping
@@ -11,7 +7,6 @@ namespace YoutubeClone.Foundation.Database.Mapping
     {
         public ChannelMap()
         {
-            // Id(x => x.Id).GeneratedBy.Identity();
             Id(x => x.Id).Column("Id").GeneratedBy.GuidNative();
             Map(x => x.Name);
             Map(x => x.CreateDate);

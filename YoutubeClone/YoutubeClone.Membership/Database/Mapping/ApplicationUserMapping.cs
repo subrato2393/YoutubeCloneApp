@@ -5,7 +5,8 @@ namespace YoutubeClone.IdentityMapping
 {
     public class ApplicationUserMapping : ClassMap<ApplicationUser>
     {
-        public ApplicationUserMapping() {
+        public ApplicationUserMapping() 
+        {
             Id(x => x.Id);
             Map(x => x.UserName);
             Map(x => x.Email);

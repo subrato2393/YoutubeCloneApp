@@ -12,7 +12,7 @@ using YoutubeClone.Membership.Entities;
 namespace YoutubeClone.Membership.IdentityStores
 {
     public class RoleStore<TRole>
-        : RoleStoreBase<TRole, string, UserRole, RoleClaim> where TRole : Role
+        : RoleStoreBase<TRole, Guid, UserRole, RoleClaim> where TRole : Role
     {
         private readonly ISession session;
 
@@ -87,7 +87,7 @@ namespace YoutubeClone.Membership.IdentityStores
             if (role == null) {
                 throw new ArgumentNullException(nameof(role));
             }
-            return Task.FromResult(role.Id);
+            return Task.FromResult(role.Id.ToString());
         }
 
         public override Task<string> GetRoleNameAsync(

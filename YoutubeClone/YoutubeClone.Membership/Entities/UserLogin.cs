@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace YoutubeClone.Membership.Entities
 {
-    public class UserLogin : IdentityUserLogin<string>
+    public class UserLogin : IdentityUserLogin<Guid>
     {
         protected bool Equals(UserLogin other)
         {

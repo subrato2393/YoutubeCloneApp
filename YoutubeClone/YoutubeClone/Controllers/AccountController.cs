@@ -42,7 +42,7 @@ namespace YoutubeClone.Controllers
             model.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { Id = "2", UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser {UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -76,7 +76,7 @@ namespace YoutubeClone.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            return View();
+            return View(model);
         }
 
         public async Task<IActionResult> Login(string returnUrl = null)
