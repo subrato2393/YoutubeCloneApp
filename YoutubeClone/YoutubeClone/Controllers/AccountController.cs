@@ -40,6 +40,7 @@ namespace YoutubeClone.Controllers
         {
             returnUrl = returnUrl ?? Url.Content("~/");
             model.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+          
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser {UserName = model.Email, Email = model.Email };
@@ -47,9 +48,13 @@ namespace YoutubeClone.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-
+                  
+                    await _userManager.AddToRoleAsync(user, "Member");
+                  
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                 
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                   
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,

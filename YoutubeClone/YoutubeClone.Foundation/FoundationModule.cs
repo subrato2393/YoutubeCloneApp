@@ -22,9 +22,7 @@ namespace YoutubeClone.Foundation
 
             builder.Register(c => MemberContext.OpenSession()).As<ISession>()
                 .InstancePerLifetimeScope();
-
           
-
             base.Load(builder);
         }
     }

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using YoutubeClone.Foundation;
+using YoutubeClone.Membership;
 using YoutubeClone.Membership.Entities;
 using YoutubeClone.Membership.Extensions;
 
@@ -44,6 +45,7 @@ namespace YoutubeClone
         {
             // This will all go in the ROOT CONTAINER and is NOT TENANT SPECIFIC.
             builder.RegisterModule(new WebModule());
+            builder.RegisterModule(new MembershipModule());
             builder.RegisterModule(new FoundationModule());
         }
 
