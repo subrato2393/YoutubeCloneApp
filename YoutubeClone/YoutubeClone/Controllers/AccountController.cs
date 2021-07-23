@@ -41,21 +41,21 @@ namespace YoutubeClone.Controllers
         {
             returnUrl = returnUrl ?? Url.Content("~/");
             model.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-          
+
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser {UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-                  
+
                     await _userManager.AddToRoleAsync(user, MemberRole.UserRole);
-                  
+
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                 
+
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                   
+
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
@@ -116,8 +116,18 @@ namespace YoutubeClone.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+                    var roles = await _userManager.GetRolesAsync(user);
+
+                    if (roles.Contains(MemberRole.AdminRole))
+                    {
+                        return RedirectToAction("Index", "Home", new { Area = "Admin" });
+                    }
+
+                    else
+                    {
+                        return LocalRedirect(returnUrl);
+                    }
                 }
                 if (result.RequiresTwoFactor)
                 {
