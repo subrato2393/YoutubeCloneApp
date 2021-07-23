@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
@@ -15,12 +16,14 @@ namespace YoutubeClone.Controllers
             _logger = logger;
         }
 
+        [Authorize(Roles ="Member")]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles ="Member")]
         public IActionResult Create(ChannelModel model) 
         {
             try

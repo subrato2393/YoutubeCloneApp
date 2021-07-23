@@ -20,12 +20,9 @@ namespace YoutubeClone.Foundation
             builder.RegisterType<ChannelUnitOfWork>().As<IChannelUnitOfWork>()
                 .InstancePerLifetimeScope();
 
-            //builder.RegisterType<MemberContext>().As<ISession>()
-            //    .InstancePerLifetimeScope();
-
             builder.Register(c => MemberContext.OpenSession()).As<ISession>()
                 .InstancePerLifetimeScope();
-
+          
             base.Load(builder);
         }
     }

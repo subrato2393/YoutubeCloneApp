@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\YoutubeClone.Foundation\YoutubeClone.Foundation.csproj" />
+    <ProjectReference Include="..\YoutubeClone.Membership\YoutubeClone.Membership.csproj" />
   </ItemGroup>
 
 </Project>
