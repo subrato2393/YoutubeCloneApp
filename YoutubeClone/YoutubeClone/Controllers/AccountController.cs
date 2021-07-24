@@ -32,49 +32,32 @@ namespace YoutubeClone.Controllers
         {
             var model = new RegisterModel();
             model.ReturnUrl = returnUrl;
-            model.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            await model.GetExternalLoginProviderAsync();
+
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterModel model, string returnUrl = null)
         {
-            returnUrl = returnUrl ?? Url.Content("~/");
-            model.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-          
+            model.ReturnUrl = returnUrl ?? Url.Content("~/");
+
+            await model.GetExternalLoginProviderAsync();
+
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser {UserName = model.Email, Email = model.Email };
-                var result = await _userManager.CreateAsync(user, model.Password);
+                var result = await model.CreateUserAsync();
+
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
-                  
-                    await _userManager.AddToRoleAsync(user, MemberRole.UserRole);
-                  
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                 
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                   
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
+                    await model.AddRoleToUser();
 
-                    //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                    //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    await model.SetBrowserCookie();
 
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                    {
-                        return RedirectToPage("RegisterConfirmation", new { email = model.Email, returnUrl = returnUrl });
-                    }
-                    else
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
-                    }
+                    return LocalRedirect(model.ReturnUrl);
                 }
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
@@ -116,8 +99,18 @@ namespace YoutubeClone.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+                    var roles = await _userManager.GetRolesAsync(user);
+
+                    if (roles.Contains(MemberRole.AdminRole))
+                    {
+                        return RedirectToAction("Index", "Home", new { Area = "Admin" });
+                    }
+
+                    else
+                    {
+                        return LocalRedirect(returnUrl);
+                    }
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -148,7 +141,7 @@ namespace YoutubeClone.Controllers
         public async Task<IActionResult> Logout(string returnUrl = null)
         {
             await _signInManager.SignOutAsync();
-            _logger.LogInformation("User logged out.");
+           
             if (returnUrl != null)
             {
                 return LocalRedirect(returnUrl);
