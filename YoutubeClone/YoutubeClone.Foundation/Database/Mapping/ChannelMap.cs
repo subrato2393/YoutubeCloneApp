@@ -1,6 +1,6 @@
 ﻿using FluentNHibernate.Mapping;
-using YoutubeClone.Entities;
- 
+using YoutubeClone.Foundation.Entities;
+
 namespace YoutubeClone.Foundation.Database.Mapping
 {
     public class ChannelMap : ClassMap<Channel>

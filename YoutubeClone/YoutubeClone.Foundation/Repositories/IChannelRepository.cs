@@ -1,5 +1,5 @@
 ﻿using YoutubeClone.DataAccessLayer;
-using YoutubeClone.Entities;
+using YoutubeClone.Foundation.Entities;
 
 namespace YoutubeClone.Foundation.Repositories
 {

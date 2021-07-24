@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using YoutubeClone.Areas.Admin.Models;
 using YoutubeClone.Foundation.Services;
 using YoutubeClone.Models;
 

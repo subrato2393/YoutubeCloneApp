@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using YoutubeClone.Entities;
 
 namespace YoutubeClone.Foundation.Entities
 {

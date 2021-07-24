@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
 using System;
-using YoutubeClone.Entities;
 using YoutubeClone.Foundation.Entities;
 using YoutubeClone.Membership.Entities;
 

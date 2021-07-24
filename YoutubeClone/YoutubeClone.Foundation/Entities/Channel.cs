@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using YoutubeClone.Foundation.Entities;
 
-namespace YoutubeClone.Entities
+namespace YoutubeClone.Foundation.Entities
 {
     public class Channel
     {

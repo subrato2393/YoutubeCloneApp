@@ -1,9 +1,9 @@
-﻿using YoutubeClone.Entities;
+﻿using ChannelBO = YoutubeClone.Foundation.BusinessObjects.Channel;
 
 namespace YoutubeClone.Foundation.Services
 {
     public interface IChannelService
     {
-        void AddChannelInfo(Channel channel);
+        void AddChannelInfo(ChannelBO channel);
     }
 }
