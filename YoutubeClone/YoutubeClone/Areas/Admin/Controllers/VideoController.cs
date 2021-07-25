@@ -11,7 +11,7 @@ using YoutubeClone.Foundation.Services;
 
 namespace YoutubeClone.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Area("Admin"),Authorize(Roles ="Admin")] 
     public class VideoController : Controller
     {
         private readonly IChannelService _channelService;
