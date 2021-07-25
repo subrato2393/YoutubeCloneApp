@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using YoutubeClone.Foundation.Services;
 using VideoBO = YoutubeClone.Foundation.BusinessObjects.Video;
@@ -9,12 +10,22 @@ namespace YoutubeClone.Areas.Admin.Models
 {
     public class VideoModel
     {
-        public virtual Guid Id { get; set; }
-        public virtual string VideoTitle { get; set; }
-        public virtual string VideoName { get; set; }
-        public virtual IFormFile VideoFile { get; set; }
-        public virtual string Description { get; set; }
-        public virtual DateTime PublishDate { get; set; }
+        [Required]
+        [Display(Name = "Video Title")]
+        public string VideoTitle { get; set; }
+
+        [Required]
+        [Display(Name = "Video Name")]
+        public string VideoName { get; set; }
+        public  IFormFile VideoFile { get; set; }
+
+        [Required]
+        [Display(Name = "Description")]
+        public string Description { get; set; }
+
+        [Required]
+        [Display(Name = "Publish Date")]
+        public DateTime PublishDate { get; set; }
 
 
         private readonly IChannelService _channelService;
@@ -34,7 +45,7 @@ namespace YoutubeClone.Areas.Admin.Models
                 VideoTitle = VideoTitle,
                 VideoName = VideoFile.FileName,
                 Description = Description,
-                PublishDate = PublishDate,
+                PublishDate = DateTime.Now,
                 VideoFile = VideoFile
             });
         }
@@ -47,7 +58,7 @@ namespace YoutubeClone.Areas.Admin.Models
                 VideoFile = VideoFile,
                 VideoName = VideoFile.FileName,
                 Description = Description,
-                PublishDate = PublishDate,
+                PublishDate = DateTime.Now,
             });
         }
     }
