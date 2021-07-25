@@ -33,6 +33,7 @@
   <ItemGroup>
     <Folder Include="Logs\" />
     <Folder Include="wwwroot\admin\" />
+    <Folder Include="wwwroot\Video\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -3,6 +3,7 @@ using ChannelEO = YoutubeClone.Foundation.Entities.Channel;
 using YoutubeClone.Foundation.UnitOfWorks;
 using AutoMapper;
 using System;
+using YoutubeClone.Foundation.Entities;
 
 namespace YoutubeClone.Foundation.Services 
 {
@@ -34,6 +35,14 @@ namespace YoutubeClone.Foundation.Services
             {
                 throw new InvalidOperationException("Channel info must be provide");
             }
+        } 
+        public void AddVideoInfoIntoDatabase(Video video)
+        {
+            _channelUnitOfWork.BeginTransaction();
+
+            _channelUnitOfWork.VideoRepository.Add(video);
+
+            _channelUnitOfWork.Commit();
         }
     }
 }
