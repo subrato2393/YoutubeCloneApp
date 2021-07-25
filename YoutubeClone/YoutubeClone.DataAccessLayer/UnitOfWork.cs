@@ -1,4 +1,5 @@
 ﻿using NHibernate;
+using System.Threading.Tasks;
 
 namespace YoutubeClone.DataAccessLayer
 {
@@ -45,9 +46,12 @@ namespace YoutubeClone.DataAccessLayer
             }
         }
 
-        public void BeginTransaction()
+        public Task BeginTransaction()
         {
-            _transaction = _session.BeginTransaction();
+            return Task.Run(() =>
+            { 
+                _transaction = _session.BeginTransaction();
+            });
         }
     }
 }

@@ -1,22 +1,28 @@
 ﻿using ChannelBO = YoutubeClone.Foundation.BusinessObjects.Channel;
 using ChannelEO = YoutubeClone.Foundation.Entities.Channel;
+using VideoBO = YoutubeClone.Foundation.BusinessObjects.Video;
+using VideoEO = YoutubeClone.Foundation.Entities.Video;
 using YoutubeClone.Foundation.UnitOfWorks;
 using AutoMapper;
 using System;
-using YoutubeClone.Foundation.Entities;
+using System.Threading.Tasks;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
-namespace YoutubeClone.Foundation.Services 
+namespace YoutubeClone.Foundation.Services
 {
     public class ChannelService : IChannelService
     {
         private readonly IChannelUnitOfWork _channelUnitOfWork;
-        private readonly IMapper _mapper; 
-
+        private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         public ChannelService(IChannelUnitOfWork channelUnitOfWork,
+            IWebHostEnvironment webHostEnvironment,
             IMapper mapper)
         {
             _channelUnitOfWork = channelUnitOfWork;
             _mapper = mapper;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public void AddChannelInfo(ChannelBO channelBo)
@@ -35,14 +41,37 @@ namespace YoutubeClone.Foundation.Services
             {
                 throw new InvalidOperationException("Channel info must be provide");
             }
-        } 
-        public void AddVideoInfoIntoDatabase(Video video)
+        }
+        public async Task AddVideoInfoIntoDatabase(VideoBO videoBo)
         {
-            _channelUnitOfWork.BeginTransaction();
+            if(videoBo != null)
+            {
+                await _channelUnitOfWork.BeginTransaction();
 
-            _channelUnitOfWork.VideoRepository.Add(video);
+                var videoEo = _mapper.Map<VideoEO>(videoBo);
 
-            _channelUnitOfWork.Commit();
+                _channelUnitOfWork.VideoRepository.Add(videoEo);
+
+                _channelUnitOfWork.Commit();
+            }
+            else
+            {
+                throw new InvalidOperationException("Channel info must be provide");
+            }
+
+        }
+
+        public async Task UploadVideoToFolder(VideoBO video)
+        {
+            string wwwRootPath = _webHostEnvironment.WebRootPath;
+            string fileName = Path.GetFileNameWithoutExtension(video.VideoFile.FileName);
+            string extension = Path.GetExtension(video.VideoFile.FileName);
+            video.VideoName = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+            string path = Path.Combine(wwwRootPath + "/Video/", fileName);
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                await video.VideoFile.CopyToAsync(fileStream);
+            }
         }
     }
 }
