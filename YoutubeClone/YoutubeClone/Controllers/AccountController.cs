@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using YoutubeClone.Membership.Constant;
 using YoutubeClone.Membership.Entities;

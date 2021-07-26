@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using YoutubeClone.Foundation.BusinessObjects;
 using YoutubeClone.Models;
 
 namespace YoutubeClone.Controllers
@@ -10,35 +11,24 @@ namespace YoutubeClone.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
+       
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
 
-        [Authorize(Roles ="Member")]
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [Authorize(Roles ="Member")]
-        public IActionResult Create(ChannelModel model) 
+        public IActionResult Index()
         {
             try
             {
-                model.AddChannelInformation(model);
-                return RedirectToAction("Index");
+                var model = new HomeModel();
+                var videos = model.GetVideoList();
+                return View(videos);
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                _logger.LogError(exception, "error");
-                return View();
+                _logger.LogError(ex, "Failed to get Video list");
             }
-        }
-        public IActionResult Index()
-        {
             return View();
         }
 

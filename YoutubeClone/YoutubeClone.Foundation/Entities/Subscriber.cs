@@ -1,5 +1,4 @@
 ﻿using System;
-using YoutubeClone.Entities;
 
 namespace YoutubeClone.Foundation.Entities
 {

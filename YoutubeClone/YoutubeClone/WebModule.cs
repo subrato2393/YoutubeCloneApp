@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using YoutubeClone.Areas.Admin.Models;
 using YoutubeClone.Foundation.Services;
 using YoutubeClone.Models;
 
@@ -14,6 +15,8 @@ namespace YoutubeClone
             builder.RegisterType<ChannelModel>().AsSelf();
 
             builder.RegisterType<RegisterModel>().AsSelf();
+
+            builder.RegisterType<HomeModel>().AsSelf();
 
             base.Load(builder);
         }

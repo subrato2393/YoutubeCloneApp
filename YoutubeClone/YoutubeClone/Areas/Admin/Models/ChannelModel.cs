@@ -1,16 +1,18 @@
 ﻿using Autofac;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using YoutubeClone.Entities;
+using System.ComponentModel.DataAnnotations;
 using YoutubeClone.Foundation.Services;
+using ChannelBO = YoutubeClone.Foundation.BusinessObjects.Channel;
 
-namespace YoutubeClone.Models
+
+namespace YoutubeClone.Areas.Admin.Models
 {
     public class ChannelModel
     {
+        [Required]
+        [Display(Name = "Name")]
         public string Name { get; set; }
+
         public DateTime CreateDate { get; set; }
 
         private readonly IChannelService _channelService;
@@ -23,12 +25,13 @@ namespace YoutubeClone.Models
         {
             _channelService = channelService;
         }
-        public void AddChannelInformation(ChannelModel model)
+
+        public void AddChannelInformation()
         {
-            _channelService.AddChannelInfo(new Channel()
+            _channelService.AddChannelInfo(new ChannelBO()
             {
-                CreateDate = model.CreateDate,
-                Name = model.Name
+                CreateDate = DateTime.Now,
+                Name = Name
             });
         }
     }

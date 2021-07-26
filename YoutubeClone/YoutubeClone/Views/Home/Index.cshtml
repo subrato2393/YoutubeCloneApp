@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<YoutubeClone.Foundation.BusinessObjects.Video>
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -6,8 +7,38 @@
     <link rel="stylesheet" href="/user/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 }
-<div class="videos">
+<div class="videos col-12">
     <section class="video-section">
+        @foreach (var item in Model)
+        {
+            <div class="row">
+                <article class="video-container">
+                    <a href="#" class="thumbnail" data-duration="12:24">
+                        @{
+                            var iVideoUrl = "/Video/" + item.VideoName;
+                            <video width="290" height="170" controls>
+                                <source src="@iVideoUrl" type="video/mp4">
+                            </video>
+                        }
+                    </a>
+                    <div class="video-bottom-section">
+                        <a href="#">
+                            <img class="channel-icon" src="/user/thumbnil.jpg" />
+                        </a>
+                        <div class="video-details">
+                            <a href="#" class="video-title">Video Title</a>
+                            <a href="#" class="video-channel-name">Channel Name</a>
+                            <div class="video-metadata">
+                                <span>12K views</span>
+                                •
+                                <span>1 week ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+        }
         <article class="video-container">
             <a href="#" class="thumbnail" data-duration="12:24">
                 <img class="thumbnail-image" src="/user/thumbnil.jpg" />
@@ -26,101 +57,6 @@
                     </div>
                 </div>
             </div>
-        </article>
-        <article class="video-container">
-            <a href="#" class="thumbnail" data-duration="12:24">
-                <img class="thumbnail-image" src="/user/thumbnil.jpg" />
-            </a>
-            <div class="video-bottom-section">
-                <a href="#">
-                    <img class="channel-icon" src="/user/thumbnil.jpg" />
-                </a>
-                <div class="video-details">
-                    <a href="#" class="video-title">Video Title</a>
-                    <a href="#" class="video-channel-name">Channel Name</a>
-                    <div class="video-metadata">
-                        <span>12K views</span>
-                        •
-                        <span>1 week ago</span>
-                    </div>
-                </div>
-            </div>
-        </article>
-        <article class="video-container">
-            <a href="#" class="thumbnail" data-duration="12:24">
-                <img class="thumbnail-image" src="/user/thumbnil.jpg" />
-            </a>
-            <div class="video-bottom-section">
-                <a href="#">
-                    <img class="channel-icon" src="/user/thumbnil.jpg" />
-                </a>
-                <div class="video-details">
-                    <a href="#" class="video-title">Video Title</a>
-                    <a href="#" class="video-channel-name">Channel Name</a>
-                    <div class="video-metadata">
-                        <span>12K views</span>
-                        •
-                        <span>1 week ago</span>
-                    </div>
-                </div>
-            </div>
-        </article>
-        <article class="video-container">
-            <a href="#" class="thumbnail" data-duration="12:24">
-                <img class="thumbnail-image" src="/user/thumbnil.jpg" />
-            </a>
-            <div class="video-bottom-section">
-                <a href="#">
-                    <img class="channel-icon" src="/user/thumbnil.jpg" />
-                </a>
-                <div class="video-details">
-                    <a href="#" class="video-title">Video Title</a>
-                    <a href="#" class="video-channel-name">Channel Name</a>
-                    <div class="video-metadata">
-                        <span>12K views</span>
-                        •
-                        <span>1 week ago</span>
-                    </div>
-                </div>
-            </div>
-        </article>
-        <article class="video-container">
-            <a href="#" class="thumbnail" data-duration="12:24">
-                <img class="thumbnail-image" src="/user/thumbnil.jpg" />
-            </a>
-            <div class="video-bottom-section">
-                <a href="#">
-                    <img class="channel-icon" src="/user/thumbnil.jpg" />
-                </a>
-                <div class="video-details">
-                    <a href="#" class="video-title">Video Title</a>
-                    <a href="#" class="video-channel-name">Channel Name</a>
-                    <div class="video-metadata">
-                        <span>12K views</span>
-                        •
-                        <span>1 week ago</span>
-                    </div>
-                </div>
-            </div>
-        </article>
-        <article class="video-container">
-            <a href="#" class="thumbnail" data-duration="12:24">
-                <img class="thumbnail-image" src="/user/thumbnil.jpg" />
-            </a>
-            <div class="video-bottom-section">
-                <a href="#">
-                    <img class="channel-icon" src="/user/thumbnil.jpg" />
-                </a>
-                <div class="video-details">
-                    <a href="#" class="video-title">Video Title</a>
-                    <a href="#" class="video-channel-name">Channel Name</a>
-                    <div class="video-metadata">
-                        <span>12K views</span>
-                        •
-                        <span>1 week ago</span>
-                    </div>
-                </div>
-            </div>
-        </article>
+        </article>    
     </section>
 </div>

@@ -3,7 +3,8 @@ using YoutubeClone.Foundation.Entities;
 
 namespace YoutubeClone.Foundation.Repositories
 {
-    public interface IChannelRepository : IRepository<Channel>
+    public interface IVideoRepository : IRepository<Video>
     {
+
     }
 }

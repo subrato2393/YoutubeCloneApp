@@ -1,4 +1,5 @@
 ﻿using NHibernate;
+using System;
 
 namespace YoutubeClone.DataAccessLayer
 {
@@ -20,12 +21,14 @@ namespace YoutubeClone.DataAccessLayer
                     _transaction.Commit();
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 if (_transaction != null && _transaction.IsActive)
                 {
                     _transaction.Rollback();
                 }
+
+                throw new InvalidOperationException("Failed to commit", ex);
             }
         }
 

@@ -9,11 +9,12 @@ namespace YoutubeClone.Foundation.Database.Mapping
         {
             Id(x => x.Id).Column("Id").GeneratedBy.GuidNative();
             Map(x => x.Description);
-            Map(x => x.FileName);
             Map(x => x.PublishDate);
             Map(x => x.VideoTitle);
-            HasMany(x => x.Views).Cascade.All();
-            HasMany(x => x.Likes).Cascade.All();
+            Map(x => x.VideoName);
+            References(x => x.Channel);
+            HasMany(x => x.Views).Cascade.AllDeleteOrphan();
+            HasMany(x => x.Likes).Cascade.AllDeleteOrphan();
         }
     }
 }

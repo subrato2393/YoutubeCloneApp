@@ -1,0 +1,85 @@
+﻿@model YoutubeClone.Areas.Admin.Models.VideoModel
+@{
+    ViewData["Title"] = "UploadVideo";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+@section styles{
+    <link rel="stylesheet" href="/admin/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="/admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+}
+<section class="content">
+    <div class="container-fluid">
+        <h1>Upload Video</h1>
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <!-- Horizontal Form -->
+                <div class="card card-light">
+                    <div class="card-header">
+                        <h3 class="card-title">Upload Video</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form class="form-horizontal" role="form" method="post" asp-action="UploadVideo" enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+                        <div class="card-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group row">
+                                <label asp-for="ChannelId" class="col-sm-2 col-form-label">Channel</label>
+                                <div class="col-sm-10">
+                                    <select asp-for="ChannelId" asp-items="@Model.Channels" class="form-control select2bs4" style="width: 100%;">
+                                        <option selected="selected">Please Select</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label asp-for="VideoTitle" class="col-sm-2 col-form-label">Title</label>
+                                <div class="col-sm-10">
+                                    <input type="text" asp-for="VideoTitle" class="form-control" placeholder="Video Title">
+                                    <span asp-validation-for="VideoTitle" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="Description" class="col-sm-2 col-form-label">Description</label>
+                                <div class="col-sm-10">
+                                    <textarea type="text" asp-for="Description" class="form-control" placeholder="Description" id="outline" required></textarea>
+                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="VideoFile" class="col-sm-2 col-form-label">Video File</label>
+                                <div class="col-sm-10">
+                                    <input asp-for="VideoFile" type="file" accept="video/mp4" placeholder="Video File">
+                                    <span asp-validation-for="VideoFile" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-success float-right">Create</button>
+                            <a asp-action="Index" asp-controller="Channel" class="btn btn-outline-success">Back To List</a>
+                        </div>
+                        <!-- /.card-footer -->
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+@section Scripts {
+    <script src="https://cdn.tiny.cloud/1/nw1hlo3uo111mlrt0795i0dz4gfr53jjvdbn4gthatqtz3b3/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="/admin/plugins/select2/js/select2.full.min.js"></script>
+    <script>
+        tinymce.init({ selector: 'textarea' });
+        $(function () {
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            })
+        })
+
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,11 +1,13 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using YoutubeClone.Foundation;
+using YoutubeClone.Foundation.MappingProfile;
 using YoutubeClone.Membership;
 using YoutubeClone.Membership.Entities;
 using YoutubeClone.Membership.Extensions;
@@ -29,6 +31,13 @@ namespace YoutubeClone
             services.AddDefaultIdentity<ApplicationUser>()
            .AddRoles<Role>()
            .AddHibernateStores();
+
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new FoundationProfile());
+            });
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
 
             services.AddControllersWithViews();
             services.AddRazorPages();

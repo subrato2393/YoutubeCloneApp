@@ -1,23 +1,113 @@
-﻿using YoutubeClone.Entities;
+﻿using ChannelBO = YoutubeClone.Foundation.BusinessObjects.Channel;
+using ChannelEO = YoutubeClone.Foundation.Entities.Channel;
+using VideoBO = YoutubeClone.Foundation.BusinessObjects.Video;
+using VideoEO = YoutubeClone.Foundation.Entities.Video;
 using YoutubeClone.Foundation.UnitOfWorks;
+using AutoMapper;
+using System;
+using System.Threading.Tasks;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using System.Collections.Generic;
+using Microsoft.Extensions.FileProviders;
+using System.Linq;
 
-namespace YoutubeClone.Foundation.Services 
+namespace YoutubeClone.Foundation.Services
 {
     public class ChannelService : IChannelService
     {
         private readonly IChannelUnitOfWork _channelUnitOfWork;
-
-        public ChannelService(IChannelUnitOfWork channelUnitOfWork)
+        private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public ChannelService(IChannelUnitOfWork channelUnitOfWork,
+            IWebHostEnvironment webHostEnvironment,
+            IMapper mapper)
         {
             _channelUnitOfWork = channelUnitOfWork;
+            _mapper = mapper;
+            _webHostEnvironment = webHostEnvironment;
         }
-        public void AddChannelInfo(Channel channel)
+
+        public void AddChannelInfo(ChannelBO channelBo)
         {
-            _channelUnitOfWork.BeginTransaction();
+            if (channelBo != null)
+            {
+                var channelEO = _mapper.Map<ChannelEO>(channelBo);
 
-            _channelUnitOfWork.ChannelRepository.Add(channel);
+                _channelUnitOfWork.BeginTransaction();
 
-            _channelUnitOfWork.Commit();
+                _channelUnitOfWork.ChannelRepository.Add(channelEO);
+
+                _channelUnitOfWork.Commit();
+            }
+            else
+            {
+                throw new InvalidOperationException("Channel info must be provide");
+            }
+        }
+        public void AddVideoInfoIntoDatabase(VideoBO videoBo)
+        {
+            if (videoBo != null)
+            {
+                var videoEo = _mapper.Map<VideoEO>(videoBo);
+
+                _channelUnitOfWork.BeginTransaction();
+
+                _channelUnitOfWork.VideoRepository.Add(videoEo);
+
+                _channelUnitOfWork.Commit();
+            }
+            else
+            {
+                throw new InvalidOperationException("Channel info must be provide");
+            }
+        }
+
+        public IList<ChannelBO> GetAllChannel()
+        {
+            var channelEoList = _channelUnitOfWork.ChannelRepository.GetAll();
+
+            var channelBoList = _mapper.Map<IList<ChannelEO>, IList<ChannelBO>>(channelEoList);
+
+            return channelBoList;
+        }
+
+        public IList<VideoBO> GetAllVideos()
+        {
+            List<VideoBO> videos = new List<VideoBO>();
+            string wwwRootPath = _webHostEnvironment.WebRootPath;
+            string path = Path.Combine("Video");
+
+            var provider = new PhysicalFileProvider(_webHostEnvironment.WebRootPath);
+            var contents = provider.GetDirectoryContents(path);
+            var objFiles = contents.OrderBy(m => m.LastModified);
+
+            foreach (var item in objFiles)
+            {
+                videos.Add(new VideoBO() { VideoName = item.Name });
+            }
+
+            return videos;
+        }
+
+        public ChannelBO GetChannelById(Guid channelId)
+        {
+            var channelEo = _channelUnitOfWork.ChannelRepository.GetById(channelId);
+            var channelBo = _mapper.Map<ChannelBO>(channelEo);
+            return channelBo;
+        }
+
+        public async Task UploadVideoToFolder(VideoBO video)
+        {
+            string wwwRootPath = _webHostEnvironment.WebRootPath;
+            string fileName = Path.GetFileNameWithoutExtension(video.VideoFile.FileName);
+            string extension = Path.GetExtension(video.VideoFile.FileName);
+            video.VideoName = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+            string path = Path.Combine(wwwRootPath + "/Video/", fileName);
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                await video.VideoFile.CopyToAsync(fileStream);
+            }
         }
     }
 }

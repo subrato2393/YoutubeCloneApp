@@ -4,9 +4,9 @@ using YoutubeClone.Foundation.Entities;
 
 namespace YoutubeClone.Foundation.Repositories
 {
-    public class ChannelRepository : Repository<Channel>, IChannelRepository
+    public class VideoRepository : Repository<Video>, IVideoRepository
     {
-        public ChannelRepository(ISession session)
+        public VideoRepository(ISession session)
             : base(session)
         {
 

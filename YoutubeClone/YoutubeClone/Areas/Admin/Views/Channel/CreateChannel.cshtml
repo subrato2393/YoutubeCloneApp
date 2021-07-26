@@ -1,0 +1,52 @@
+﻿@model YoutubeClone.Areas.Admin.Models.ChannelModel
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <h1>Create New Channel</h1>
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <!-- Horizontal Form -->
+                <div class="card card-light">
+                    <div class="card-header">
+                        <h3 class="card-title">Create Channel</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form class="form-horizontal" role="form" method="post" asp-action="CreateChannel" asp-controller="Channel">
+                        @Html.AntiForgeryToken()
+                        <div class="card-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group row">
+                                <label asp-for="Name" class="col-sm-2 col-form-label">Name</label>
+                                <div class="col-sm-10">
+                                    <input type="text" asp-for="Name" class="form-control" placeholder="Channel Name">
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-success float-right">Create</button>
+                            <a asp-action="Index" asp-controller="Channel" class="btn btn-outline-success">Back To List</a>
+                        </div>
+                        <!-- /.card-footer -->
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+
