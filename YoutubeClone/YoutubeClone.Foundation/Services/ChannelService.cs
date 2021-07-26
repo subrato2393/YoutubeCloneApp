@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using System.Collections.Generic;
-
+ 
 namespace YoutubeClone.Foundation.Services
 {
     public class ChannelService : IChannelService
@@ -65,13 +65,13 @@ namespace YoutubeClone.Foundation.Services
         public IList<ChannelBO> GetAllChannel()
         {
             var channelEoList = _channelUnitOfWork.ChannelRepository.GetAll();
-            
+
             var channelBoList = _mapper.Map<IList<ChannelEO>, IList<ChannelBO>>(channelEoList);
 
             return channelBoList;
         }
 
-        public void UploadVideoToFolder(VideoBO video)
+        public async Task UploadVideoToFolder(VideoBO video)
         {
             string wwwRootPath = _webHostEnvironment.WebRootPath;
             string fileName = Path.GetFileNameWithoutExtension(video.VideoFile.FileName);
@@ -79,8 +79,9 @@ namespace YoutubeClone.Foundation.Services
             video.VideoName = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
             string path = Path.Combine(wwwRootPath + "/Video/", fileName);
             using (var fileStream = new FileStream(path, FileMode.Create))
-            
-                 video.VideoFile.CopyToAsync(fileStream);
+            {
+                await video.VideoFile.CopyToAsync(fileStream);
             }
         }
     }
+}

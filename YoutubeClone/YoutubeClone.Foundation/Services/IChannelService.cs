@@ -10,7 +10,7 @@ namespace YoutubeClone.Foundation.Services
     {
         void AddChannelInfo(ChannelBO channel);
         void AddVideoInfoIntoDatabase(VideoBO video);
-        void UploadVideoToFolder(VideoBO video);
+        Task UploadVideoToFolder(VideoBO video);
         IList<ChannelBO> GetAllChannel();
     }
 }
