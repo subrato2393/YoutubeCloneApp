@@ -12,6 +12,7 @@ namespace YoutubeClone.Foundation.Database.Mapping
             Map(x => x.PublishDate);
             Map(x => x.VideoTitle);
             Map(x => x.VideoName);
+            References(x => x.Channel);
             HasMany(x => x.Views).Cascade.All();
             HasMany(x => x.Likes).Cascade.All();
         }

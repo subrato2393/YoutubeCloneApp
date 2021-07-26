@@ -13,6 +13,7 @@ namespace YoutubeClone.Foundation.Entities
         public virtual string Description { get; set; }
         public virtual DateTime PublishDate { get; set; }
         public virtual Channel Channel { get; set; }
+        public virtual Guid ChannelId { get; set; }
         public virtual IList<Views> Views { get; set; }
         public virtual IList<Likes> Likes { get; set; }
     }

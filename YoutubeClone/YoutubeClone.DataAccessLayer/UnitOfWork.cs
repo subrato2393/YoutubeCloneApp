@@ -1,5 +1,5 @@
 ﻿using NHibernate;
-using System.Threading.Tasks;
+using System;
 
 namespace YoutubeClone.DataAccessLayer
 {
@@ -21,12 +21,14 @@ namespace YoutubeClone.DataAccessLayer
                     _transaction.Commit();
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 if (_transaction != null && _transaction.IsActive)
                 {
                     _transaction.Rollback();
                 }
+
+                throw new InvalidOperationException("Failed to commit", ex);
             }
         }
 
@@ -46,12 +48,9 @@ namespace YoutubeClone.DataAccessLayer
             }
         }
 
-        public Task BeginTransaction()
+        public void BeginTransaction()
         {
-            return Task.Run(() =>
-            { 
-                _transaction = _session.BeginTransaction();
-            });
+            _transaction = _session.BeginTransaction();
         }
     }
 }

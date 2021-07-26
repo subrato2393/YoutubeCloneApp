@@ -11,6 +11,10 @@ namespace YoutubeClone.Areas.Admin.Controllers
     public class VideoController : Controller
     {
         private readonly ILogger<VideoController> _logger;
+        public VideoController(ILogger<VideoController> logger)
+        {
+            _logger = logger;
+        }
         public IActionResult Index()
         {
             return View();
@@ -18,22 +22,27 @@ namespace YoutubeClone.Areas.Admin.Controllers
 
         public IActionResult UploadVideo()
         {
-            return View();
+            var model = new VideoModel();
+            model.GetAllChannel();
+
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [RequestFormLimits(MultipartBodyLengthLimit = 209715200)]
-        public async Task<IActionResult> UploadVideo(VideoModel model)
+        public IActionResult UploadVideo(VideoModel model)
         {
             try
             {
                 ModelState.Remove("VideoName");
                 if (ModelState.IsValid)
                 {
-                    await model.UploadVideoToFolder();
+                    model.GetAllChannel();
+                    
+                    model.UploadVideoToFolder();
 
-                    await model.AddVideoIntoDataBase();
+                    model.AddVideoIntoDataBase();
 
                     return RedirectToAction("Index", "Home");
                 }

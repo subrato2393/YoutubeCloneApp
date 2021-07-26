@@ -8,6 +8,7 @@ using System;
 using System.Threading.Tasks;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using System.Collections.Generic;
 
 namespace YoutubeClone.Foundation.Services
 {
@@ -42,11 +43,11 @@ namespace YoutubeClone.Foundation.Services
                 throw new InvalidOperationException("Channel info must be provide");
             }
         }
-        public async Task AddVideoInfoIntoDatabase(VideoBO videoBo)
+        public void AddVideoInfoIntoDatabase(VideoBO videoBo)
         {
-            if(videoBo != null)
+            if (videoBo != null)
             {
-                await _channelUnitOfWork.BeginTransaction();
+                _channelUnitOfWork.BeginTransaction();
 
                 var videoEo = _mapper.Map<VideoEO>(videoBo);
 
@@ -61,7 +62,16 @@ namespace YoutubeClone.Foundation.Services
 
         }
 
-        public async Task UploadVideoToFolder(VideoBO video)
+        public IList<ChannelBO> GetAllChannel()
+        {
+            var channelEoList = _channelUnitOfWork.ChannelRepository.GetAll();
+            
+            var channelBoList = _mapper.Map<IList<ChannelEO>, IList<ChannelBO>>(channelEoList);
+
+            return channelBoList;
+        }
+
+        public void UploadVideoToFolder(VideoBO video)
         {
             string wwwRootPath = _webHostEnvironment.WebRootPath;
             string fileName = Path.GetFileNameWithoutExtension(video.VideoFile.FileName);
@@ -69,9 +79,8 @@ namespace YoutubeClone.Foundation.Services
             video.VideoName = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
             string path = Path.Combine(wwwRootPath + "/Video/", fileName);
             using (var fileStream = new FileStream(path, FileMode.Create))
-            {
-                await video.VideoFile.CopyToAsync(fileStream);
+            
+                 video.VideoFile.CopyToAsync(fileStream);
             }
         }
     }
-}

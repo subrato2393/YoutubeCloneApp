@@ -19,7 +19,7 @@ namespace YoutubeClone.DataAccessLayer
 
         public virtual void Add(TEntity entity)
         {
-           _session.Save(entity);
+            _session.Save(entity);
         }
 
         public virtual IList<TEntity> GetAll()

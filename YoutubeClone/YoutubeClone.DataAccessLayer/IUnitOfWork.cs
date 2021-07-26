@@ -5,7 +5,7 @@ namespace YoutubeClone.DataAccessLayer
 {
     public interface IUnitOfWork : IDisposable
     {
-        Task BeginTransaction();
+        void BeginTransaction();
         void Commit();
         void Rollback();
     }
