@@ -25,10 +25,10 @@ namespace YoutubeClone.Foundation.Database.Contexts
             .ConnectionString(connectionString)
             .ShowSql())
             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Channel>())
+            .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Video>())
             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Likes>())
             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Subscriber>())
             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Views>())
-            .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Video>())
 
             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ApplicationUser>())
             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<UserRole>())

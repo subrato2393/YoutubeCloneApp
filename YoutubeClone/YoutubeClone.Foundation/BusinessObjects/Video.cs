@@ -11,6 +11,7 @@ namespace YoutubeClone.Foundation.BusinessObjects
         public IFormFile VideoFile { get; set; }
         public string Description { get; set; }
         public DateTime PublishDate { get; set; }
+        public Channel Channel { get; set; }
         public Guid ChannelId { get; set; } 
     }
 }

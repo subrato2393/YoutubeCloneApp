@@ -27,7 +27,7 @@ namespace YoutubeClone.DataAccessLayer
             return _session.Query<TEntity>().ToList();
         }
 
-        public TEntity GetById(int id)
+        public TEntity GetById(Guid id)
         {
             return _session.Get<TEntity>(id);
         }

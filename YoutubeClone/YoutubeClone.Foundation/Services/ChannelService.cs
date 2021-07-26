@@ -47,9 +47,9 @@ namespace YoutubeClone.Foundation.Services
         {
             if (videoBo != null)
             {
-                _channelUnitOfWork.BeginTransaction();
-
                 var videoEo = _mapper.Map<VideoEO>(videoBo);
+
+                _channelUnitOfWork.BeginTransaction();
 
                 _channelUnitOfWork.VideoRepository.Add(videoEo);
 
@@ -59,7 +59,6 @@ namespace YoutubeClone.Foundation.Services
             {
                 throw new InvalidOperationException("Channel info must be provide");
             }
-
         }
 
         public IList<ChannelBO> GetAllChannel()
@@ -69,6 +68,13 @@ namespace YoutubeClone.Foundation.Services
             var channelBoList = _mapper.Map<IList<ChannelEO>, IList<ChannelBO>>(channelEoList);
 
             return channelBoList;
+        }
+
+        public ChannelBO GetChannelById(Guid channelId)
+        {
+            var channelEo = _channelUnitOfWork.ChannelRepository.GetById(channelId);
+            var channelBo = _mapper.Map<ChannelBO>(channelEo);
+            return channelBo;
         }
 
         public async Task UploadVideoToFolder(VideoBO video)

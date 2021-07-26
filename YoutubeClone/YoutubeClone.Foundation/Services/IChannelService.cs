@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChannelBO = YoutubeClone.Foundation.BusinessObjects.Channel;
@@ -12,5 +13,6 @@ namespace YoutubeClone.Foundation.Services
         void AddVideoInfoIntoDatabase(VideoBO video);
         Task UploadVideoToFolder(VideoBO video);
         IList<ChannelBO> GetAllChannel();
+        ChannelBO GetChannelById(Guid channelId);
     }
 }

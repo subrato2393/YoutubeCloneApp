@@ -8,8 +8,7 @@ namespace YoutubeClone.DataAccessLayer
     {
         void Add(TEntity entity);
         IList<TEntity> GetAll();
-        TEntity GetById(int id);
-
+        TEntity GetById(Guid id); 
         void Edit(TEntity entityToUpdate);
         void Remove(TEntity entityToDelete);
     }

@@ -31,7 +31,6 @@ namespace YoutubeClone.Areas.Admin.Models
         [Display(Name = "Publish Date")]
         public DateTime PublishDate { get; set; }
         public List<SelectListItem> Channels { get; set; }
-        //public string Channel { get; set; }
         public Guid ChannelId { get; set; }
 
 
@@ -60,6 +59,7 @@ namespace YoutubeClone.Areas.Admin.Models
 
         public void AddVideoIntoDataBase()
         {
+            var channel = _channelService.GetChannelById(ChannelId); 
             _channelService.AddVideoInfoIntoDatabase(new VideoBO()
             {
                 VideoTitle = VideoTitle,
@@ -67,7 +67,7 @@ namespace YoutubeClone.Areas.Admin.Models
                 VideoName = VideoFile.FileName,
                 Description = Description,
                 PublishDate = DateTime.Now,
-                ChannelId = ChannelId
+                Channel = channel
             });
         }
 
