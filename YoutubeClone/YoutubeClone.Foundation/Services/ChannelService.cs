@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using System.Collections.Generic;
- 
+using Microsoft.Extensions.FileProviders;
+using System.Linq;
+
 namespace YoutubeClone.Foundation.Services
 {
     public class ChannelService : IChannelService
@@ -68,6 +70,24 @@ namespace YoutubeClone.Foundation.Services
             var channelBoList = _mapper.Map<IList<ChannelEO>, IList<ChannelBO>>(channelEoList);
 
             return channelBoList;
+        }
+
+        public IList<VideoBO> GetAllVideos()
+        {
+            List<VideoBO> videos = new List<VideoBO>();
+            string wwwRootPath = _webHostEnvironment.WebRootPath;
+            string path = Path.Combine("Video");
+
+            var provider = new PhysicalFileProvider(_webHostEnvironment.WebRootPath);
+            var contents = provider.GetDirectoryContents(path);
+            var objFiles = contents.OrderBy(m => m.LastModified);
+
+            foreach (var item in objFiles)
+            {
+                videos.Add(new VideoBO() { VideoName = item.Name });
+            }
+
+            return videos;
         }
 
         public ChannelBO GetChannelById(Guid channelId)

@@ -14,5 +14,6 @@ namespace YoutubeClone.Foundation.Services
         Task UploadVideoToFolder(VideoBO video);
         IList<ChannelBO> GetAllChannel();
         ChannelBO GetChannelById(Guid channelId);
+        IList<VideoBO> GetAllVideos();
     }
 }

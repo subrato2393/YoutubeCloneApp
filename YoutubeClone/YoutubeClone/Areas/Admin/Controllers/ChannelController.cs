@@ -43,7 +43,6 @@ namespace YoutubeClone.Areas.Admin.Controllers
                 {
                     return View();
                 }
-              
             }
 
             catch (Exception exception)
