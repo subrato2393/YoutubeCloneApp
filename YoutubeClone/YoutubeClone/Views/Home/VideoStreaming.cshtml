@@ -1,0 +1,15 @@
+﻿@model YoutubeClone.Foundation.BusinessObjects.Video
+@{
+    ViewData["Title"] = "VideoStreaming";
+}
+@{
+    var iVideoUrl = "/Video/" + Model.VideoName;
+    <video width="860" height="480" controls="controls" autoplay>
+        <source src="@iVideoUrl" type="video/mp4">
+    </video>
+}
+<h1>VideoStreaming</h1>
+<h1>@ViewBag.Id</h1>
+<h1>@Model.ChannelName</h1>
+<h1>@Model.VideoName</h1>
+<h1>@Model.VideoTitle</h1>

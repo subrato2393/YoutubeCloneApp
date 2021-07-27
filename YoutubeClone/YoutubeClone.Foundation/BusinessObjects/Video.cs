@@ -5,7 +5,7 @@ namespace YoutubeClone.Foundation.BusinessObjects
 {
     public class Video
     {
-        public  Guid Id { get; set; }
+        public Guid Id { get; set; }
         public string VideoTitle { get; set; }
         public string VideoName { get; set; }
         public IFormFile VideoFile { get; set; }

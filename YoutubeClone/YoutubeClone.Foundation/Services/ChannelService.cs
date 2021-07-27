@@ -44,6 +44,7 @@ namespace YoutubeClone.Foundation.Services
                 throw new InvalidOperationException("Channel info must be provide");
             }
         }
+
         private void AddVideoInfoIntoDatabase(VideoBO videoBo)
         {
             if (videoBo != null)
@@ -92,7 +93,7 @@ namespace YoutubeClone.Foundation.Services
                             VideoName = item.Name,
                             VideoTitle = dbVideo.VideoTitle,
                             ChannelName = dbVideo.ChannelName,
-                           // Channel=dbVideo.Channel.Name
+                            Id = dbVideo.Id
                         });
                     }
                 }
@@ -100,6 +101,7 @@ namespace YoutubeClone.Foundation.Services
 
             return videos;
         }
+
         private IList<VideoBO> GetVideos()
         {
             var videoList = _channelUnitOfWork.VideoRepository.GetAll();
@@ -107,6 +109,7 @@ namespace YoutubeClone.Foundation.Services
             var VideoBoList = _mapper.Map<IList<VideoBO>>(videoList);
             return VideoBoList;
         }
+
         public ChannelBO GetChannelById(Guid channelId)
         {
             var channelEo = _channelUnitOfWork.ChannelRepository.GetById(channelId);
@@ -128,6 +131,35 @@ namespace YoutubeClone.Foundation.Services
             {
                 video.VideoFile.CopyTo(fileStream);
             }
+        }
+
+        public VideoBO GetVideoById(Guid id)
+        {
+            VideoBO video = new VideoBO();
+
+            var videoEo = _channelUnitOfWork.VideoRepository.GetById(id);
+            var videoBo = _mapper.Map<VideoBO>(videoEo);
+
+            string wwwRootPath = _webHostEnvironment.WebRootPath;
+            string path = Path.Combine("Video");
+
+            var provider = new PhysicalFileProvider(_webHostEnvironment.WebRootPath);
+            var contents = provider.GetDirectoryContents(path);
+            var objFiles = contents.OrderBy(m => m.LastModified);
+
+            foreach (var item in objFiles)
+            {
+                if (item.Name == videoBo.VideoName)
+                {
+                    video.ChannelName = videoBo.ChannelName;
+                    video.VideoName = videoBo.VideoName;
+                    video.VideoTitle = videoBo.VideoTitle;
+                    video.Description = videoBo.Description;
+                    video.Id = videoBo.Id;
+                };
+            }
+
+            return video;
         }
     }
 }

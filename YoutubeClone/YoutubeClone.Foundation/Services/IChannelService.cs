@@ -14,5 +14,6 @@ namespace YoutubeClone.Foundation.Services
         IList<ChannelBO> GetAllChannel();
         ChannelBO GetChannelById(Guid channelId);
         IList<VideoBO> GetAllVideos();
+        VideoBO GetVideoById(Guid id);
     }
 }

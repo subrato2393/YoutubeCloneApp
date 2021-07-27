@@ -9,7 +9,7 @@ namespace YoutubeClone.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-       
+
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
@@ -28,6 +28,13 @@ namespace YoutubeClone.Controllers
                 _logger.LogError(ex, "Failed to get Video list");
             }
             return View();
+        }
+
+        public IActionResult VideoStreaming(Guid id)
+        {
+            var model = new HomeModel();
+            var video= model.GetVideoById(id);
+            return View(video);
         }
 
         public IActionResult Privacy()
