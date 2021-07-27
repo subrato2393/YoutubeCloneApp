@@ -43,7 +43,6 @@ namespace YoutubeClone.Areas.Admin.Models
         {
             _channelService = Startup.AutofacContainer.Resolve<IChannelService>();
         }
-
         public void UploadVideo()
         {
             var channel = _channelService.GetChannelById(ChannelId);
@@ -59,19 +58,6 @@ namespace YoutubeClone.Areas.Admin.Models
                 Channel = channel
             });
         }
-
-        //public void AddVideoIntoDataBase()
-        //{
-        //    _channelService.AddVideoInfoIntoDatabase(new VideoBO()
-        //    {
-        //        VideoTitle = VideoTitle,
-        //        VideoFile = VideoFile,
-        //        VideoName = VideoFile.FileName,
-        //        Description = Description,
-        //        PublishDate = DateTime.Now,
-        //       // Channel = channel
-        //    });
-        //}
 
         public void GetAllChannel()
         {

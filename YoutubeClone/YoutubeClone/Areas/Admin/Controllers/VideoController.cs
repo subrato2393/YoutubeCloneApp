@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Threading.Tasks;
 using YoutubeClone.Areas.Admin.Models;
 
 namespace YoutubeClone.Areas.Admin.Controllers
@@ -41,8 +40,6 @@ namespace YoutubeClone.Areas.Admin.Controllers
                     model.GetAllChannel();
                     
                     model.UploadVideo();
-
-                   // model.AddVideoIntoDataBase();
 
                     return RedirectToAction("Index", "Home");
                 }
