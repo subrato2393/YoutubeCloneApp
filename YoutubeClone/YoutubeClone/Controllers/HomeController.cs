@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using YoutubeClone.Foundation.BusinessObjects;
 using YoutubeClone.Models;
 
 namespace YoutubeClone.Controllers

@@ -12,6 +12,7 @@ namespace YoutubeClone.Foundation.BusinessObjects
         public string Description { get; set; }
         public DateTime PublishDate { get; set; }
         public Channel Channel { get; set; }
+        public string ChannelName { get; set; } 
         public Guid ChannelId { get; set; } 
     }
 }

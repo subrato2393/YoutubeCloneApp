@@ -87,7 +87,13 @@ namespace YoutubeClone.Foundation.Services
                 {
                     if (item.Name == dbVideo.VideoName)
                     {
-                        videos.Add(new VideoBO() { VideoName = item.Name });
+                        videos.Add(new VideoBO()
+                        {
+                            VideoName = item.Name,
+                            VideoTitle = dbVideo.VideoTitle,
+                            ChannelName = dbVideo.ChannelName,
+                           // Channel=dbVideo.Channel.Name
+                        });
                     }
                 }
             }
@@ -115,9 +121,9 @@ namespace YoutubeClone.Foundation.Services
             string extension = Path.GetExtension(video.VideoFile.FileName);
             video.VideoName = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
             string path = Path.Combine(wwwRootPath + "/Video/", fileName);
-          
+
             AddVideoInfoIntoDatabase(video);
-         
+
             using (var fileStream = new FileStream(path, FileMode.Create))
             {
                 video.VideoFile.CopyTo(fileStream);
