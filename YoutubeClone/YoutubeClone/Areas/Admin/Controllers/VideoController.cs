@@ -40,9 +40,9 @@ namespace YoutubeClone.Areas.Admin.Controllers
                 {
                     model.GetAllChannel();
                     
-                    model.UploadVideoToFolder();
+                    model.UploadVideo();
 
-                    model.AddVideoIntoDataBase();
+                   // model.AddVideoIntoDataBase();
 
                     return RedirectToAction("Index", "Home");
                 }

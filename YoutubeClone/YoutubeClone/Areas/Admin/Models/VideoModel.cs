@@ -44,32 +44,34 @@ namespace YoutubeClone.Areas.Admin.Models
             _channelService = Startup.AutofacContainer.Resolve<IChannelService>();
         }
 
-        public void UploadVideoToFolder()
+        public void UploadVideo()
         {
-             _channelService.UploadVideoToFolder(new VideoBO()
-            {
-                VideoTitle = VideoTitle,
-                VideoName = VideoFile.FileName,
-                Description = Description,
-                PublishDate = DateTime.Now,
-                VideoFile = VideoFile,
-                ChannelId = ChannelId
-            });
-        }
+            var channel = _channelService.GetChannelById(ChannelId);
 
-        public void AddVideoIntoDataBase()
-        {
-            var channel = _channelService.GetChannelById(ChannelId); 
-            _channelService.AddVideoInfoIntoDatabase(new VideoBO()
+            _channelService.UploadVideoToFolder(new VideoBO()
             {
                 VideoTitle = VideoTitle,
-                VideoFile = VideoFile,
                 VideoName = VideoFile.FileName,
                 Description = Description,
                 PublishDate = DateTime.Now,
+                VideoFile = VideoFile,
+                ChannelId = ChannelId,
                 Channel = channel
             });
         }
+
+        //public void AddVideoIntoDataBase()
+        //{
+        //    _channelService.AddVideoInfoIntoDatabase(new VideoBO()
+        //    {
+        //        VideoTitle = VideoTitle,
+        //        VideoFile = VideoFile,
+        //        VideoName = VideoFile.FileName,
+        //        Description = Description,
+        //        PublishDate = DateTime.Now,
+        //       // Channel = channel
+        //    });
+        //}
 
         public void GetAllChannel()
         {

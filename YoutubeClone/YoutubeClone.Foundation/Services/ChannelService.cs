@@ -84,12 +84,24 @@ namespace YoutubeClone.Foundation.Services
 
             foreach (var item in objFiles)
             {
-                videos.Add(new VideoBO() { VideoName = item.Name });
+                foreach (var dbVideo in GetVideos())
+                {
+                    if (item.Name == dbVideo.VideoName)
+                    {
+                        videos.Add(new VideoBO() { VideoName = item.Name });
+                    }
+                }
             }
 
             return videos;
         }
+        public IList<VideoBO> GetVideos()
+        {
+            var videoList = _channelUnitOfWork.VideoRepository.GetAll();
 
+            var VideoBoList = _mapper.Map<IList<VideoBO>>(videoList);
+            return VideoBoList;
+        }
         public ChannelBO GetChannelById(Guid channelId)
         {
             var channelEo = _channelUnitOfWork.ChannelRepository.GetById(channelId);
@@ -104,6 +116,7 @@ namespace YoutubeClone.Foundation.Services
             string extension = Path.GetExtension(video.VideoFile.FileName);
             video.VideoName = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
             string path = Path.Combine(wwwRootPath + "/Video/", fileName);
+            AddVideoInfoIntoDatabase(video);
             using (var fileStream = new FileStream(path, FileMode.Create))
             {
                 await video.VideoFile.CopyToAsync(fileStream);
