@@ -18,6 +18,8 @@ namespace YoutubeClone
 
             builder.RegisterType<HomeModel>().AsSelf();
 
+            builder.RegisterType<SubscribeModel>().AsSelf();
+
             base.Load(builder);
         }
     }

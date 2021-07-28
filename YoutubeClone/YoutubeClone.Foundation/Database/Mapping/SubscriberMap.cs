@@ -8,8 +8,9 @@ namespace YoutubeClone.Foundation.Database.Mapping
         public SubscriberMap()
         {
             Id(x => x.Id).Column("Id").GeneratedBy.GuidNative();
-            Map(x => x.Name);
-            Map(x => x.Email);
+            //Map(x => x.Name);
+            //Map(x => x.Email);
+            References(x => x.ApplicationUser);
             References(x => x.Channel);
         }
     }

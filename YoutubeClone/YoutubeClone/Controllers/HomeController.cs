@@ -33,7 +33,8 @@ namespace YoutubeClone.Controllers
         public IActionResult VideoStreaming(Guid id)
         {
             var model = new HomeModel();
-            var video= model.GetVideoById(id);
+            var video = model.GetVideoById(id);
+
             return View(video);
         }
 

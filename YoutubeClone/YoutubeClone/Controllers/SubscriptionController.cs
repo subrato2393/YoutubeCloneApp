@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using YoutubeClone.Models;
 
 namespace YoutubeClone.Controllers
 {
@@ -13,6 +11,16 @@ namespace YoutubeClone.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+ 
+        public IActionResult Subscribe(Guid channelId,Guid videoId)
+        {
+            var model = new SubscribeModel();  
+            var userName = User.Identity.Name;
+
+            model.AddSubscriptionInfo(channelId,userName);
+
+            return RedirectToAction("VideoStreaming", "Home", new { id = videoId});
         }
     }
 }

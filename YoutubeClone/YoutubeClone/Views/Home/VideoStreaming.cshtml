@@ -33,12 +33,12 @@
             </div>
         </div>
         <div class="col-7">
-            <a  asp-action="Index" asp-controller="Subscription" asp-area="" class="btn btn-danger float-right">Subscribe</a>
+            <a  asp-action="Subscribe" asp-controller="Subscription"  asp-area="" asp-route-channelId="@Model.ChannelId" asp-route-videoId="@Model.Id" class="btn btn-danger float-right">Subscribe</a>
         </div>
     </div>
 
-
-    <h1>@ViewBag.Id</h1>
+    <h1>@Model.Id</h1>
+    <h1>@Model.ChannelId</h1>
     <h1>@Model.ChannelName</h1>
     <h1>@Model.VideoName</h1>
     <h1>@Model.VideoTitle</h1>
