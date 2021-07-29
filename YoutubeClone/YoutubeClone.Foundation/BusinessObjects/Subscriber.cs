@@ -7,8 +7,8 @@ namespace YoutubeClone.Foundation.BusinessObjects
 {
     public class Subscriber
     {
-        public virtual Guid Id { get; set; }
-        public virtual Channel Channel { get; set; }
-        public virtual ApplicationUser ApplicationUser { get; set; }
+        public Guid Id { get; set; }
+        public Channel Channel { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
     }
 }

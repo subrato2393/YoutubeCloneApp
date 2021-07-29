@@ -5,12 +5,12 @@ using System.Diagnostics;
 using YoutubeClone.Models;
 
 namespace YoutubeClone.Controllers
-{
-    public class HomeController : Controller
+{ 
+    public class VideoController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<VideoController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public VideoController(ILogger<VideoController> logger)
         {
             _logger = logger;
         }
@@ -19,9 +19,10 @@ namespace YoutubeClone.Controllers
         {
             try
             {
-                var model = new HomeModel();
-                var videos = model.GetVideoList();
-                return View(videos);
+                var model = new VideoListModel();
+                model.GetVideoList();
+               
+                return View(model);
             }
             catch (Exception ex)
             {
@@ -32,10 +33,10 @@ namespace YoutubeClone.Controllers
 
         public IActionResult VideoStreaming(Guid id)
         {
-            var model = new HomeModel();
-            var video = model.GetVideoById(id);
+            var model = new VideoViewModel();
+            model.GetVideoById(id);
 
-            return View(video);
+            return View(model);
         }
 
         public IActionResult Privacy()

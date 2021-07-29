@@ -14,9 +14,9 @@ namespace YoutubeClone.Areas.Admin.Controllers
         {
             _logger = logger;
         }
-        public IActionResult Index()
+        public IActionResult ShowAllVideo()
         {
-            return View();
+            return View(); 
         }
 
         public IActionResult UploadVideo()
@@ -41,9 +41,10 @@ namespace YoutubeClone.Areas.Admin.Controllers
                     
                     model.UploadVideo();
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("ShowAllVideo");
                 }
             }
+
             catch (Exception ex)
             {
                 _logger.LogError(ex,"Failed To Upload Video");

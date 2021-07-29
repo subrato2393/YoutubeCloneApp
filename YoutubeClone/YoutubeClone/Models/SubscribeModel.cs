@@ -8,6 +8,10 @@ namespace YoutubeClone.Models
 {
     public class SubscribeModel
     {
+        public virtual Guid Id { get; set; }
+        public  Channel Channel { get; set; }
+        public  ApplicationUser ApplicationUser { get; set; }
+
         private readonly IFeedbackService _feedbackService;
 
         public SubscribeModel()
@@ -20,9 +24,9 @@ namespace YoutubeClone.Models
             _feedbackService = feedbackService;
         }
 
-        public void AddSubscriptionInfo(Guid channelId,string userName)
+        public void AddSubscriptionInfo(Guid channelId, string userName)
         {
-            _feedbackService.AddSubscriptionIntoDatabase(channelId,userName);
+            _feedbackService.AddSubscriptionIntoDatabase(channelId, userName);
         }
     }
 }
