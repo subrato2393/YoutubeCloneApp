@@ -17,6 +17,7 @@ namespace YoutubeClone.Areas.Admin.Controllers
             _signInManager = signInManager;
             _userManager = userManager;
         }
+
         public IActionResult Index()
         {
             return View();
@@ -26,7 +27,7 @@ namespace YoutubeClone.Areas.Admin.Controllers
         {
             await _signInManager.SignOutAsync();
             
-            return RedirectToAction("Index", "Home", new { area = "" });
+            return RedirectToAction("Index", "Video", new { area = "" });
         }
     }
 }

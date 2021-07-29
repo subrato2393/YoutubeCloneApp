@@ -12,6 +12,7 @@ namespace YoutubeClone.Foundation.MappingProfile
             CreateMap<BO.Channel, EO.Channel>();
             CreateMap<EO.Channel, BO.Channel>();
             CreateMap<BO.Video, EO.Video>();
+            CreateMap<EO.Video, BO.Video>();
         }
     }
 }

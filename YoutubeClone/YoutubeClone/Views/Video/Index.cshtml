@@ -1,0 +1,46 @@
+﻿@model VideoListModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@section styles{
+    <link rel="stylesheet" href="/user/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+}
+<div class="videos col-12">
+    <section class="video-section">
+        @foreach (var item in Model.Videos)
+        {
+            <div class="row col-4">
+                <article class="video-container">
+                    <input type="hidden" value="@item.Id" />
+                    <div onclick="window.location.href = '/Video/VideoStreaming/@item.Id'">
+                        <a class="thumbnail">
+                            @{
+                                var iVideoUrl = "/Video/" + item.VideoName;
+                                <video width="290" height="170">
+                                    <source src="@iVideoUrl" type="video/mp4">
+                                </video>
+                            }
+                        </a>
+                        <div class="video-bottom-section">
+                            <a href="#">
+                                <img class="channel-icon" src="/user/thumbnil.jpg" />
+                            </a>
+                            <div class="video-details">
+                                <a href="#" class="video-title">@item.VideoTitle</a>
+                                <a href="#" class="video-channel-name">@item.ChannelName</a>
+                                <div class="video-metadata">
+                                    <span>12K views</span>
+                                    •
+                                    <span>1 week ago</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+        }
+    </section>
+</div>

@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Threading.Tasks;
 using YoutubeClone.Foundation.Services;
 using VideoBO = YoutubeClone.Foundation.BusinessObjects.Video;
 
@@ -43,30 +42,18 @@ namespace YoutubeClone.Areas.Admin.Models
         {
             _channelService = Startup.AutofacContainer.Resolve<IChannelService>();
         }
-
-        public void UploadVideoToFolder()
+        public void UploadVideo()
         {
-             _channelService.UploadVideoToFolder(new VideoBO()
+            var channel = _channelService.GetChannelById(ChannelId);
+
+            _channelService.UploadVideoToFolder(new VideoBO()
             {
                 VideoTitle = VideoTitle,
                 VideoName = VideoFile.FileName,
                 Description = Description,
                 PublishDate = DateTime.Now,
                 VideoFile = VideoFile,
-                ChannelId = ChannelId
-            });
-        }
-
-        public void AddVideoIntoDataBase()
-        {
-            var channel = _channelService.GetChannelById(ChannelId); 
-            _channelService.AddVideoInfoIntoDatabase(new VideoBO()
-            {
-                VideoTitle = VideoTitle,
-                VideoFile = VideoFile,
-                VideoName = VideoFile.FileName,
-                Description = Description,
-                PublishDate = DateTime.Now,
+                ChannelId = ChannelId,
                 Channel = channel
             });
         }

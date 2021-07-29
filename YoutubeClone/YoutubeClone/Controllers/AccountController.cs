@@ -146,7 +146,7 @@ namespace YoutubeClone.Controllers
             }
             else
             {
-                return RedirectToAction("Register");
+                return RedirectToAction("Index","Video");
             }
         }
     }

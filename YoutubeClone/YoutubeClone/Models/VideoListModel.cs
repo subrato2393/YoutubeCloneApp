@@ -1,26 +1,29 @@
 ﻿using Autofac;
-using System;
 using System.Collections.Generic;
+using YoutubeClone.Foundation.BusinessObjects;
 using YoutubeClone.Foundation.Services;
-using VideoBO=  YoutubeClone.Foundation.BusinessObjects.Video;
 
 namespace YoutubeClone.Models
 {
-    public class HomeModel
+    public class VideoListModel
     {
+        public IList<Video> Videos { get; set; }
 
         private readonly IChannelService _channelService;
-        public HomeModel(IChannelService channelService)
+
+        public VideoListModel(IChannelService channelService)
         {
             _channelService = channelService;
         }
-        public HomeModel()
+
+        public VideoListModel()
         {
             _channelService = Startup.AutofacContainer.Resolve<IChannelService>();
         }
-        public IList<VideoBO> GetVideoList()
+
+        public void GetVideoList()
         {
-           return _channelService.GetAllVideos();
+            Videos = _channelService.GetAllVideos();
         }
     }
 }

@@ -1,18 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using YoutubeClone.Foundation.BusinessObjects;
 using YoutubeClone.Models;
 
 namespace YoutubeClone.Controllers
-{
-    public class HomeController : Controller
+{ 
+    public class VideoController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-       
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ILogger<VideoController> _logger;
+
+        public VideoController(ILogger<VideoController> logger)
         {
             _logger = logger;
         }
@@ -21,15 +19,24 @@ namespace YoutubeClone.Controllers
         {
             try
             {
-                var model = new HomeModel();
-                var videos = model.GetVideoList();
-                return View(videos);
+                var model = new VideoListModel();
+                model.GetVideoList();
+               
+                return View(model);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to get Video list");
             }
             return View();
+        }
+
+        public IActionResult VideoStreaming(Guid id)
+        {
+            var model = new VideoViewModel();
+            model.GetVideoById(id);
+
+            return View(model);
         }
 
         public IActionResult Privacy()
