@@ -31,9 +31,9 @@
                                 <a href="#" class="video-title">@item.VideoTitle</a>
                                 <a href="#" class="video-channel-name">@item.ChannelName</a>
                                 <div class="video-metadata">
-                                    <span>12K views</span>
-                                    •
-                                    <span>1 week ago</span>
+                                    @{
+                                        <span>@Model.VideoViewCounts.Where(x => x.Video.Id == item.Id).Count() views</span>
+                                    }
                                 </div>
                             </div>
                         </div>

@@ -5,8 +5,9 @@ namespace YoutubeClone.Foundation.UnitOfWorks
 {
     public interface IChannelUnitOfWork : IUnitOfWork
     {
-        IChannelRepository  ChannelRepository { get; set; }
+        IChannelRepository ChannelRepository { get; set; }
         IVideoRepository VideoRepository { get; set; }
         ISubscriberRepository SubscriberRepository { get; set; }
+        IViewRepository ViewRepository { get; set; }
     }
 }

@@ -149,5 +149,9 @@ namespace YoutubeClone.Controllers
                 return RedirectToAction("Index","Video");
             }
         }
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }
