@@ -5,7 +5,7 @@ using System.Diagnostics;
 using YoutubeClone.Models;
 
 namespace YoutubeClone.Controllers
-{ 
+{
     public class VideoController : Controller
     {
         private readonly ILogger<VideoController> _logger;
@@ -21,7 +21,7 @@ namespace YoutubeClone.Controllers
             {
                 var model = new VideoListModel();
                 model.GetVideoList();
-               
+
                 return View(model);
             }
             catch (Exception ex)
@@ -30,11 +30,11 @@ namespace YoutubeClone.Controllers
             }
             return View();
         }
-
+         
         public IActionResult VideoStreaming(Guid id)
         {
             var model = new VideoViewModel();
-            model.GetVideoById(id);
+            model.GetVideoById(id,User.Identity.Name);
 
             return View(model);
         }

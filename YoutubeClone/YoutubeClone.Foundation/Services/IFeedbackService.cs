@@ -6,5 +6,6 @@ namespace YoutubeClone.Foundation.Services
     public interface IFeedbackService
     {
         Task AddSubscriptionIntoDatabase(Guid channelId, string userName);
+        bool IsUserSubscribeBefore(Guid channelId, string userName);
     }
 }

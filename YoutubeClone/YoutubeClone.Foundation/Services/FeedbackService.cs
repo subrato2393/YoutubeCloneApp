@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using YoutubeClone.Foundation.Entities;
 using YoutubeClone.Foundation.UnitOfWorks;
@@ -21,6 +22,14 @@ namespace YoutubeClone.Foundation.Services
             _userManager = userManager;
             _channelUnitOfWork = channelUnitOfWork;
             _mapper = mapper;
+        }
+
+        public bool IsUserSubscribeBefore(Guid channelId, string userName)
+        {
+            var subscribers = _channelUnitOfWork.SubscriberRepository.GetAll();
+            var subscribeUsers = subscribers.Where(x => x.Channel.Id == channelId && x.ApplicationUser.Email == userName).ToList();
+
+            return subscribeUsers.Count > 0;
         }
 
         public async Task AddSubscriptionIntoDatabase(Guid channelId, string userName)
