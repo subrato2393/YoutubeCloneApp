@@ -17,20 +17,25 @@ namespace YoutubeClone.Models
         public Channel Channel { get; set; }
         public string ChannelName { get; set; }
         public Guid ChannelId { get; set; }
+        public bool IsScribedUser { get; set; } 
 
-        private readonly IChannelService _channelService;
+        private readonly IChannelService  _channelService;
+        private readonly IFeedbackService  _feedbackService;
 
-        public VideoViewModel(IChannelService channelService)
+        public VideoViewModel(IChannelService channelService,
+            IFeedbackService feedbackService)
         {
             _channelService = channelService;
+            _feedbackService = feedbackService;
         }
 
         public VideoViewModel()
         {
             _channelService = Startup.AutofacContainer.Resolve<IChannelService>();
+            _feedbackService = Startup.AutofacContainer.Resolve<IFeedbackService>();
         }
 
-        public void GetVideoById(Guid id)
+        public void GetVideoById(Guid id,string userName)
         {
             var video = _channelService.GetVideoById(id);
             
@@ -44,6 +49,8 @@ namespace YoutubeClone.Models
             Channel = video.Channel;
             ChannelName = video.ChannelName;
             ChannelId = video.ChannelId;
+
+            IsScribedUser = _feedbackService.IsUserSubscribeBefore(ChannelId, userName);
         }
     }
 }

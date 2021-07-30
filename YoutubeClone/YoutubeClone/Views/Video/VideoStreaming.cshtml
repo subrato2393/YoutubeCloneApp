@@ -33,7 +33,16 @@
             </div>
         </div>
         <div class="col-7">
-            <a  asp-action="Subscribe" asp-controller="Subscription"  asp-area="" asp-route-channelId="@Model.ChannelId" asp-route-videoId="@Model.Id" class="btn btn-danger float-right">Subscribe</a>
+            @{
+                if (Model.IsScribedUser)
+                {
+                    <button class="btn btn-outline-danger float-right" disabled >Subscribed</button>
+                }
+                else
+                {
+                    <a asp-action="Subscribe" asp-controller="Subscription" asp-area="" asp-route-channelId="@Model.ChannelId" asp-route-videoId="@Model.Id" class="btn btn-danger float-right">Subscribe</a>
+                }
+            }
         </div>
     </div>
 

@@ -11,6 +11,7 @@ namespace YoutubeClone.Models
         public virtual Guid Id { get; set; }
         public  Channel Channel { get; set; }
         public  ApplicationUser ApplicationUser { get; set; }
+        public bool IsScribedUser { get; set; }
 
         private readonly IFeedbackService _feedbackService;
 
@@ -26,7 +27,12 @@ namespace YoutubeClone.Models
 
         public void AddSubscriptionInfo(Guid channelId, string userName)
         {
-            _feedbackService.AddSubscriptionIntoDatabase(channelId, userName);
+            IsScribedUser = _feedbackService.IsUserSubscribeBefore(channelId, userName);
+         
+            if (!IsScribedUser)
+            {
+                _feedbackService.AddSubscriptionIntoDatabase(channelId, userName);
+            }
         }
     }
 }

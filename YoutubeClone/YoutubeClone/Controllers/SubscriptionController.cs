@@ -20,7 +20,7 @@ namespace YoutubeClone.Controllers
 
             model.AddSubscriptionInfo(channelId,userName);
 
-            return RedirectToAction("VideoStreaming", "Video", new { id = videoId});
+            return RedirectToAction("VideoStreaming", "Video", new { id = videoId,channelId=channelId});
         }
     }
 }
