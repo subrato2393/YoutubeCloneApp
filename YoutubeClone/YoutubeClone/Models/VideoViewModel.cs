@@ -18,6 +18,7 @@ namespace YoutubeClone.Models
         public string ChannelName { get; set; }
         public Guid ChannelId { get; set; }
         public bool IsScribedUser { get; set; } 
+        public int VideoViewCount { get; set; }
 
         private readonly IChannelService  _channelService;
         private readonly IFeedbackService  _feedbackService;
@@ -27,7 +28,7 @@ namespace YoutubeClone.Models
         {
             _channelService = channelService;
             _feedbackService = feedbackService;
-        }
+        }  
 
         public VideoViewModel()
         {
@@ -51,6 +52,10 @@ namespace YoutubeClone.Models
             ChannelId = video.ChannelId;
 
             IsScribedUser = _feedbackService.IsUserSubscribeBefore(ChannelId, userName);
+        }
+        public void GetVideoViewCount(Guid id)
+        {
+            VideoViewCount = _feedbackService.GetVideoViewCountFromDatabase(id);
         }
     }
 }

@@ -9,15 +9,14 @@
 <div class="col-10">
     @{
         var iVideoUrl = "/Video/" + Model.VideoName;
-        <video width="900" height="560" controls autoplay>
-            <source src="@iVideoUrl" type="video/mp4">
+    
+        <video id="video" width="900" height="560" controls>
+            <source src="@iVideoUrl" type='video/mp4;codecs="avc1.4D401E, mp4a.40.2"'>
         </video>
     }
     <h4 class="mt-2">@Model.VideoTitle</h4>
     <div class="video-metadata">
-        <span>12 views</span>
-        •
-        <span>@DateTime.Now</span>
+        <span>@Model.VideoViewCount  views</span>
     </div>
     <hr>
     <div class="video-bottom-section row">
@@ -36,7 +35,7 @@
             @{
                 if (Model.IsScribedUser)
                 {
-                    <button class="btn btn-outline-danger float-right" disabled >Subscribed</button>
+                    <button class="btn btn-outline-danger float-right" disabled>Subscribed</button>
                 }
                 else
                 {
@@ -47,4 +46,37 @@
     </div>
     <br /><br /><br />
 </div>
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var videoId = '@Model.Id'
+
+            function reset() {
+                startTime = new Date();
+            }
+
+            $('video')[0].addEventListener('play', reset);
+            $('video')[0].addEventListener('pause', reset);
+            $('video')[0].addEventListener('stop', reset);
+
+            var IsPlayed = true;
+
+            $('video')[0].addEventListener('timeupdate', (e) => {
+                let elapsedSeconds = (new Date() - startTime) / 1000;
+                if (elapsedSeconds > 10 && IsPlayed) {
+                    IsPlayed = false;
+
+                    $.ajax(
+                        {
+                            type: 'POST',
+                            dataType: 'JSON',
+                            url: '/VideoView/AddVideoView',
+                            data: { videoId: videoId },
+                        });
+                }
+            });
+        });
+    </script>
+}
 

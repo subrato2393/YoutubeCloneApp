@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using YoutubeClone.Foundation.BusinessObjects;
 using YoutubeClone.Foundation.Entities;
 using YoutubeClone.Foundation.UnitOfWorks;
 using YoutubeClone.Membership.Entities;
+using Subscriber = YoutubeClone.Foundation.Entities.Subscriber;
 
 namespace YoutubeClone.Foundation.Services
 {
@@ -46,6 +49,31 @@ namespace YoutubeClone.Foundation.Services
             _channelUnitOfWork.BeginTransaction();
             _channelUnitOfWork.SubscriberRepository.Add(subscriber);
             _channelUnitOfWork.Commit();
+        }
+
+        public void AddVideoViewCountInfo(VideoViewCount videoViewCount)
+        {
+            var viewsEntity = _mapper.Map<Views>(videoViewCount);
+
+            _channelUnitOfWork.BeginTransaction();
+            _channelUnitOfWork.ViewRepository.Add(viewsEntity);
+            _channelUnitOfWork.Commit();
+        }
+
+        public int GetVideoViewCountFromDatabase(Guid id)
+        {
+            var views = _channelUnitOfWork.ViewRepository.GetAll();
+            var count = views.Where(x => x.Video.Id == id).Count();
+            return count;
+        }
+
+        public IList<VideoViewCount> GetAllVideoView()  
+        {
+            var videoView = _channelUnitOfWork.ViewRepository.GetAll();
+            
+            var videoViewBo = _mapper.Map<IList<VideoViewCount>>(videoView);
+           
+            return videoViewBo;
         }
     }
 }

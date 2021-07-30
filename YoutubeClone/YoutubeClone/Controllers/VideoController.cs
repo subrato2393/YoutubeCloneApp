@@ -21,6 +21,7 @@ namespace YoutubeClone.Controllers
             {
                 var model = new VideoListModel();
                 model.GetVideoList();
+                model.GetVideoViewCount();
 
                 return View(model);
             }
@@ -35,6 +36,7 @@ namespace YoutubeClone.Controllers
         {
             var model = new VideoViewModel();
             model.GetVideoById(id,User.Identity.Name);
+            model.GetVideoViewCount(id);
 
             return View(model);
         }
