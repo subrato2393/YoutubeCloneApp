@@ -75,5 +75,12 @@ namespace YoutubeClone.Foundation.Services
            
             return videoViewBo;
         }
+
+        public int GetAllSubscriberCount(Guid channelId)
+        {
+            var subscribers = _channelUnitOfWork.SubscriberRepository.GetAll();
+            var count = subscribers.Where(x => x.Channel.Id == channelId).Count();
+            return count;
+        }
     }
 }
