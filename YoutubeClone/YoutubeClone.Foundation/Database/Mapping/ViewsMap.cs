@@ -9,6 +9,7 @@ namespace YoutubeClone.Foundation.Database.Mapping
         {
             Id(x => x.Id).Column("Id").GeneratedBy.GuidNative();
             Map(x => x.ViewCount);
+            Map(x => x.ViewDate).CustomSqlType("date");
             References(x => x.Video);
         }
     }

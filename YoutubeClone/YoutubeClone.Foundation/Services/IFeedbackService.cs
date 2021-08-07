@@ -13,5 +13,7 @@ namespace YoutubeClone.Foundation.Services
         int GetVideoViewCountFromDatabase(Guid id);
         IList<VideoViewCount> GetAllVideoView();
         int GetAllSubscriberCount(Guid channelId);
+        IList<VideoViewChart> GetVideoViewCountonDateForChart(Guid channelId);
+        // IList<DataModel> GetVideoViewCountonDateForChart();
     }
 }

@@ -23,6 +23,8 @@ namespace YoutubeClone
             builder.RegisterType<VideoListModel>().AsSelf();
 
             builder.RegisterType<ViewCountModel>().AsSelf();
+         
+            builder.RegisterType<ChartModel>().AsSelf();
 
             base.Load(builder);
         }

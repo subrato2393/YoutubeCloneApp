@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using YoutubeClone.Foundation;
 using YoutubeClone.Foundation.MappingProfile;
+using YoutubeClone.MappingProfile;
 using YoutubeClone.Membership;
 using YoutubeClone.Membership.Entities;
 using YoutubeClone.Membership.Extensions;
@@ -35,6 +36,7 @@ namespace YoutubeClone
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new FoundationProfile());
+                mc.AddProfile(new WebProfile());
             });
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);

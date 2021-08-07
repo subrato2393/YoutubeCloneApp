@@ -10,6 +10,7 @@ namespace YoutubeClone.Models
         public  Guid Id { get; set; }
         public int ViewCount { get; set; }
         public Video Video { get; set; }
+        public DateTime ViewDate { get; set; } 
 
         private readonly IFeedbackService _feedbackService;
         private readonly IChannelService _channelService; 
@@ -34,7 +35,8 @@ namespace YoutubeClone.Models
             _feedbackService.AddVideoViewCountInfo(new VideoViewCount()
             {
                 ViewCount = 1,
-                Video = video
+                Video = video,
+                ViewDate = DateTime.Now
             });
         }
     }

@@ -67,12 +67,12 @@ namespace YoutubeClone.Foundation.Services
             return count;
         }
 
-        public IList<VideoViewCount> GetAllVideoView()  
+        public IList<VideoViewCount> GetAllVideoView()
         {
             var videoView = _channelUnitOfWork.ViewRepository.GetAll();
-            
+
             var videoViewBo = _mapper.Map<IList<VideoViewCount>>(videoView);
-           
+
             return videoViewBo;
         }
 
@@ -81,6 +81,28 @@ namespace YoutubeClone.Foundation.Services
             var subscribers = _channelUnitOfWork.SubscriberRepository.GetAll();
             var count = subscribers.Where(x => x.Channel.Id == channelId).Count();
             return count;
+        }
+
+        public IList<VideoViewChart> GetVideoViewCountonDateForChart(Guid channelId)
+        {
+            var channels = _channelUnitOfWork.ChannelRepository.GetAll();
+            var video = _channelUnitOfWork.VideoRepository.GetAll();
+            var view = _channelUnitOfWork.ViewRepository.GetAll();
+            
+            DateTime today = DateTime.Today;
+            
+            var videoViewCount = (from v in view
+                          join vid in video on v.Video.Id equals vid.Id
+                          join chnl in channels on vid.Channel.Id equals chnl.Id
+                          where chnl.Id == channelId && v.ViewDate.Month == today.Month && v.ViewDate.Year == today.Year
+                          group new {v,chnl}  by new {v.ViewDate, chnl.Id, chnl.Name} into vg
+                          select new VideoViewChart
+                          {
+                             ChannelName = vg.Key.Name,
+                             ViewDate = vg.Key.ViewDate,
+                             ViewCount = vg.Count() 
+                          }).OrderBy(x=>x.ViewDate).ToList();
+            return videoViewCount;
         }
     }
 }
