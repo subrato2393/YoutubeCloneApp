@@ -4,19 +4,35 @@
 }
 @section styles{
     <link rel="stylesheet" href="/user/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 }
 <div class="col-10">
     @{
         var iVideoUrl = "/Video/" + Model.VideoName;
-    
+
         <video id="video" width="900" height="560" controls>
             <source src="@iVideoUrl" type='video/mp4;codecs="avc1.4D401E, mp4a.40.2"'>
         </video>
     }
     <h4 class="mt-2">@Model.VideoTitle</h4>
     <div class="video-metadata">
-        <span>@Model.VideoViewCount  views</span>
+        <span>@Model.VideoViewCount  views . @Model.PublishDate.ToString("dd MMMM yyyy")</span>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <button class="btn btn-outline-success float-right ml-1">
+                <span><i class="fas fa-share"></i></span>
+                <span>Share</span>
+            </button>
+            <button class="btn btn-outline-success float-right ml-1">
+                <span><i class="fas fa-thumbs-down"></i></span>
+                <span>0</span>
+            </button>
+            <button class="btn btn-outline-success float-right">
+                <span><i class="fas fa-thumbs-up"></i></span>
+                <span>0</span>
+            </button>
+        </div>
     </div>
     <hr>
     <div class="video-bottom-section row">
@@ -44,9 +60,25 @@
             }
         </div>
     </div>
+    <hr />
+    <p>@Html.Raw(Model.Description)</p>
+    <hr />
+    <h5>Comments</h5>
+    <div class="row">
+        <div class="col-12">
+            <input type="text" class="form-control" placeholder="Add a public comments" />
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-12">
+            <button class="btn btn-outline-success float-right ml-2">Comment</button>
+            <button class="btn btn-outline-success float-right">Cancel</button>
+        </div>
+    </div>
     <br /><br /><br />
 </div>
 @section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
 

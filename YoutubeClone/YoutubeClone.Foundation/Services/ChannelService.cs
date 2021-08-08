@@ -156,6 +156,7 @@ namespace YoutubeClone.Foundation.Services
                     video.VideoTitle = videoBo.VideoTitle;
                     video.Description = videoBo.Description;
                     video.ChannelId = videoBo.ChannelId;
+                    video.PublishDate = videoBo.PublishDate;
                     video.Id = videoBo.Id;
                 };
             }
