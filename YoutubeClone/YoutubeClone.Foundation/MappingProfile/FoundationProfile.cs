@@ -17,6 +17,7 @@ namespace YoutubeClone.Foundation.MappingProfile
             CreateMap<EO.Video, BO.Video>();
             CreateMap<VideoViewCount,Views>();
             CreateMap<Views, VideoViewCount>();
+            CreateMap<BO.Likes, EO.Likes>();
         }
     }
 }

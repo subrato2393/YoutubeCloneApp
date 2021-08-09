@@ -9,5 +9,6 @@ namespace YoutubeClone.Foundation.UnitOfWorks
         IVideoRepository VideoRepository { get; set; }
         ISubscriberRepository SubscriberRepository { get; set; }
         IViewRepository ViewRepository { get; set; }
+        ILikeRepository LikeRepository { get; set; }
     }
 }

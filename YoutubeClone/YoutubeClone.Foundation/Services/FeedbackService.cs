@@ -9,6 +9,8 @@ using YoutubeClone.Foundation.Entities;
 using YoutubeClone.Foundation.UnitOfWorks;
 using YoutubeClone.Membership.Entities;
 using Subscriber = YoutubeClone.Foundation.Entities.Subscriber;
+using LikeBO = YoutubeClone.Foundation.BusinessObjects.Likes;
+using LikeEO = YoutubeClone.Foundation.Entities.Likes;
 
 namespace YoutubeClone.Foundation.Services
 {
@@ -88,21 +90,43 @@ namespace YoutubeClone.Foundation.Services
             var channels = _channelUnitOfWork.ChannelRepository.GetAll();
             var video = _channelUnitOfWork.VideoRepository.GetAll();
             var view = _channelUnitOfWork.ViewRepository.GetAll();
-            
+
             DateTime today = DateTime.Today;
-            
+
             var videoViewCount = (from v in view
-                          join vid in video on v.Video.Id equals vid.Id
-                          join chnl in channels on vid.Channel.Id equals chnl.Id
-                          where chnl.Id == channelId && v.ViewDate.Month == today.Month && v.ViewDate.Year == today.Year
-                          group new {v,chnl}  by new {v.ViewDate, chnl.Id, chnl.Name} into vg
-                          select new VideoViewChart
-                          {
-                             ChannelName = vg.Key.Name,
-                             ViewDate = vg.Key.ViewDate,
-                             ViewCount = vg.Count() 
-                          }).OrderBy(x=>x.ViewDate).ToList();
+                                  join vid in video on v.Video.Id equals vid.Id
+                                  join chnl in channels on vid.Channel.Id equals chnl.Id
+                                  where chnl.Id == channelId && v.ViewDate.Month == today.Month && v.ViewDate.Year == today.Year
+                                  group new { v, chnl } by new { v.ViewDate, chnl.Id, chnl.Name } into vg
+                                  select new VideoViewChart
+                                  {
+                                      ChannelName = vg.Key.Name,
+                                      ViewDate = vg.Key.ViewDate,
+                                      ViewCount = vg.Count()
+                                  }).OrderBy(x => x.ViewDate).ToList();
             return videoViewCount;
+        }
+
+        public void AddVideoLike(LikeBO likeBO)
+        {
+            var video = _channelUnitOfWork.VideoRepository.GetById(likeBO.VideoId);
+
+            var like = new LikeEO
+            {
+                LikesCount = likeBO.LikesCount,
+                Video = video
+            };
+
+            _channelUnitOfWork.BeginTransaction();
+            _channelUnitOfWork.LikeRepository.Add(like);
+            _channelUnitOfWork.Commit();
+        }
+
+        public int GetLikesCount(Guid id)
+        {
+            var likes = _channelUnitOfWork.LikeRepository.GetAll();
+            var count = likes.Where(x => x.Video.Id == id).Count();
+            return count;
         }
     }
 }

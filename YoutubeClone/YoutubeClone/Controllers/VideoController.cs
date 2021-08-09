@@ -38,6 +38,7 @@ namespace YoutubeClone.Controllers
             model.GetVideoById(id,User.Identity.Name);
             model.GetVideoViewCount(id);
             model.GetSubscriberCount();
+            model.GetVideoLikesCount(id);
 
             return View(model);
         }
