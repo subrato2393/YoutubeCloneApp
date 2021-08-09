@@ -17,7 +17,6 @@ namespace YoutubeClone.Controllers
         { 
             var model = new LikeModel();
             model.IsUserLikedVideoBefore(videoId, User.Identity.Name);
-           // model.AddLikeInfo(videoId,User.Identity.Name);
 
             return Json(new { redirectToAction = Url.Action("VideoStreaming", "Video",new { Id=videoId})});
         }

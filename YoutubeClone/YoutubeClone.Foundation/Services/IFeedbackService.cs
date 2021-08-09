@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using YoutubeClone.Foundation.BusinessObjects;
 using LikeBO = YoutubeClone.Foundation.BusinessObjects.Likes;
 using LikeEO = YoutubeClone.Foundation.Entities.Likes;
+using DislikeBO = YoutubeClone.Foundation.BusinessObjects.Dislikes;
 
 namespace YoutubeClone.Foundation.Services
 {
@@ -19,6 +20,10 @@ namespace YoutubeClone.Foundation.Services
         Task AddVideoLike(LikeBO likeBO);
         int GetLikesCount(Guid id);
         bool IsLiked(Guid videoId, string name);
+        bool IsDisliked(Guid videoId, string name);
         void DeleteLike(Guid videoId, string name);
+        void DeleteDislike(Guid videoId, string name);
+        Task AddVideoDislike(DislikeBO dislikeBO);
+        int GetDislikesCount(Guid id);
     }
 }

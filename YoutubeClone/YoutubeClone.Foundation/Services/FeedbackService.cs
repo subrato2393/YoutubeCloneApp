@@ -11,6 +11,8 @@ using YoutubeClone.Membership.Entities;
 using Subscriber = YoutubeClone.Foundation.Entities.Subscriber;
 using LikeBO = YoutubeClone.Foundation.BusinessObjects.Likes;
 using LikeEO = YoutubeClone.Foundation.Entities.Likes;
+using DislikeBO = YoutubeClone.Foundation.BusinessObjects.Dislikes;
+using DislikeEO = YoutubeClone.Foundation.Entities.Dislikes;
 
 namespace YoutubeClone.Foundation.Services
 {
@@ -146,6 +148,49 @@ namespace YoutubeClone.Foundation.Services
             _channelUnitOfWork.BeginTransaction();
             _channelUnitOfWork.LikeRepository.Remove(like);
             _channelUnitOfWork.Commit();
+        }
+
+        public bool IsDisliked(Guid videoId, string name)
+        {
+            var dislikes = _channelUnitOfWork.DislikeRepository.GetAll();
+            var IsDisliked = dislikes.Where(x => x.Video.Id == videoId && x.User.UserName == name).ToList();
+
+            return IsDisliked.Count > 0;
+        }
+
+        public void DeleteDislike(Guid videoId, string name)
+        {
+            var dislikes = _channelUnitOfWork.DislikeRepository.GetAll();
+            var dislike = dislikes.FirstOrDefault(x => x.Video.Id == videoId && x.User.UserName == name);
+
+            _channelUnitOfWork.BeginTransaction();
+            _channelUnitOfWork.DislikeRepository.Remove(dislike);
+            _channelUnitOfWork.Commit();
+        }
+
+        public async Task AddVideoDislike(DislikeBO dislikeBO)
+        {
+            var user = await _userManager.FindByNameAsync(dislikeBO.UserName);
+
+            var video = _channelUnitOfWork.VideoRepository.GetById(dislikeBO.VideoId);
+
+            var dislike = new DislikeEO
+            {
+                DislikesCounts = dislikeBO.DislikesCount,
+                Video = video,
+                User = user
+            };
+
+            _channelUnitOfWork.BeginTransaction();
+            _channelUnitOfWork.DislikeRepository.Add(dislike);
+            _channelUnitOfWork.Commit();
+        }
+
+        public int GetDislikesCount(Guid id)
+        {
+            var dislikes = _channelUnitOfWork.DislikeRepository.GetAll();
+            var count = dislikes.Where(x => x.Video.Id == id).Count();
+            return count;
         }
     }
 }

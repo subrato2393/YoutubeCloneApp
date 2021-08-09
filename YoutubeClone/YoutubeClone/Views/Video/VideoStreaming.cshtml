@@ -24,10 +24,23 @@
                 <span><i class="fas fa-share"></i></span>
                 <span>Share</span>
             </button>
-            <button id="btnDisLike" class="btn btn-outline-success float-right ml-1">
-                <span><i class="fas fa-thumbs-down"></i></span>
-                <span>0</span>
-            </button>
+            @{
+                if (Model.IsDislikedBefore)
+                {
+                    <button id="btndislike" data-toggle="tooltip" data-placement="top" title="Dislike" class="btn btn-success float-right ml-1">
+                        <span><i class="fas fa-thumbs-down"></i></span>
+                        <span>@Model.DislikesCount</span>
+                    </button>
+                }
+                else
+                {
+                    <button id="btndislike" data-toggle="tooltip" data-placement="top" title="Dislike" class="btn btn-outline-success float-right ml-1">
+                        <span><i class="fas fa-thumbs-down"></i></span>
+                        <span>@Model.DislikesCount</span>
+                    </button>
+                }
+            }
+
             @{
                 if (Model.IsLikedBefore)
                 {
@@ -123,6 +136,27 @@
 
             })
 
+            //Insert Dislike into Database
+            $('#btndislike').click(function () {
+                $.when(
+                    $.get(
+                        {
+                            type: 'POST',
+                            dataType: 'JSON',
+                            url: '/Dislike/AddDisLike',
+                            data: {
+                                videoId: videoId,
+                            },
+                            success: function () {
+                                location.reload();
+                            },
+                            error: function () {
+                                window.location.href = '/Account/Login';
+                            }
+                        }),
+                );
+
+            })
             //Insert video view into Database
 
             function reset() {

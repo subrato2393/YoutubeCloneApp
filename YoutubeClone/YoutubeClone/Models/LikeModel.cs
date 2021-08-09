@@ -12,6 +12,7 @@ namespace YoutubeClone.Models
         public int LikeCount { get; set; }
         public Guid VideoId { get; set; }
         public bool IsLikedBefore { get; set; }
+        public bool IsDislikeBefore { get; set; }
 
         private readonly IFeedbackService _feedbackService;
         public LikeModel(IFeedbackService feedbackService)
@@ -19,29 +20,26 @@ namespace YoutubeClone.Models
             _feedbackService = feedbackService;
         }
 
+        public LikeModel()
+        {
+            _feedbackService = Startup.AutofacContainer.Resolve<IFeedbackService>();
+        }
         public void GetLikeCount(Guid videoId)
         {
             //  LikeCount = _feedbackService.GetAllLikeCount(videoId);
             LikeCount = 10;
         }
 
-        public LikeModel()
-        {
-            _feedbackService = Startup.AutofacContainer.Resolve<IFeedbackService>();
-        }
-        //public void AddLikeInfo(Guid videoId, string userName)
-        //{
-        //    _feedbackService.AddVideoLike(new LikeBO()
-        //    {
-        //        LikesCount = 1,
-        //        VideoId = videoId,
-        //        UserName = userName
-        //    });
-        //}
         public void IsUserLikedVideoBefore(Guid videoId, string name)
         {
+            IsDislikeBefore = _feedbackService.IsDisliked(videoId,name);
+            
             IsLikedBefore = _feedbackService.IsLiked(videoId, name);
 
+            if (IsDislikeBefore)
+            {
+                _feedbackService.DeleteDislike(videoId, name);
+            }
             if (IsLikedBefore)
             {
                 _feedbackService.DeleteLike(videoId, name);
