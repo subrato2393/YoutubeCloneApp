@@ -107,26 +107,45 @@ namespace YoutubeClone.Foundation.Services
             return videoViewCount;
         }
 
-        public void AddVideoLike(LikeBO likeBO)
+        public async Task AddVideoLike(LikeBO likeBO)
         {
+            var user = await _userManager.FindByNameAsync(likeBO.UserName);
+
             var video = _channelUnitOfWork.VideoRepository.GetById(likeBO.VideoId);
 
             var like = new LikeEO
             {
                 LikesCount = likeBO.LikesCount,
-                Video = video
+                Video = video,
+                User = user
             };
 
             _channelUnitOfWork.BeginTransaction();
             _channelUnitOfWork.LikeRepository.Add(like);
             _channelUnitOfWork.Commit();
         }
-
         public int GetLikesCount(Guid id)
         {
             var likes = _channelUnitOfWork.LikeRepository.GetAll();
             var count = likes.Where(x => x.Video.Id == id).Count();
             return count;
+        }
+        public bool IsLiked(Guid videoId, string name)
+        {
+            var likes = _channelUnitOfWork.LikeRepository.GetAll();
+            var IsLiked = likes.Where(x => x.Video.Id == videoId && x.User.UserName == name).ToList();
+           
+            return IsLiked.Count > 0;
+        }
+         
+        public void DeleteLike(Guid videoId, string name)
+        {
+            var likes = _channelUnitOfWork.LikeRepository.GetAll();
+            var like = likes.FirstOrDefault(x => x.Video.Id == videoId && x.User.UserName == name);
+
+            _channelUnitOfWork.BeginTransaction();
+            _channelUnitOfWork.LikeRepository.Remove(like);
+            _channelUnitOfWork.Commit();
         }
     }
 }

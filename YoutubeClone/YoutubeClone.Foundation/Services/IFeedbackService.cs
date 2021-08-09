@@ -16,8 +16,9 @@ namespace YoutubeClone.Foundation.Services
         IList<VideoViewCount> GetAllVideoView();
         int GetAllSubscriberCount(Guid channelId);
         IList<VideoViewChart> GetVideoViewCountonDateForChart(Guid channelId);
-        void AddVideoLike(LikeBO likeBO);
+        Task AddVideoLike(LikeBO likeBO);
         int GetLikesCount(Guid id);
-        // IList<DataModel> GetVideoViewCountonDateForChart();
+        bool IsLiked(Guid videoId, string name);
+        void DeleteLike(Guid videoId, string name);
     }
 }

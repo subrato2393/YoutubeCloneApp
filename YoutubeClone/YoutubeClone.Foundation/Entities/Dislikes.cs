@@ -3,7 +3,7 @@ using YoutubeClone.Membership.Entities;
 
 namespace YoutubeClone.Foundation.Entities
 {
-    public class Likes
+    public class Dislikes
     {
         public virtual Guid Id { get; set; }
         public virtual int LikesCount { get; set; }

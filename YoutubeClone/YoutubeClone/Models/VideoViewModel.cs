@@ -18,9 +18,10 @@ namespace YoutubeClone.Models
         public string ChannelName { get; set; }
         public Guid ChannelId { get; set; }
         public bool IsScribedUser { get; set; } 
-        public int VideoViewCount { get; set; }
-        public int SubscriberCount { get; set; }
+        public int VideoViewCount { get; set; } 
+        public int SubscriberCount { get; set; } 
         public int LikesCount { get; set; }
+        public bool IsLikedBefore { get; set; }
 
         private readonly IChannelService  _channelService;
         private readonly IFeedbackService  _feedbackService;
@@ -30,7 +31,7 @@ namespace YoutubeClone.Models
         {
             _channelService = channelService;
             _feedbackService = feedbackService;
-        }
+        }      
 
         public VideoViewModel()
         {
@@ -67,6 +68,10 @@ namespace YoutubeClone.Models
         public void GetVideoLikesCount(Guid id)
         {
             LikesCount = _feedbackService.GetLikesCount(id);
+        }
+        public void IsLikedVideoBefore(Guid id, string name)
+        {
+            IsLikedBefore = _feedbackService.IsLiked(id, name);
         }
     }
 }

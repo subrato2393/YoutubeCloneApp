@@ -18,7 +18,7 @@
     <div class="video-metadata">
         <span>@Model.VideoViewCount  views . @Model.PublishDate.ToString("dd MMMM yyyy")</span>
     </div>
-    <div class="row">
+    <div id="feedback" class="row">
         <div class="col-12">
             <button class="btn btn-outline-success float-right ml-1">
                 <span><i class="fas fa-share"></i></span>
@@ -28,10 +28,23 @@
                 <span><i class="fas fa-thumbs-down"></i></span>
                 <span>0</span>
             </button>
-            <button id="btnLike" class="btn btn-outline-success float-right">
-                <span><i class="fas fa-thumbs-up"></i></span>
-                <span>@Model.LikesCount</span>
-            </button>
+            @{
+                if (Model.IsLikedBefore)
+                {
+                    <button id="btnLike" data-toggle="tooltip" data-placement="top" title="Unlike" class="btn btn-success float-right">
+                        <span><i class="fas fa-thumbs-up"></i></span>
+                        <span>@Model.LikesCount</span>
+                    </button>
+                }
+                else
+                {
+                    <button id="btnLike" data-toggle="tooltip" data-placement="top" title="Like" class="btn btn-outline-success float-right">
+                        <span><i class="fas fa-thumbs-up"></i></span>
+                        <span>@Model.LikesCount</span>
+                    </button>
+                }
+            }
+
         </div>
     </div>
     <hr>
@@ -82,6 +95,10 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+
             var videoId = '@Model.Id'
 
             //Insert Like into Database
@@ -95,8 +112,11 @@
                             data: {
                                 videoId: videoId,
                             },
-                            success: function (response) {
-                              location.reload();
+                            success: function () {
+                                 location.reload();
+                            },
+                            error: function () {
+                                window.location.href = '/Account/Login';
                             }
                         }),
                 );
