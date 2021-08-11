@@ -90,17 +90,19 @@
     <p>@Html.Raw(Model.Description)</p>
     <hr />
     <h5>Comments</h5>
-    <div class="row">
-        <div class="col-12">
-            <input type="text" class="form-control" placeholder="Add a public comments" />
+    @*<form>*@
+        <div class="row">
+            <div class="col-12">
+                <input id="txtComment" type="text" class="form-control" placeholder="Add a public comments" />
+            </div>
         </div>
-    </div>
-    <div class="row mt-2">
-        <div class="col-12">
-            <button class="btn btn-outline-success float-right ml-2">Comment</button>
-            <button class="btn btn-outline-success float-right">Cancel</button>
+        <div class="row mt-2">
+            <div class="col-12">
+                <button id="btnComment" class="btn btn-outline-success float-right ml-2">Comment</button>
+                <button class="btn btn-outline-success float-right">Cancel</button>
+            </div>
         </div>
-    </div>
+    @*</form>*@
     <br /><br /><br />
 </div>
 @section scripts{
@@ -113,6 +115,25 @@
             })
 
             var videoId = '@Model.Id'
+            var Id = null;
+
+            //Insert Comments Into Database
+            $('#btnComment').click(function () {
+                var comment = {
+                    videoId: videoId,
+                    description: $('#txtComment').val(),
+                };
+
+                $('#txtComment').val('');
+
+                $.ajax({
+                    method: 'POST',
+                    dataType: 'JSON',
+                    url: '/Comment/AddComment',
+                    contentType: "application/json",
+                    data: JSON.stringify(comment),
+                })
+            })
 
             //Insert Like into Database
             $('#btnLike').click(function () {
@@ -157,8 +178,8 @@
                 );
 
             })
-            //Insert video view into Database
 
+            //Insert video view into Database
             function reset() {
                 startTime = new Date();
             }
