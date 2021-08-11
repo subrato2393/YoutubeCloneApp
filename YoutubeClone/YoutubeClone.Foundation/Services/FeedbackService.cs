@@ -13,6 +13,9 @@ using LikeBO = YoutubeClone.Foundation.BusinessObjects.Likes;
 using LikeEO = YoutubeClone.Foundation.Entities.Likes;
 using DislikeBO = YoutubeClone.Foundation.BusinessObjects.Dislikes;
 using DislikeEO = YoutubeClone.Foundation.Entities.Dislikes;
+using CommentBO = YoutubeClone.Foundation.BusinessObjects.Comments;
+using CommentEO = YoutubeClone.Foundation.Entities.Comments;
+
 
 namespace YoutubeClone.Foundation.Services
 {
@@ -136,10 +139,10 @@ namespace YoutubeClone.Foundation.Services
         {
             var likes = _channelUnitOfWork.LikeRepository.GetAll();
             var IsLiked = likes.Where(x => x.Video.Id == videoId && x.User.UserName == name).ToList();
-           
+
             return IsLiked.Count > 0;
         }
-         
+
         public void DeleteLike(Guid videoId, string name)
         {
             var likes = _channelUnitOfWork.LikeRepository.GetAll();
@@ -191,6 +194,22 @@ namespace YoutubeClone.Foundation.Services
             var dislikes = _channelUnitOfWork.DislikeRepository.GetAll();
             var count = dislikes.Where(x => x.Video.Id == id).Count();
             return count;
+        }
+
+        public void AddComments(CommentBO commentBo)
+        {
+            var video = _channelUnitOfWork.VideoRepository.GetById(commentBo.VideoId);
+
+            var comment = new CommentEO()
+            {
+                Description = commentBo.Description,
+                Id = commentBo.Id,
+                Video = video
+            };
+
+            _channelUnitOfWork.BeginTransaction();
+            _channelUnitOfWork.CommentRepository.Add(comment);
+            _channelUnitOfWork.Commit();
         }
     }
 }

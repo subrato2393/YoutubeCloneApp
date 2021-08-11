@@ -16,6 +16,7 @@ namespace YoutubeClone.Foundation.Services
         int GetVideoViewCountFromDatabase(Guid id);
         IList<VideoViewCount> GetAllVideoView();
         int GetAllSubscriberCount(Guid channelId);
+        void AddComments(Comments comments);
         IList<VideoViewChart> GetVideoViewCountonDateForChart(Guid channelId);
         Task AddVideoLike(LikeBO likeBO);
         int GetLikesCount(Guid id);

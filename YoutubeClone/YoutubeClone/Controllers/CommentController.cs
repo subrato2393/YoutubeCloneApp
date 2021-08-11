@@ -15,7 +15,7 @@ namespace YoutubeClone.Controllers
         }
         public IActionResult AddComment([FromBody] CommentsModel model)
         {
-            //return Json(new { redirectToAction = Url.Action("VideoStreaming", "Video", new { Id = model.VideoId }) });
+            model.AddCommentIntoDatabase();
             return RedirectToAction("VideoStreaming", "Video", new { Id = model.VideoId });
         }
     }

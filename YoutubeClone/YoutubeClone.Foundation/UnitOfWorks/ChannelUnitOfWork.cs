@@ -12,12 +12,14 @@ namespace YoutubeClone.Foundation.UnitOfWorks
         public IViewRepository ViewRepository { get; set; }
         public ILikeRepository LikeRepository { get; set; }
         public IDislikeRepository DislikeRepository { get; set; }
+        public ICommentRepository CommentRepository { get; set; }
         public ChannelUnitOfWork(IChannelRepository channelRepository,
             IVideoRepository videoRepository,
             ISubscriberRepository subscriberRepository,
             IViewRepository viewRepository,
             ILikeRepository likeRepository,
             IDislikeRepository dislikeRepository,
+            ICommentRepository commentRepository,
             ISession session)
             : base(session)
         {
@@ -27,6 +29,7 @@ namespace YoutubeClone.Foundation.UnitOfWorks
             ViewRepository = viewRepository;
             LikeRepository = likeRepository;
             DislikeRepository = dislikeRepository;
+            CommentRepository = commentRepository;
         }
     }
 }
