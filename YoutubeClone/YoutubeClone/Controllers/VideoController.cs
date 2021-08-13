@@ -42,6 +42,7 @@ namespace YoutubeClone.Controllers
             model.IsLikedVideoBefore(id, User.Identity.Name);
             model.GetVideoDisLikesCount(id);
             model.IsDislikedVideoBefore(id, User.Identity.Name);
+            model.GetAllComments(id);
             return View(model);
         }
 

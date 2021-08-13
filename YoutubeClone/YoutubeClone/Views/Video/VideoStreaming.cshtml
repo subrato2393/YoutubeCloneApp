@@ -91,17 +91,50 @@
     <hr />
     <h5>Comments</h5>
     @*<form>*@
-        <div class="row">
-            <div class="col-12">
-                <input id="txtComment" type="text" class="form-control" placeholder="Add a public comments" />
-            </div>
+    <div class="row">
+        <div class="col-12">
+            <input id="txtComment" type="text" class="form-control" placeholder="Add a public comments" />
         </div>
-        <div class="row mt-2">
-            <div class="col-12">
-                <button id="btnComment" class="btn btn-outline-success float-right ml-2">Comment</button>
-                <button class="btn btn-outline-success float-right">Cancel</button>
-            </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-12">
+            <button id="btnComment" class="btn btn-outline-success float-right ml-2">Comment</button>
+            <button class="btn btn-outline-success float-right">Cancel</button>
         </div>
+    </div>
+    <table>
+        <tr>
+            <td id="tdComment"></td>
+        </tr>
+        @foreach (var item in Model.CommentList)
+        {
+            @*<div class="row">
+                <div class="col-2">
+
+                </div>
+            </div>*@
+            <tr>
+                <td><img class="channel-icon" src="/user/thumbnil.jpg" />Subrato Ghosh</td>
+            </tr>
+            <tr>
+                <td>@item.Description</td>
+            </tr>
+            <tr>
+                <td>
+                    <a id="btnLike" data-toggle="tooltip" data-placement="top" title="Like">
+                        <span><i class="fas fa-thumbs-up mr-2"></i></span>
+                    </a>
+                    <a id="btnDislike" data-toggle="tooltip" data-placement="top" title="Dislike">
+                        <span><i class="fas fa-thumbs-down mr-2"></i></span>
+                    </a>
+                    <a id="btnReply" data-toggle="tooltip" data-placement="top" title="Reply">
+                        Reply
+                    </a>
+                    @*<span><i class="fas fa-thumbs-up mr-2"></i></span><span><i class="fas fa-thumbs-down"></i></span>*@
+                </td>
+            </tr>
+        }
+    </table>
     @*</form>*@
     <br /><br /><br />
 </div>
@@ -125,14 +158,41 @@
                 };
 
                 $('#txtComment').val('');
-
+               // location.reload(),
                 $.ajax({
                     method: 'POST',
                     dataType: 'JSON',
                     url: '/Comment/AddComment',
                     contentType: "application/json",
                     data: JSON.stringify(comment),
+                    success: function () {
+                        location.reload();
+                       // $('#tdComment').load('/Video/VideoStreaming', { id: videoId })
+                       // getAllComments(videoId);
+                        /*{ id: $("#Id").val() }*/
+                    },
+                    error: function () {
+                        location.reload();
+                       // $('#tdComment').load('/Video/VideoStreaming', {id:videoId})
+                       //getAllComments(videoId);
+                    }
                 })
+                function getAllComments(videoId) {
+                    var id = videoId;
+                    $.ajax({
+                    method: 'GET',
+                    dataType: 'JSON',
+                        contentType: "application/json",
+                        url: '/Video/VideoStreaming/' + videoId,
+                        success: function (result) {
+                            alert(result.videoId);
+                    },
+                        error: function (result) {
+                            alert(result.videoId);
+                    }
+                })
+               }
+
             })
 
             //Insert Like into Database

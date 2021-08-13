@@ -26,5 +26,6 @@ namespace YoutubeClone.Foundation.Services
         void DeleteDislike(Guid videoId, string name);
         Task AddVideoDislike(DislikeBO dislikeBO);
         int GetDislikesCount(Guid id);
+        IList<Comments> GetAllComments(Guid id);
     }
 }

@@ -211,5 +211,13 @@ namespace YoutubeClone.Foundation.Services
             _channelUnitOfWork.CommentRepository.Add(comment);
             _channelUnitOfWork.Commit();
         }
+
+        public IList<CommentBO> GetAllComments(Guid id)
+        {
+            var comments = _channelUnitOfWork.CommentRepository.GetAll();
+            var commentsBo = _mapper.Map<IList<CommentBO>>(comments);
+
+            return commentsBo;
+        }
     }
 }

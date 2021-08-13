@@ -1,6 +1,8 @@
 ﻿using Autofac;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using YoutubeClone.Foundation.BusinessObjects;
 using YoutubeClone.Foundation.Services;
 
@@ -24,6 +26,7 @@ namespace YoutubeClone.Models
         public int DislikesCount { get; set; } 
         public bool IsLikedBefore { get; set; }
         public bool IsDislikedBefore { get; set; }
+        public IList<Comments> CommentList { get; set; }
 
         private readonly IChannelService  _channelService;
         private readonly IFeedbackService  _feedbackService;
@@ -82,6 +85,11 @@ namespace YoutubeClone.Models
         public void IsDislikedVideoBefore(Guid id, string name)
         {
             IsDislikedBefore = _feedbackService.IsDisliked(id, name);
+        }
+
+        public void GetAllComments(Guid id)
+        {
+            CommentList = _feedbackService.GetAllComments(id);
         }
     }
 }
