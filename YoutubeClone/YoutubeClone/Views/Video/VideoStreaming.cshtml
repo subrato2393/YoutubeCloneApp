@@ -102,25 +102,19 @@
             <button class="btn btn-outline-success float-right">Cancel</button>
         </div>
     </div>
-    <table>
-        <tr>
+    @*<tr>
             <td id="tdComment"></td>
-        </tr>
+        </tr>*@
+    <div class="row">
         @foreach (var item in Model.CommentList)
         {
-            @*<div class="row">
-                <div class="col-2">
-
-                </div>
-            </div>*@
-            <tr>
-                <td><img class="channel-icon" src="/user/thumbnil.jpg" />Subrato Ghosh</td>
-            </tr>
-            <tr>
-                <td>@item.Description</td>
-            </tr>
-            <tr>
-                <td>
+            <div class="col-1">
+                <div><img class="channel-icon" src="/user/thumbnil.jpg" /></div>
+            </div>
+            <div class="col-11 mb-4">
+                <div>Subrato Ghosh</div>
+                <div>@item.Description</div>
+                <div>
                     <a id="btnLike" data-toggle="tooltip" data-placement="top" title="Like">
                         <span><i class="fas fa-thumbs-up mr-2"></i></span>
                     </a>
@@ -131,10 +125,11 @@
                         Reply
                     </a>
                     @*<span><i class="fas fa-thumbs-up mr-2"></i></span><span><i class="fas fa-thumbs-down"></i></span>*@
-                </td>
-            </tr>
+                </div>
+            </div>
+          
         }
-    </table>
+    </div>
     @*</form>*@
     <br /><br /><br />
 </div>
