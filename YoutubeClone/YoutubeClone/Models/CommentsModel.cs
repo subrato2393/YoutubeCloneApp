@@ -20,13 +20,14 @@ namespace YoutubeClone.Models
         {
             _feedbackService = Startup.AutofacContainer.Resolve<IFeedbackService>();
         }
-        public void AddCommentIntoDatabase()
+        public void AddCommentIntoDatabase(string userName)
         {
             _feedbackService.AddComments(new CommentBO()
             {
                 Description = Description,
                 Id = Id,
-                VideoId = VideoId
+                VideoId = VideoId,
+                UserName = userName
             });
         }
     }

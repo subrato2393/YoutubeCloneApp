@@ -196,15 +196,17 @@ namespace YoutubeClone.Foundation.Services
             return count;
         }
 
-        public void AddComments(CommentBO commentBo)
+        public async Task AddComments(CommentBO commentBo)
         {
+            var user = await _userManager.FindByNameAsync(commentBo.UserName);
             var video = _channelUnitOfWork.VideoRepository.GetById(commentBo.VideoId);
 
             var comment = new CommentEO()
             {
                 Description = commentBo.Description,
                 Id = commentBo.Id,
-                Video = video
+                Video = video,
+                User = user
             };
 
             _channelUnitOfWork.BeginTransaction();
@@ -212,11 +214,12 @@ namespace YoutubeClone.Foundation.Services
             _channelUnitOfWork.Commit();
         }
 
-        public IList<CommentBO> GetAllComments(Guid id)
+        public IList<CommentBO> GetAllComments(Guid id,string name) 
         {
             var comments = _channelUnitOfWork.CommentRepository.GetAll();
-            var commentsBo = _mapper.Map<IList<CommentBO>>(comments);
-
+           
+            var filterComment = comments.Where(x => x.Video.Id == id);
+            var commentsBo = _mapper.Map<IList<CommentBO>>(filterComment);
             return commentsBo;
         }
     }

@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Text.Json;
-using YoutubeClone.Foundation.Entities;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using YoutubeClone.Models;
 
 namespace YoutubeClone.Controllers
 {
+    [Authorize(Roles ="Member")]
     public class CommentController : Controller
     {
         public IActionResult Index()
@@ -15,7 +13,7 @@ namespace YoutubeClone.Controllers
         }
         public IActionResult AddComment([FromBody] CommentsModel model)
         {
-            model.AddCommentIntoDatabase();
+            model.AddCommentIntoDatabase(User.Identity.Name);
             return RedirectToAction("VideoStreaming", "Video", new { Id = model.VideoId });
         }
     }

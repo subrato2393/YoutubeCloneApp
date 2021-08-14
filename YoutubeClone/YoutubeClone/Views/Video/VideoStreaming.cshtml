@@ -90,7 +90,6 @@
     <p>@Html.Raw(Model.Description)</p>
     <hr />
     <h5>Comments</h5>
-    @*<form>*@
     <div class="row">
         <div class="col-12">
             <input id="txtComment" type="text" class="form-control" placeholder="Add a public comments" />
@@ -102,9 +101,6 @@
             <button class="btn btn-outline-success float-right">Cancel</button>
         </div>
     </div>
-    @*<tr>
-            <td id="tdComment"></td>
-        </tr>*@
     <div class="row">
         @foreach (var item in Model.CommentList)
         {
@@ -112,7 +108,7 @@
                 <div><img class="channel-icon" src="/user/thumbnil.jpg" /></div>
             </div>
             <div class="col-11 mb-4">
-                <div>Subrato Ghosh</div>
+                <div>@item.User.Email</div>
                 <div>@item.Description</div>
                 <div>
                     <a id="btnLike" data-toggle="tooltip" data-placement="top" title="Like">
@@ -124,20 +120,18 @@
                     <a id="btnReply" data-toggle="tooltip" data-placement="top" title="Reply">
                         Reply
                     </a>
-                    @*<span><i class="fas fa-thumbs-up mr-2"></i></span><span><i class="fas fa-thumbs-down"></i></span>*@
                 </div>
             </div>
           
         }
     </div>
-    @*</form>*@
     <br /><br /><br />
 </div>
 @section scripts{
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-
+                   
             $(function () {
                 $('[data-toggle="tooltip"]').tooltip()
             })
@@ -145,7 +139,7 @@
             var videoId = '@Model.Id'
             var Id = null;
 
-            //Insert Comments Into Database
+            //Insert and get Comments 
             $('#btnComment').click(function () {
                 var comment = {
                     videoId: videoId,
@@ -153,41 +147,18 @@
                 };
 
                 $('#txtComment').val('');
-               // location.reload(),
                 $.ajax({
                     method: 'POST',
-                    dataType: 'JSON',
                     url: '/Comment/AddComment',
                     contentType: "application/json",
                     data: JSON.stringify(comment),
                     success: function () {
-                        location.reload();
-                       // $('#tdComment').load('/Video/VideoStreaming', { id: videoId })
-                       // getAllComments(videoId);
-                        /*{ id: $("#Id").val() }*/
+                       location.reload();
                     },
                     error: function () {
-                        location.reload();
-                       // $('#tdComment').load('/Video/VideoStreaming', {id:videoId})
-                       //getAllComments(videoId);
+                       window.location.href = '/Account/Login'
                     }
                 })
-                function getAllComments(videoId) {
-                    var id = videoId;
-                    $.ajax({
-                    method: 'GET',
-                    dataType: 'JSON',
-                        contentType: "application/json",
-                        url: '/Video/VideoStreaming/' + videoId,
-                        success: function (result) {
-                            alert(result.videoId);
-                    },
-                        error: function (result) {
-                            alert(result.videoId);
-                    }
-                })
-               }
-
             })
 
             //Insert Like into Database
