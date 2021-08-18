@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 }
 <div class="col-10">
+    <h1 id="btnlike"></h1>
     @{
         var iVideoUrl = "/Video/" + Model.VideoName;
 
@@ -27,9 +28,9 @@
             @{
                 if (Model.IsDislikedBefore)
                 {
-                    <button id="btndislike" data-toggle="tooltip" data-placement="top" title="Dislike" class="btn btn-success float-right ml-1">
+                    <button  data-toggle="tooltip" data-placement="top" title="Dislike" class="btn btn-success float-right ml-1">
                         <span><i class="fas fa-thumbs-down"></i></span>
-                        <span>@Model.DislikesCount</span>
+                        <span id="btndislike">@Model.DislikesCount</span>
                     </button>
                 }
                 else
@@ -45,7 +46,7 @@
                 if (Model.IsLikedBefore)
                 {
                     <button id="btnLike" data-toggle="tooltip" data-placement="top" title="Unlike" class="btn btn-success float-right">
-                        <span><i class="fas fa-thumbs-up"></i></span>
+                        <span><i id="iconLike" class="fas fa-thumbs-up"></i></span>
                         <span>@Model.LikesCount</span>
                     </button>
                 }
@@ -57,7 +58,6 @@
                     </button>
                 }
             }
-
         </div>
     </div>
     <hr>
@@ -111,7 +111,7 @@
                 <div>@item.User.Email</div>
                 <div>@item.Description</div>
                 <div>
-                    <a id="btnLike" data-toggle="tooltip" data-placement="top" title="Like">
+                    <a id="btnLikes" data-toggle="tooltip" data-placement="top" title="Like">
                         <span><i class="fas fa-thumbs-up mr-2"></i></span>
                     </a>
                     <a id="btnDislike" data-toggle="tooltip" data-placement="top" title="Dislike">
@@ -131,7 +131,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-                   
+
             $(function () {
                 $('[data-toggle="tooltip"]').tooltip()
             })
@@ -139,7 +139,7 @@
             var videoId = '@Model.Id'
             var Id = null;
 
-            //Insert and get Comments 
+            //Insert and get Comments
             $('#btnComment').click(function () {
                 var comment = {
                     videoId: videoId,
@@ -166,14 +166,24 @@
                 $.when(
                     $.get(
                         {
-                            type: 'POST',
                             dataType: 'JSON',
                             url: '/Like/AddLike',
                             data: {
                                 videoId: videoId,
                             },
-                            success: function () {
-                                 location.reload();
+                            success: function (data) {
+                                $.ajax({
+                                    dataType: 'JSON',
+                                    url: '/Like/GetLike',
+                                    data: {
+                                        videoId: videoId,
+                                    },
+                                    success: function (data) {
+                                        $('#btnLike').html("<span><i class='fas fa-thumbs-up mr-1'></i></span>" + data.likeCount)
+                                        $("#btnLike").removeClass("btn btn-outline-success").addClass("btn btn-success");
+                                        console.log(data)
+                                    }
+                                })
                             },
                             error: function () {
                                 window.location.href = '/Account/Login';
@@ -186,15 +196,15 @@
             //Insert Dislike into Database
             $('#btndislike').click(function () {
                 $.when(
-                    $.get(
+                    $.ajax(
                         {
-                            type: 'POST',
+                          /*  type: 'POST',*/
                             dataType: 'JSON',
                             url: '/Dislike/AddDisLike',
                             data: {
                                 videoId: videoId,
                             },
-                            success: function () {
+                            success: function (data) {
                                 location.reload();
                             },
                             error: function () {

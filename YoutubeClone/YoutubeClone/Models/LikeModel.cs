@@ -27,9 +27,16 @@ namespace YoutubeClone.Models
         public void GetLikeCount(Guid videoId)
         {
             //  LikeCount = _feedbackService.GetAllLikeCount(videoId);
-            LikeCount = 10;
+            //LikeCount = 10;
         }
-
+        public void GetVideoLikesCount(Guid id)
+        {
+            LikeCount = _feedbackService.GetLikesCount(id);
+        }
+        //public void IsLikedVideoBefore(Guid id, string name)
+        //{
+        //    IsLikedBefore = _feedbackService.IsLiked(id, name);
+        //}
         public void IsUserLikedVideoBefore(Guid videoId, string name)
         {
             IsDislikeBefore = _feedbackService.IsDisliked(videoId,name);
