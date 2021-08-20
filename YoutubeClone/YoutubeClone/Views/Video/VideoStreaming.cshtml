@@ -15,7 +15,7 @@
             <source src="@iVideoUrl" type='video/mp4;codecs="avc1.4D401E, mp4a.40.2"'>
         </video>
     }
-    <h1 id="loads">loading</h1>
+    <h1 id="load">loading</h1>
 
     <h4 class="mt-2">@Model.VideoTitle</h4>
     @*<div id="load" class="spinner-border spinner-border-sm" role="status">
@@ -139,29 +139,8 @@
 @section scripts{
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     <script type="text/javascript">
-        $("#loads").hide();
-        $(document).on({
-            ajaxStart: function () {
-                $("#loads").show();
-                $("#btnLike").html("<i id='loads' class='fa fa-circle-o-notch fa-spin'></i>");
-              //  $("#btnLike").addClass("fa fa-circle-o-notch fa-spin");
-                @* <i id="loads" class="fa fa-circle-o-notch fa-spin"></i> *@
-          //      $("#iconLike").removeClass("fas fa-thumbs-up").addClass("fa fa-circle-o-notch fa-spin");
-            },
-            ajaxStop: function () {
-                $("#loads").hide();
-             //   $("#btnLike").html("fa fa-circle-o-notch fa-spin");
-               // $("#iconLike").removeClass("fa fa-circle-o-notch fa-spin").addClass("fas fa-thumbs-up");
-            }
-        });
 
-            //$('#iconLoad').bind('ajaxStart', function () {
-            //    $(this).hide();
-            //}).bind('ajaxStop', function () {
-            //    $(this).show();
-            //});
-
-            $(function () {
+        $(function () {
                 $('[data-toggle="tooltip"]').tooltip()
             })
 
@@ -190,67 +169,54 @@
                 })
             })
 
-            //Insert Like into Database
+        //Insert Like into Database
         $('#btnLike').click(function () {
-
-            //ajaxStart: function () {
-            //    $("#load").show();
-            //    $("#btnThumbsup").hide();
-            //},
-            //ajaxStop: function () {
-            //    $("#btnThumbsup").show();
-            //    $("#load").hide();
-            //}
-                $.when(
-                    $.get(
-                        {
+             $.when(
+                 $.ajax({
+                    method: 'POST',
+                    dataType: 'JSON',
+                    url: '/Like/AddLike',
+                    data: {
+                        videoId: videoId,
+                     },
+                     beforeSend: function () {
+                         $("#btnLike").html("<i class='fa fa-circle-o-notch fa-spin'></i>");
+                     },
+                     success: function (data) {
+                        if (data.isLikedBefore == true) {
+                            $.ajax({
+                                dataType: 'JSON',
+                                url: '/Like/Deletelike',
+                                data: {
+                                    videoId: videoId,
+                                },
+                                success: function (data) {
+                                    $('#btnLike').html("<span><i class='fas fa-thumbs-up mr-1'></i></span>" + data.likeCount)
+                                    $("#btnLike").removeClass("btn btn-success").addClass("btn btn-outline-success");
+                                }
+                            })
+                        }
+                        else {
+                            $("#btnLike").removeClass("btn btn-outline-success").addClass("btn btn-success");
+                        }
+                        $.ajax({
                             dataType: 'JSON',
-                            url: '/Like/AddLike',
+                            url: '/Like/GetLike',
                             data: {
                                 videoId: videoId,
                             },
-                            //ajaxStart: function () {
-                            //    $("#loads").show();
-                            //    $("#btnThumbsup").hide();
-                            //},
-                            //ajaxStop: function () {
-                            //    $("#btnThumbsup").show();
-                            //    $("#loads").hide();
-                            //},
                             success: function (data) {
-                                if (data.isLikedBefore == true) {
-                                    $.ajax({
-                                        dataType: 'JSON',
-                                        url: '/Like/Deletelike',
-                                        data: {
-                                            videoId: videoId,
-                                        },
-                                        success: function (data) {
-                                            $('#btnLike').html("<span><i class='fas fa-thumbs-up mr-1'></i></span>" + data.likeCount)
-                                            $("#btnLike").removeClass("btn btn-success").addClass("btn btn-outline-success");
-                                            console.log(data);
-                                        }
-                                    })
-                                }
-                                else {
-                                    $("#btnLike").removeClass("btn btn-outline-success").addClass("btn btn-success");
-                                }
-                                $.ajax({
-                                    dataType: 'JSON',
-                                    url: '/Like/GetLike',
-                                    data: {
-                                        videoId: videoId,
-                                    },
-                                    success: function (data) {
-                                        $('#btnLike').html("<span><i class='fas fa-thumbs-up mr-1'></i></span>" + data.likeCount)
-                                       // $("#btnLike").removeClass("btn btn-outline-success").addClass("btn btn-success");
-                                    }
-                                })
-                            },
-                            error: function () {
-                                window.location.href = '/Account/Login';
+                                $('#btnLike').html("<span><i class='fas fa-thumbs-up mr-1'></i></span>" + data.likeCount)
                             }
-                        }),
+                        })
+                     },
+                     complete: function () {
+                        /* $("#loads").hide();*/
+                     },
+                    error: function () {
+                        window.location.href = '/Account/Login';
+                    }
+                }),
                 );
 
             })
