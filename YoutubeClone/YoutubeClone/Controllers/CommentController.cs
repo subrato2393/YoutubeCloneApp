@@ -14,7 +14,12 @@ namespace YoutubeClone.Controllers
         public IActionResult AddComment([FromBody] CommentsModel model)
         {
             model.AddCommentIntoDatabase(User.Identity.Name);
-            return RedirectToAction("VideoStreaming", "Video", new { Id = model.VideoId });
+            return Json(model);
+        }
+        public IActionResult GetAllComments([FromBody] CommentsModel model)
+        {
+            model.GetAllComments(model.VideoId, User.Identity.Name);
+            return Json(model.CommentList);
         }
     }
 }

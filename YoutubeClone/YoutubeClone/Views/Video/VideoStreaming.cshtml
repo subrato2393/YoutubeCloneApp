@@ -15,8 +15,6 @@
             <source src="@iVideoUrl" type='video/mp4;codecs="avc1.4D401E, mp4a.40.2"'>
         </video>
     }
-    <h1 id="load">loading</h1>
-
     <h4 class="mt-2">@Model.VideoTitle</h4>
     @*<div id="load" class="spinner-border spinner-border-sm" role="status">
             <span class="sr-only">Loading...</span>
@@ -52,7 +50,6 @@
                 {
                     <button id="btnLike" data-toggle="tooltip" data-placement="top" title="Unlike" class="btn btn-success float-right">
                         <span><i class="fas fa-thumbs-up"></i></span>
-                        @*<i id="loads" class="fa fa-circle-o-notch fa-spin"></i>*@
                         <span>@Model.LikesCount</span>
                     </button>
                 }
@@ -60,7 +57,6 @@
                 {
                     <button id="btnLike" data-toggle="tooltip" data-placement="top" title="Like" class="btn btn-outline-success float-right">
                         <span><i class="fas fa-thumbs-up"></i></span>
-                        @*<i id="loads" class="fa fa-circle-o-notch fa-spin"></i>*@
                         <span>@Model.LikesCount</span>
                     </button>
                 }
@@ -108,8 +104,8 @@
             <button class="btn btn-outline-success float-right">Cancel</button>
         </div>
     </div>
-    <div class="row">
-        @foreach (var item in Model.CommentList)
+    <div id="comments" class="row">
+        @*@foreach (var item in Model.CommentList)
         {
             <div class="col-1">
                 <div><img class="channel-icon" src="/user/thumbnil.jpg" /></div>
@@ -123,16 +119,13 @@
                     <a id="btnLikes" data-toggle="tooltip" data-placement="top" title="Like">
                         <span><i class="fas fa-thumbs-up mr-2"></i></span>
                     </a>
-                    @*<a id="btnDislike" data-toggle="tooltip" data-placement="top" title="Dislike">
-                            <span><i class="fas fa-thumbs-down mr-2"></i></span>
-                        </a>*@
                     <a id="btnReply" data-toggle="tooltip" data-placement="top" title="Reply">
                         Reply
                     </a>
                 </div>
             </div>
 
-        }
+        }*@
     </div>
     <br /><br /><br />
 </div>
@@ -160,8 +153,35 @@
                     url: '/Comment/AddComment',
                     contentType: "application/json",
                     data: JSON.stringify(comment),
-                    success: function () {
-                       location.reload();
+                    success: function (data) {
+                        $.ajax({
+                            method: 'POST',
+                            url: '/Comment/GetAllComments',
+                            contentType: "application/json",
+                            data: JSON.stringify(comment),
+                            success: function (data) {
+                                $.each(data, function (key, value) {
+                                        var div = ` <div class="col-1">
+                <div><img class="channel-icon" src="/user/thumbnil.jpg" /></div>
+            </div>
+            <div class="col-11 mb-4">
+                <div>${value.user.email}</div>
+                <div>
+                 ${value.description}
+                </div>
+                <div>
+                    <a id="btnLikes" data-toggle="tooltip" data-placement="top" title="Like">
+                        <span><i class="fas fa-thumbs-up mr-2"></i></span>
+                    </a>
+                    <a id="btnReply" data-toggle="tooltip" data-placement="top" title="Reply">
+                        Reply
+                    </a>
+                </div>
+            </div>`
+                                    $('#comments').append(div);
+                                });
+                            }
+                        })
                     },
                     error: function () {
                        window.location.href = '/Account/Login'
@@ -180,7 +200,7 @@
                         videoId: videoId,
                      },
                      beforeSend: function () {
-                         $("#btnLike").html("<i class='fa fa-circle-o-notch fa-spin'></i>");
+                         $("#btnLike").html("<i class='fas fa-circle-notch fa-spin'></i>");
                      },
                      success: function (data) {
                         if (data.isLikedBefore == true) {

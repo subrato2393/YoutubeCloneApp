@@ -1,5 +1,7 @@
 ﻿using Autofac;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using YoutubeClone.Foundation.Services;
 using CommentBO = YoutubeClone.Foundation.BusinessObjects.Comments;
 
@@ -10,6 +12,7 @@ namespace YoutubeClone.Models
         public Guid Id { get; set; }
         public string Description { get; set; }
         public Guid VideoId { get; set; }
+        public IList<CommentBO> CommentList {get; set;}
 
         private readonly IFeedbackService _feedbackService;
         public CommentsModel(IFeedbackService feedbackService)
@@ -29,6 +32,10 @@ namespace YoutubeClone.Models
                 VideoId = VideoId,
                 UserName = userName
             });
+        }
+        public void GetAllComments(Guid id, string name)
+        {
+            CommentList = _feedbackService.GetAllComments(id, name);
         }
     }
 }
