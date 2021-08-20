@@ -15,7 +15,12 @@
             <source src="@iVideoUrl" type='video/mp4;codecs="avc1.4D401E, mp4a.40.2"'>
         </video>
     }
+    <h1 id="loads">loading</h1>
+
     <h4 class="mt-2">@Model.VideoTitle</h4>
+    @*<div id="load" class="spinner-border spinner-border-sm" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>*@
     <div class="video-metadata">
         <span>@Model.VideoViewCount  views . @Model.PublishDate.ToString("dd MMMM yyyy")</span>
     </div>
@@ -28,17 +33,17 @@
             @{
                 if (Model.IsDislikedBefore)
                 {
-                    <button  data-toggle="tooltip" data-placement="top" title="Dislike" class="btn btn-success float-right ml-1">
-                        <span><i class="fas fa-thumbs-down"></i></span>
-                        <span id="btndislike">@Model.DislikesCount</span>
-                    </button>
+                    @*<button id="btndislike" data-toggle="tooltip" data-placement="top" title="Dislike" class="btn btn-success float-right ml-1">
+                            <span><i class="fas fa-thumbs-down"></i></span>
+                            <span>@Model.DislikesCount</span>
+                        </button>*@
                 }
                 else
                 {
-                    <button id="btndislike" data-toggle="tooltip" data-placement="top" title="Dislike" class="btn btn-outline-success float-right ml-1">
-                        <span><i class="fas fa-thumbs-down"></i></span>
-                        <span>@Model.DislikesCount</span>
-                    </button>
+                    @*<button id="btndislike" data-toggle="tooltip" data-placement="top" title="Dislike" class="btn btn-outline-success float-right ml-1">
+                            <span><i class="fas fa-thumbs-down"></i></span>
+                            <span>@Model.DislikesCount</span>
+                        </button>*@
                 }
             }
 
@@ -46,7 +51,8 @@
                 if (Model.IsLikedBefore)
                 {
                     <button id="btnLike" data-toggle="tooltip" data-placement="top" title="Unlike" class="btn btn-success float-right">
-                        <span><i id="iconLike" class="fas fa-thumbs-up"></i></span>
+                        <span><i class="fas fa-thumbs-up"></i></span>
+                        @*<i id="loads" class="fa fa-circle-o-notch fa-spin"></i>*@
                         <span>@Model.LikesCount</span>
                     </button>
                 }
@@ -54,6 +60,7 @@
                 {
                     <button id="btnLike" data-toggle="tooltip" data-placement="top" title="Like" class="btn btn-outline-success float-right">
                         <span><i class="fas fa-thumbs-up"></i></span>
+                        @*<i id="loads" class="fa fa-circle-o-notch fa-spin"></i>*@
                         <span>@Model.LikesCount</span>
                     </button>
                 }
@@ -109,20 +116,22 @@
             </div>
             <div class="col-11 mb-4">
                 <div>@item.User.Email</div>
-                <div>@item.Description</div>
+                <div>
+                    @item.Description
+                </div>
                 <div>
                     <a id="btnLikes" data-toggle="tooltip" data-placement="top" title="Like">
                         <span><i class="fas fa-thumbs-up mr-2"></i></span>
                     </a>
-                    <a id="btnDislike" data-toggle="tooltip" data-placement="top" title="Dislike">
-                        <span><i class="fas fa-thumbs-down mr-2"></i></span>
-                    </a>
+                    @*<a id="btnDislike" data-toggle="tooltip" data-placement="top" title="Dislike">
+                            <span><i class="fas fa-thumbs-down mr-2"></i></span>
+                        </a>*@
                     <a id="btnReply" data-toggle="tooltip" data-placement="top" title="Reply">
                         Reply
                     </a>
                 </div>
             </div>
-          
+
         }
     </div>
     <br /><br /><br />
@@ -130,7 +139,27 @@
 @section scripts{
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
+        $("#loads").hide();
+        $(document).on({
+            ajaxStart: function () {
+                $("#loads").show();
+                $("#btnLike").html("<i id='loads' class='fa fa-circle-o-notch fa-spin'></i>");
+              //  $("#btnLike").addClass("fa fa-circle-o-notch fa-spin");
+                @* <i id="loads" class="fa fa-circle-o-notch fa-spin"></i> *@
+          //      $("#iconLike").removeClass("fas fa-thumbs-up").addClass("fa fa-circle-o-notch fa-spin");
+            },
+            ajaxStop: function () {
+                $("#loads").hide();
+             //   $("#btnLike").html("fa fa-circle-o-notch fa-spin");
+               // $("#iconLike").removeClass("fa fa-circle-o-notch fa-spin").addClass("fas fa-thumbs-up");
+            }
+        });
+
+            //$('#iconLoad').bind('ajaxStart', function () {
+            //    $(this).hide();
+            //}).bind('ajaxStop', function () {
+            //    $(this).show();
+            //});
 
             $(function () {
                 $('[data-toggle="tooltip"]').tooltip()
@@ -162,7 +191,16 @@
             })
 
             //Insert Like into Database
-            $('#btnLike').click(function () {
+        $('#btnLike').click(function () {
+
+            //ajaxStart: function () {
+            //    $("#load").show();
+            //    $("#btnThumbsup").hide();
+            //},
+            //ajaxStop: function () {
+            //    $("#btnThumbsup").show();
+            //    $("#load").hide();
+            //}
                 $.when(
                     $.get(
                         {
@@ -171,7 +209,32 @@
                             data: {
                                 videoId: videoId,
                             },
+                            //ajaxStart: function () {
+                            //    $("#loads").show();
+                            //    $("#btnThumbsup").hide();
+                            //},
+                            //ajaxStop: function () {
+                            //    $("#btnThumbsup").show();
+                            //    $("#loads").hide();
+                            //},
                             success: function (data) {
+                                if (data.isLikedBefore == true) {
+                                    $.ajax({
+                                        dataType: 'JSON',
+                                        url: '/Like/Deletelike',
+                                        data: {
+                                            videoId: videoId,
+                                        },
+                                        success: function (data) {
+                                            $('#btnLike').html("<span><i class='fas fa-thumbs-up mr-1'></i></span>" + data.likeCount)
+                                            $("#btnLike").removeClass("btn btn-success").addClass("btn btn-outline-success");
+                                            console.log(data);
+                                        }
+                                    })
+                                }
+                                else {
+                                    $("#btnLike").removeClass("btn btn-outline-success").addClass("btn btn-success");
+                                }
                                 $.ajax({
                                     dataType: 'JSON',
                                     url: '/Like/GetLike',
@@ -180,8 +243,7 @@
                                     },
                                     success: function (data) {
                                         $('#btnLike').html("<span><i class='fas fa-thumbs-up mr-1'></i></span>" + data.likeCount)
-                                        $("#btnLike").removeClass("btn btn-outline-success").addClass("btn btn-success");
-                                        console.log(data)
+                                       // $("#btnLike").removeClass("btn btn-outline-success").addClass("btn btn-success");
                                     }
                                 })
                             },
@@ -194,26 +256,50 @@
             })
 
             //Insert Dislike into Database
-            $('#btndislike').click(function () {
-                $.when(
-                    $.ajax(
-                        {
-                          /*  type: 'POST',*/
-                            dataType: 'JSON',
-                            url: '/Dislike/AddDisLike',
-                            data: {
-                                videoId: videoId,
-                            },
-                            success: function (data) {
-                                location.reload();
-                            },
-                            error: function () {
-                                window.location.href = '/Account/Login';
-                            }
-                        }),
-                );
+            //$('#btndislike').click(function () {
+            //    $.when(
+            //        $.ajax(
+            //            {
+            //              /*  type: 'POST',*/
+            //                dataType: 'JSON',
+            //                url: '/Dislike/AddDisLike',
+            //                data: {
+            //                    videoId: videoId,
+            //                },
+            //                success: function (data) {
+            //                    if (data.isLikedBefore) {
+            //                        $.ajax({
+            //                            dataType: 'JSON',
+            //                            url: '/Like/Deletelike',
+            //                            data: {
+            //                                videoId: videoId,
+            //                            },
+            //                            success: function (data) {
+            //                                $('#btnLike').html("<span><i class='fas fa-thumbs-up mr-1'></i></span>" + data.likeCount)
+            //                                $("#btnLike").removeClass("btn btn-success").addClass("btn btn-outline-success");
+            //                                console.log(data);
+            //                            }
+            //                        })
+            //                    }
+            //                    $.ajax({
+            //                        dataType: 'JSON',
+            //                        url: '/Dislike/GetDislike',
+            //                        data: {
+            //                            videoId: videoId,
+            //                        },
+            //                        success: function (data) {
+            //                            $('#btndislike').html("<span><i class='fas fa-thumbs-down mr-1'></i></span>" + data.dislikesCount)
+            //                            $("#btndislike").removeClass("btn btn-outline-success").addClass("btn btn-success");
+            //                        }
+            //                    })
+            //                },
+            //                error: function () {
+            //                    window.location.href = '/Account/Login';
+            //                }
+            //            }),
+            //    );
 
-            })
+            //})
 
             //Insert video view into Database
             function reset() {
@@ -240,7 +326,8 @@
                         });
                 }
             });
-        });
+       /* });*/
+
     </script>
 }
 

@@ -25,5 +25,11 @@ namespace YoutubeClone.Controllers
             model.GetVideoLikesCount(videoId);
             return Json(model);
         }
+        public IActionResult DeleteLike(Guid videoId)
+        {
+            var model = new LikeModel();
+            model.GetVideoLikesCount(videoId);
+            return Json(model);
+        }
     }
 }

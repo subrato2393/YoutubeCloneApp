@@ -14,7 +14,8 @@ namespace YoutubeClone.Models
         public int LikeCount { get; set; }
         public Guid VideoId { get; set; } 
         public bool IsDislikedBefore { get; set; }
-        public bool IsLikedBefore { get; set; } 
+        public bool IsLikedBefore { get; set; }  
+        public int DislikesCount { get; set; }
 
         private readonly IFeedbackService _feedbackService;
         public DislikeModel(IFeedbackService feedbackService)
@@ -24,6 +25,10 @@ namespace YoutubeClone.Models
         public DislikeModel() 
         {
             _feedbackService = Startup.AutofacContainer.Resolve<IFeedbackService>();
+        }
+        public void GetVideoDisLikesCount(Guid id)
+        {
+            DislikesCount = _feedbackService.GetDislikesCount(id);
         }
 
         internal void IsUserDislikedVideoBefore(Guid videoId, string name)
