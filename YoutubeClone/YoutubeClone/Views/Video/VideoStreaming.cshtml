@@ -105,27 +105,30 @@
         </div>
     </div>
     <div id="comments" class="row">
-        @*@foreach (var item in Model.CommentList)
-        {
-            <div class="col-1">
-                <div><img class="channel-icon" src="/user/thumbnil.jpg" /></div>
-            </div>
-            <div class="col-11 mb-4">
-                <div>@item.User.Email</div>
-                <div>
-                    @item.Description
-                </div>
-                <div>
-                    <a id="btnLikes" data-toggle="tooltip" data-placement="top" title="Like">
-                        <span><i class="fas fa-thumbs-up mr-2"></i></span>
-                    </a>
-                    <a id="btnReply" data-toggle="tooltip" data-placement="top" title="Reply">
-                        Reply
-                    </a>
-                </div>
-            </div>
+       <div id="commentData">
 
-        }*@
+       </div>
+        @*@foreach (var item in Model.CommentList)
+            {
+                <div class="col-1">
+                    <div><img class="channel-icon" src="/user/thumbnil.jpg" /></div>
+                </div>
+                <div class="col-11 mb-4">
+                    <div>@item.User.Email</div>
+                    <div>
+                        @item.Description
+                    </div>
+                    <div>
+                        <a id="btnLikes" data-toggle="tooltip" data-placement="top" title="Like">
+                            <span><i class="fas fa-thumbs-up mr-2"></i></span>
+                        </a>
+                        <a id="btnReply" data-toggle="tooltip" data-placement="top" title="Reply">
+                            Reply
+                        </a>
+                    </div>
+                </div>
+
+            }*@
     </div>
     <br /><br /><br />
 </div>
@@ -140,28 +143,16 @@
             var videoId = '@Model.Id'
             var Id = null;
 
-            //Insert and get Comments
-            $('#btnComment').click(function () {
-                var comment = {
-                    videoId: videoId,
-                    description: $('#txtComment').val(),
-                };
-
-                $('#txtComment').val('');
+            //Get All comments from Database
                 $.ajax({
-                    method: 'POST',
-                    url: '/Comment/AddComment',
-                    contentType: "application/json",
-                    data: JSON.stringify(comment),
+                   dataType: 'JSON',
+                   url: '/Comment/GetComments',
+                   data: {
+                      videoId: videoId,
+                   },
                     success: function (data) {
-                        $.ajax({
-                            method: 'POST',
-                            url: '/Comment/GetAllComments',
-                            contentType: "application/json",
-                            data: JSON.stringify(comment),
-                            success: function (data) {
-                                $.each(data, function (key, value) {
-                                        var div = ` <div class="col-1">
+                        $.each(data, function (key, value) {
+                            var div = ` <div class="col-1">
                 <div><img class="channel-icon" src="/user/thumbnil.jpg" /></div>
             </div>
             <div class="col-11 mb-4">
@@ -178,15 +169,59 @@
                     </a>
                 </div>
             </div>`
-                                    $('#comments').append(div);
-                                });
-                            }
+                            $('#comments').append(div);
+                        });
+                   }
+                })
+            //Insert and get Comments
+            $('#btnComment').click(function () {
+                var comment = {
+                    videoId: videoId,
+                    description: $('#txtComment').val(),
+                };
+
+                $('#txtComment').val('');
+                $.ajax({
+                    method: 'POST',
+                    url: '/Comment/AddComment',
+                    contentType: "application/json",
+                    data: JSON.stringify(comment),
+                    success: function (data) {
+                        $.ajax({
+                            method: 'POST',
+                            url: '/Comment/GetCurrentComment',
+                            data: {
+                                videoId: videoId,
+                            },
+                            success: function (data) {
+                                console.log(data);
+
+                                var div = ` <div class="col-1">
+                            <div><img class="channel-icon" src="/user/thumbnil.jpg" /></div>
+                        </div>
+                        <div class="col-11 mb-4">
+                            <div>${data.userName}</div>
+                            <div>
+                             ${data.description}
+                            </div>
+                            <div>
+                                <a id="btnLikes" data-toggle="tooltip" data-placement="top" title="Like">
+                                    <span><i class="fas fa-thumbs-up mr-2"></i></span>
+                                </a>
+                                <a id="btnReply" data-toggle="tooltip" data-placement="top" title="Reply">
+                                    Reply
+                                </a>
+                            </div>
+                        </div>`
+                                $('#comments').prepend(div);
+                            },
                         })
                     },
                     error: function () {
                        window.location.href = '/Account/Login'
                     }
                 })
+            
             })
 
         //Insert Like into Database

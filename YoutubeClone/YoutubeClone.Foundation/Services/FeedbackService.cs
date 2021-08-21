@@ -24,6 +24,7 @@ namespace YoutubeClone.Foundation.Services
         private readonly IChannelUnitOfWork _channelUnitOfWork;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
+        private  Guid _commentId;
 
         public FeedbackService(IChannelUnitOfWork channelUnitOfWork,
             UserManager<ApplicationUser> userManager,
@@ -212,6 +213,7 @@ namespace YoutubeClone.Foundation.Services
             _channelUnitOfWork.BeginTransaction();
             _channelUnitOfWork.CommentRepository.Add(comment);
             _channelUnitOfWork.Commit();
+            _commentId = comment.Id;
         }
 
         public IList<CommentBO> GetAllComments(Guid id,string name) 
@@ -221,6 +223,14 @@ namespace YoutubeClone.Foundation.Services
             var filterComment = comments.Where(x => x.Video.Id == id);
             var commentsBo = _mapper.Map<IList<CommentBO>>(filterComment);
             return commentsBo;
+        }
+
+        public CommentBO GetComment()
+        {
+            var comment = _channelUnitOfWork.CommentRepository.GetById(_commentId);
+
+            var commentBo = _mapper.Map<CommentBO>(comment); 
+            return commentBo;
         }
     }
 }
