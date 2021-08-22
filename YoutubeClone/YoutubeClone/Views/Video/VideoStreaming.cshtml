@@ -24,7 +24,7 @@
     </div>
     <div id="feedback" class="row">
         <div class="col-12">
-            <button data-toggle="modal" data-target="#btnShare" class="btn btn-outline-success float-right ml-1">
+            <button id="btnShares" data-toggle="modal" data-target="#btnShare" class="btn btn-outline-success float-right ml-1">
                 <span><i class="fas fa-share"></i></span>
                 <span>Share</span>
             </button>
@@ -40,20 +40,20 @@
                             </button>
                         </div>
                         <div class="modal-body ml-3">
-                            <a href="#"><i class="fab fa-facebook-square fa-3x mr-3" style="color:#3b5998"></i></a>
-                            <a href="#"><i class="fab fa-linkedin fa-3x mr-3" style="color:#0976b4"></i></a>
-                            <a href="#"><i class="fab fa-twitter-square fa-3x mr-3" style="color:#55acee"></i></a>
-                            <a href="#"><i class="fab fa-google-plus-square fa-3x mr-3" style="color:#dd4b39"></i></a>
+                            <a id="linkFacebook" href="http://www.facebook.com/sharer/sharer.php?s=100&p[url]="><i class="fab fa-facebook-square fa-3x mr-3" style="color:#3b5998"></i></a>
+                            <a id="linkLinkdin" href="http://www.linkedin.com/shareArticle?mini=true&url="><i class="fab fa-linkedin fa-3x mr-3" style="color:#0976b4"></i></a>
+                            <a id="linkTwitter" href="https://twitter.com/intent/tweet?text="><i class="fab fa-twitter-square fa-3x mr-3" style="color:#55acee"></i></a>
+                            <a id="linkGooglePlus" href="https://plus.google.com/share?url="><i class="fab fa-google-plus-square fa-3x mr-3" style="color:#dd4b39"></i></a>
                             <a href="#"><i class="fab fa-instagram-square fa-3x mr-3" style="color:#f77737"></i></a>
                         </div>
                         <div>
-                            <input type="text" class="form-control col-11 ml-3" />
-                            <button type="button" class="btn btn-success float-right mr-3 mb-3 mt-2">Copy</button>
+                            <input id="txtUrl" type="text" class="form-control col-11 ml-3" />
+                            <button id="btnCopy" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard" type="button" class="btn btn-success float-right mr-3 mb-3 mt-2">Copy</button>
                             <br />
                         </div>
                         @*<div>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>*@
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>*@
                     </div>
                 </div>
             </div>
@@ -61,16 +61,16 @@
                 if (Model.IsDislikedBefore)
                 {
                     @*<button id="btndislike" data-toggle="tooltip" data-placement="top" title="Dislike" class="btn btn-success float-right ml-1">
-                    <span><i class="fas fa-thumbs-down"></i></span>
-                    <span>@Model.DislikesCount</span>
-                </button>*@
+                            <span><i class="fas fa-thumbs-down"></i></span>
+                            <span>@Model.DislikesCount</span>
+                        </button>*@
                 }
                 else
                 {
                     @*<button id="btndislike" data-toggle="tooltip" data-placement="top" title="Dislike" class="btn btn-outline-success float-right ml-1">
-                    <span><i class="fas fa-thumbs-down"></i></span>
-                    <span>@Model.DislikesCount</span>
-                </button>*@
+                            <span><i class="fas fa-thumbs-down"></i></span>
+                            <span>@Model.DislikesCount</span>
+                        </button>*@
                 }
             }
 
@@ -134,9 +134,9 @@
         </div>
     </div>
     <div id="comments" class="row">
-       <div id="commentData">
+        <div id="commentData">
 
-       </div>
+        </div>
         @*@foreach (var item in Model.CommentList)
             {
                 <div class="col-1">
@@ -172,6 +172,41 @@
             var videoId = '@Model.Id'
             var Id = null;
 
+            //for demo purpose when this site will go live then use this site url
+            var pageURL = 'https://www.c-sharpcorner.com/UploadFile/cd7c2e/sharing-url-on-facebok-using-Asp-Net/';
+
+
+           //If click share button textbox will fill url link
+                $('#btnShares').click(function () {
+                    var pageURL = $(location).attr('href');
+                    $('#txtUrl').val(pageURL);
+                });
+
+                $('#linkFacebook').click(function () {
+                    var link = $('#linkFacebook');
+                    link.attr('href', link.attr('href') + pageURL);
+                })
+
+                $('#linkLinkdin').click(function () {
+                    var link = $('#linkLinkdin');
+                    link.attr('href', link.attr('href') + pageURL);
+                })
+
+                $('#linkTwitter').click(function () {
+                    var link = $('#linkTwitter');
+                    link.attr('href', link.attr('href') + pageURL);
+                })
+
+                $('#linkGooglePlus').click(function () {
+                     var link = $('#linkGooglePlus');
+                     link.attr('href', link.attr('href') + pageURL);
+                })
+
+                $('#btnCopy').click(function () {
+                    var value = $('#txtUrl').val();
+                    $('#btnCopy').html("Copied");
+                    $('#btnCopy').prop('disabled', true);
+                })
             //Get All comments from Database
                 $.ajax({
                    dataType: 'JSON',
@@ -250,7 +285,7 @@
                        window.location.href = '/Account/Login'
                     }
                 })
-            
+
             })
 
         //Insert Like into Database
