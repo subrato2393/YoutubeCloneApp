@@ -5,6 +5,24 @@
 @section styles{
     <link rel="stylesheet" href="/user/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+<style>
+    #btnCommentLike{
+        background-color: Transparent;
+        background-repeat: no-repeat;
+        border: none;
+        cursor: pointer;
+        overflow: hidden;
+        outline: none;
+    }
+    #btnCommentReply {
+        background-color: Transparent;
+        background-repeat: no-repeat;
+        border: none;
+        cursor: pointer;
+        overflow: hidden;
+        outline: none;
+    }
+</style>
 }
 <div class="col-10">
     <h1 id="btnlike"></h1>
@@ -135,7 +153,7 @@
     </div>
     <div id="comments" class="row">
         <div id="commentData">
-
+         
         </div>
         @*@foreach (var item in Model.CommentList)
             {
@@ -233,6 +251,7 @@
                    },
                     success: function (data) {
                         $.each(data, function (key, value) {
+                          //  console.log(value)
                             var div = ` <div class="col-1">
                 <div><img class="channel-icon" src="/user/thumbnil.jpg" /></div>
             </div>
@@ -242,12 +261,13 @@
                  ${value.description}
                 </div>
                 <div>
-                    <a id="btnLikes" data-toggle="tooltip" data-placement="top" title="Like">
+                    <button style="background-color:Transparent" id="btnCommentLike" data-toggle="tooltip" data-placement="top" title="Like" value=${value.id}>
                         <span><i class="fas fa-thumbs-up mr-2"></i></span>
-                    </a>
-                    <a id="btnReply" data-toggle="tooltip" data-placement="top" title="Reply">
+                        <span>${value.id}</span>
+                    </button>
+                    <button style="background-color:Transparent" id="btnCommentReply" data-toggle="tooltip" data-placement="top" title="Reply">
                         Reply
-                    </a>
+                    </button>
                 </div>
             </div>`
                             $('#comments').append(div);
@@ -277,7 +297,7 @@
                             success: function (data) {
                                 console.log(data);
 
-                                var div = ` <div class="col-1">
+                                var div = `<div class="col-1">
                             <div><img class="channel-icon" src="/user/thumbnil.jpg" /></div>
                         </div>
                         <div class="col-11 mb-4">
@@ -286,7 +306,7 @@
                              ${data.description}
                             </div>
                             <div>
-                                <a id="btnLikes" data-toggle="tooltip" data-placement="top" title="Like">
+                                <a id="btnCommentLike" data-toggle="tooltip" data-placement="top" title="Like" ${data.Id}>
                                     <span><i class="fas fa-thumbs-up mr-2"></i></span>
                                 </a>
                                 <a id="btnReply" data-toggle="tooltip" data-placement="top" title="Reply">
@@ -304,6 +324,21 @@
                 })
 
             })
+
+        // Insert CommentLike Into Database
+        $("#comments").on('click', '#btnCommentLike', function () {
+            var commentId = jQuery(this).val();
+            $.ajax({
+                method: 'POST',
+                url: '/CommentLike/AddCommentsLike',
+                data: {
+                    commentId: commentId,
+                },
+                success: function (data) {
+                    console.log(data);
+                },
+            })
+        })
 
         //Insert Like into Database
         $('#btnLike').click(function () {

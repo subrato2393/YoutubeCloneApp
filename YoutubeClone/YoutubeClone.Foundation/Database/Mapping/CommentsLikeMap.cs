@@ -6,15 +6,14 @@ using YoutubeClone.Foundation.Entities;
 
 namespace YoutubeClone.Foundation.Database.Mapping
 {
-    public class CommentsMap : ClassMap<Comments>
+    public class CommentsLikeMap : ClassMap<CommentsLike>
     {
-        public CommentsMap() 
+        public CommentsLikeMap()
         {
             Id(x => x.Id).Column("Id").GeneratedBy.GuidNative();
-            Map(x => x.Description);
-            References(x => x.Video);
+            Map(x => x.LikesCount);
             References(x => x.User);
-            HasMany(x => x.CommentsLikes).Cascade.AllDeleteOrphan();
+            References(x => x.Comments);
         }
     }
 }
