@@ -31,7 +31,7 @@
 
             <!-- Modal -->
             <div class="modal fade" id="btnShare" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" style="width:360px" role="document">
+                <div id="modalBody" class="modal-dialog" style="width:360px" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="btnShareLabel">Share</h5>
@@ -202,11 +202,28 @@
                      link.attr('href', link.attr('href') + pageURL);
                 })
 
-                $('#btnCopy').click(function () {
-                    var value = $('#txtUrl').val();
-                    $('#btnCopy').html("Copied");
-                    $('#btnCopy').prop('disabled', true);
-                })
+                //copy to clipboard
+        $(document).on('click', '#btnCopy', function () {
+            var value = $('#txtUrl').val();
+            $('#btnCopy').html("Copied");
+            $('#btnCopy').prop('disabled', true);
+            copytext(value, this);
+        })
+
+        function copytext(text, context) {
+            var textField = document.createElement('textarea');
+            textField.innerText = text;
+
+            if (context) {
+                context.parentNode.insertBefore(textField, context);
+            } else {
+                document.body.appendChild(textField);
+            }
+
+            textField.select();
+            document.execCommand('copy');
+            textField.parentNode.removeChild(textField);
+        }
             //Get All comments from Database
                 $.ajax({
                    dataType: 'JSON',
