@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using YoutubeClone.Models;
 
 namespace YoutubeClone.Controllers
 {
@@ -12,12 +13,27 @@ namespace YoutubeClone.Controllers
         {
             return View();
         }
+
         public IActionResult AddCommentsLike(Guid commentId)
-        {
-            //var model = new LikeModel(); 
-            //model.IsUserLikedVideoBefore(videoId, User.Identity.Name);
-            //return Json(model);
-            return Json("");
+        { 
+            var model = new CommentsLikeModel();
+            model.IsUserLikedCommentBefore(commentId, User.Identity.Name);
+            return Json(model); 
         }
+        
+        public IActionResult GetCommentLike(Guid commentId)
+        {
+            var model = new CommentsLikeModel();
+            model.GetCommentLikeCount(commentId);
+            return Json(model);
+        }
+
+        //public IActionResult GetAllCommentsLike(Guid commentId)
+        //{
+        //    var model = new CommentsLikeModel();
+        //   // model.GetAllCommentLike
+        //    //model.
+        //    return Json("");
+        //}
     }
 }

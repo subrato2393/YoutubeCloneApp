@@ -38,11 +38,17 @@ namespace YoutubeClone.Controllers
             model.GetVideoById(id,User.Identity.Name);
             model.GetVideoViewCount(id);
             model.GetSubscriberCount();
+
             model.GetVideoLikesCount(id);
             model.IsLikedVideoBefore(id, User.Identity.Name);
+
             model.GetVideoDisLikesCount(id);
             model.IsDislikedVideoBefore(id, User.Identity.Name);
-            model.GetAllComments(id,User.Identity.Name);
+            
+          //  model.GetAllComments(id,User.Identity.Name);
+
+
+
             return View(model);
         }
 

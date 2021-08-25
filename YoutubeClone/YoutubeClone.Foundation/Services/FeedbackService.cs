@@ -15,7 +15,8 @@ using DislikeBO = YoutubeClone.Foundation.BusinessObjects.Dislikes;
 using DislikeEO = YoutubeClone.Foundation.Entities.Dislikes;
 using CommentBO = YoutubeClone.Foundation.BusinessObjects.Comments;
 using CommentEO = YoutubeClone.Foundation.Entities.Comments;
-
+using CommentsLikeBO = YoutubeClone.Foundation.BusinessObjects.CommentsLike;
+using CommentsLikeEO = YoutubeClone.Foundation.Entities.CommentsLike;
 
 namespace YoutubeClone.Foundation.Services
 {
@@ -231,6 +232,57 @@ namespace YoutubeClone.Foundation.Services
 
             var commentBo = _mapper.Map<CommentBO>(comment); 
             return commentBo;
+        }
+
+        public async Task AddCommetsLike(CommentsLikeBO commentsLike)
+        {
+            var user = await _userManager.FindByNameAsync(commentsLike.UserName);
+             
+            var comment = _channelUnitOfWork.CommentRepository.GetById(commentsLike.CommentId);
+
+            var commentLike = new CommentsLikeEO
+            {
+                LikesCount = commentsLike.LikesCount,
+                Comments = comment,
+                User = user
+            };
+
+            _channelUnitOfWork.BeginTransaction();
+            _channelUnitOfWork.CommentLikeRepository.Add(commentLike);
+            _channelUnitOfWork.Commit();
+        }
+
+        public bool IsCommentDisliked(Guid commentId, string name)
+        {
+            //var dislikes = _channelUnitOfWork.DislikeRepository.GetAll();
+            //var IsDisliked = dislikes.Where(x => x.Video.Id == videoId && x.User.UserName == name).ToList();
+
+            return true;
+        }
+
+        public bool IsCommentLiked(Guid commentId, string name)
+        {
+            var likes = _channelUnitOfWork.CommentLikeRepository.GetAll();
+            var IsLiked = likes.Where(x => x.Comments.Id == commentId && x.User.UserName == name).ToList();
+
+            return IsLiked.Count > 0;
+        }
+
+        public void DeleteCommentLike(Guid commentId, string name)
+        {
+            var likes = _channelUnitOfWork.CommentLikeRepository.GetAll();
+            var like = likes.FirstOrDefault(x => x.Comments.Id == commentId && x.User.UserName == name);
+
+            _channelUnitOfWork.BeginTransaction();
+            _channelUnitOfWork.CommentLikeRepository.Remove(like);
+            _channelUnitOfWork.Commit();
+        }
+
+        public int GetCommentsLikesCount(Guid commentId)
+        {
+            var likes = _channelUnitOfWork.CommentLikeRepository.GetAll();
+            var count = likes.Where(x => x.Comments.Id == commentId).Count();
+            return count;
         }
     }
 }

@@ -262,12 +262,13 @@
                 </div>
                 <div>
                     <button style="background-color:Transparent" id="btnCommentLike" data-toggle="tooltip" data-placement="top" title="Like" value=${value.id}>
-                        <span><i class="fas fa-thumbs-up mr-2"></i></span>
-                        <span>${value.id}</span>
+                        <span><i class="far fa-thumbs-up mr-1"></i></span>
+                        <span class="ml-1" id='${value.id}'></span>
                     </button>
-                    <button style="background-color:Transparent" id="btnCommentReply" data-toggle="tooltip" data-placement="top" title="Reply">
+                    <button class="ml-3" style="background-color:Transparent" id="btnCommentReply" data-toggle="tooltip" data-placement="top" title="Reply">
                         Reply
                     </button>
+                        <h1 id='${value.id}'>${value.id}</h1>
                 </div>
             </div>`
                             $('#comments').append(div);
@@ -308,6 +309,7 @@
                             <div>
                                 <a id="btnCommentLike" data-toggle="tooltip" data-placement="top" title="Like" ${data.Id}>
                                     <span><i class="fas fa-thumbs-up mr-2"></i></span>
+                                    <h1 id='likeValue'>cc</h1>
                                 </a>
                                 <a id="btnReply" data-toggle="tooltip" data-placement="top" title="Reply">
                                     Reply
@@ -324,20 +326,57 @@
                 })
 
             })
-
+        //Get Comment Like from Database
+      /*  //$.ajax*//*({*/
+        //    dataType: 'JSON',
+        //    url: '/CommentLike/GetAllCommentsLike', 
+        //    data: {
+        //        commentId: commentId,
+        //    },
+        //    success: function (data) {
+        //        console.log(data)
+        //        var id = commentId;
+        //        alert(id)
+        //        $('#' + id).text(data.likeCount)
+        //        //  window.location.href = '/CommentLike/GetAllCommentsLike'
+        //        // $('#likeValue').text(data.likeCount)
+        //        // $('#btnCommentLike').html("<span><i class='fas fa-thumbs-up mr-1'></i></span>" + data.likeCount)
+        //    }
+        //})
         // Insert CommentLike Into Database
         $("#comments").on('click', '#btnCommentLike', function () {
             var commentId = jQuery(this).val();
-            $.ajax({
-                method: 'POST',
-                url: '/CommentLike/AddCommentsLike',
-                data: {
-                    commentId: commentId,
-                },
-                success: function (data) {
-                    console.log(data);
-                },
-            })
+            $.when(
+                //add comment like
+                $.ajax({
+                    method: 'POST',
+                    url: '/CommentLike/AddCommentsLike',
+                    data: {
+                        commentId: commentId,
+                    },
+                    success: function (data) {
+                        //Get comment like
+                        $.ajax({
+                            dataType: 'JSON',
+                            url: '/CommentLike/GetCommentLike',
+                            data: {
+                                commentId: commentId,
+                            },
+                            success: function (data) {
+                                console.log(data)
+                                var id = commentId;
+                                alert(id)
+                                $('#' + id).text(data.likeCount)
+                              //  window.location.href = '/CommentLike/GetAllCommentsLike'
+                               // $('#likeValue').text(data.likeCount)
+                                // $('#btnCommentLike').html("<span><i class='fas fa-thumbs-up mr-1'></i></span>" + data.likeCount)
+                            }
+                        })
+                    },
+                }),
+
+              
+            )
         })
 
         //Insert Like into Database

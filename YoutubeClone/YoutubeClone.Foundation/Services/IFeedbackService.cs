@@ -19,14 +19,19 @@ namespace YoutubeClone.Foundation.Services
         Task AddComments(Comments comments);
         IList<VideoViewChart> GetVideoViewCountonDateForChart(Guid channelId);
         Task AddVideoLike(LikeBO likeBO);
+        int GetCommentsLikesCount(Guid commentId);
+        bool IsCommentDisliked(Guid commentId, string name);
         int GetLikesCount(Guid id);
+        bool IsCommentLiked(Guid commentId, string name);
         bool IsLiked(Guid videoId, string name);
         bool IsDisliked(Guid videoId, string name);
         void DeleteLike(Guid videoId, string name);
         void DeleteDislike(Guid videoId, string name);
+        void DeleteCommentLike(Guid commentId, string name);
         Task AddVideoDislike(DislikeBO dislikeBO);
         int GetDislikesCount(Guid id);
         Comments GetComment();
         IList<Comments> GetAllComments(Guid id,string name);
+        Task AddCommetsLike(CommentsLike commentsLike);
     }
 }
