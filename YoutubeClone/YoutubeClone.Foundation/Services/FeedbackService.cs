@@ -25,7 +25,7 @@ namespace YoutubeClone.Foundation.Services
         private readonly IChannelUnitOfWork _channelUnitOfWork;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
-        private  Guid _commentId;
+        private Guid _commentId;
 
         public FeedbackService(IChannelUnitOfWork channelUnitOfWork,
             UserManager<ApplicationUser> userManager,
@@ -217,11 +217,26 @@ namespace YoutubeClone.Foundation.Services
             _commentId = comment.Id;
         }
 
-        public IList<CommentBO> GetAllComments(Guid id,string name) 
+        public IList<CommentBO> GetAllComments(Guid id, string name)
         {
             var comments = _channelUnitOfWork.CommentRepository.GetAll();
-           
-            var filterComment = comments.Where(x => x.Video.Id == id);
+            var commentsLike = _channelUnitOfWork.CommentLikeRepository.GetAll();
+
+            var comment = (from c in comments
+                           join cl in commentsLike
+                           on c.Id equals cl.Comments.Id into f
+                           from g in f.DefaultIfEmpty()
+                           group new { c} by new { Id = c.Id, c.Description, c.User.UserName, VideoId = c.Video.Id } into g
+                           select new CommentBO()
+                           {
+                               Description = g.Key.Description,
+                               LikeCount = g.Count(),
+                               Id = g.Key.Id,
+                               UserName = g.Key.UserName,
+                               VideoId = g.Key.VideoId,
+                           }).ToList();
+
+            var filterComment = comment.Where(x => x.VideoId == id);
             var commentsBo = _mapper.Map<IList<CommentBO>>(filterComment);
             return commentsBo;
         }
@@ -230,14 +245,14 @@ namespace YoutubeClone.Foundation.Services
         {
             var comment = _channelUnitOfWork.CommentRepository.GetById(_commentId);
 
-            var commentBo = _mapper.Map<CommentBO>(comment); 
+            var commentBo = _mapper.Map<CommentBO>(comment);
             return commentBo;
         }
 
         public async Task AddCommetsLike(CommentsLikeBO commentsLike)
         {
             var user = await _userManager.FindByNameAsync(commentsLike.UserName);
-             
+
             var comment = _channelUnitOfWork.CommentRepository.GetById(commentsLike.CommentId);
 
             var commentLike = new CommentsLikeEO

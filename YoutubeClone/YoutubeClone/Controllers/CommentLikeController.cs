@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using YoutubeClone.Models;
 
 namespace YoutubeClone.Controllers
@@ -25,6 +22,7 @@ namespace YoutubeClone.Controllers
         {
             var model = new CommentsLikeModel();
             model.GetCommentLikeCount(commentId);
+          //  model.IsUserLikedBefore(commentId , User.Identity.Name);
             return Json(model);
         }
 

@@ -25,13 +25,18 @@ namespace YoutubeClone.Models
             _feedbackService = Startup.AutofacContainer.Resolve<IFeedbackService>();
         }
 
+        public void IsUserLikedBefore(Guid commentId,string name)
+        {
+            IsLikedBefore = _feedbackService.IsCommentLiked(commentId, name);
+        }
+
         public void GetCommentLikeCount(Guid commentId)
         {
             LikeCount = _feedbackService.GetCommentsLikesCount(commentId);
         }
-
+         
         public void IsUserLikedCommentBefore(Guid commentId, string name)
-        {
+        { 
            // IsDislikeBefore = _feedbackService.IsCommentDisliked(commentId, name);
 
             IsLikedBefore = _feedbackService.IsCommentLiked(commentId, name);

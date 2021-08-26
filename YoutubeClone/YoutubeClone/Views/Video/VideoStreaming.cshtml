@@ -251,19 +251,26 @@
                    },
                     success: function (data) {
                         $.each(data, function (key, value) {
-                          //  console.log(value)
+                            //if (value.isUserLikedCommentBefore == true) {
+                            //    $('#btnCommentLike').html("<span><i class='far fa-thumbs-up mr-1'></i></span>" + data.likeCount)
+                            //}
+                            //else {
+                            //    $('#btnCommentLike').html("<span><i class='fas fa-thumbs-up mr-1'></i></span>" + data.likeCount)
+                            //}
+                            console.log(value)
+                          //console.log(value)
                             var div = ` <div class="col-1">
                 <div><img class="channel-icon" src="/user/thumbnil.jpg" /></div>
             </div>
             <div class="col-11 mb-4">
-                <div>${value.user.email}</div>
+                <div>${value.userName}</div>
                 <div>
                  ${value.description}
                 </div>
                 <div>
                     <button style="background-color:Transparent" id="btnCommentLike" data-toggle="tooltip" data-placement="top" title="Like" value=${value.id}>
                         <span><i class="far fa-thumbs-up mr-1"></i></span>
-                        <span class="ml-1" id='${value.id}'></span>
+                        <span class="ml-1" id='${value.id}'>${value.likeCount}</span>
                     </button>
                     <button class="ml-3" style="background-color:Transparent" id="btnCommentReply" data-toggle="tooltip" data-placement="top" title="Reply">
                         Reply
@@ -296,7 +303,7 @@
                                 videoId: videoId,
                             },
                             success: function (data) {
-                                console.log(data);
+                              //  console.log(data);
 
                                 var div = `<div class="col-1">
                             <div><img class="channel-icon" src="/user/thumbnil.jpg" /></div>
@@ -354,7 +361,11 @@
                     data: {
                         commentId: commentId,
                     },
+                    beforeSend: function () {
+                        $('#' + commentId).html("<i class='fas fa-circle-notch fa-spin'></i>");
+                    },
                     success: function (data) {
+                       // console.log(data)
                         //Get comment like
                         $.ajax({
                             dataType: 'JSON',
@@ -363,15 +374,17 @@
                                 commentId: commentId,
                             },
                             success: function (data) {
-                                console.log(data)
                                 var id = commentId;
-                                alert(id)
+                                //alert(id)
                                 $('#' + id).text(data.likeCount)
                               //  window.location.href = '/CommentLike/GetAllCommentsLike'
                                // $('#likeValue').text(data.likeCount)
                                 // $('#btnCommentLike').html("<span><i class='fas fa-thumbs-up mr-1'></i></span>" + data.likeCount)
                             }
                         })
+                    },
+                    complete: function () {
+                        /* $("#loads").hide();*/
                     },
                 }),
 

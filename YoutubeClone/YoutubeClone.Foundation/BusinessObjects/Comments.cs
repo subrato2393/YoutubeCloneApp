@@ -9,8 +9,11 @@ namespace YoutubeClone.Foundation.BusinessObjects
     {
         public Guid Id { get; set; }
         public string Description { get; set; }
-        public Guid VideoId { get; set; }
+        public Guid VideoId { get; set; } 
         public string UserName { get; set; }
+        public int LikeCount { get; set; }
+        public bool IsUserLikedCommentBefore { get; set; }
         public ApplicationUser User { get; set; }
+        public CommentsLike CommentsLike { get; set; }
     }
 }
