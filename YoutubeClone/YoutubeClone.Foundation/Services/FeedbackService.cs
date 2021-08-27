@@ -225,12 +225,13 @@ namespace YoutubeClone.Foundation.Services
             var comment = (from c in comments
                            join cl in commentsLike
                            on c.Id equals cl.Comments.Id into f
-                           from g in f.DefaultIfEmpty()
-                           group new { c} by new { Id = c.Id, c.Description, c.User.UserName, VideoId = c.Video.Id } into g
+                           from fNull in f.DefaultIfEmpty()
+                           group fNull by new { Id = c.Id, c.Description, c.User.UserName, VideoId = c.Video.Id } into g
+                           let fCount = g.Count(x => x != null)
                            select new CommentBO()
                            {
                                Description = g.Key.Description,
-                               LikeCount = g.Count(),
+                               LikeCount = fCount,
                                Id = g.Key.Id,
                                UserName = g.Key.UserName,
                                VideoId = g.Key.VideoId,
