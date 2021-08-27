@@ -242,6 +242,13 @@
             document.execCommand('copy');
             textField.parentNode.removeChild(textField);
         }
+        //Insert and Get replay from instantly
+        $("#comments").on('click', '#btnCommentReply', function () {
+            var commentId = jQuery(this).val();
+            alert(commentId)
+            $('#txtReply'+commentId).show();
+        })
+
             //Get All comments from Database
                 $.ajax({
                    dataType: 'JSON',
@@ -272,10 +279,15 @@
                         <span><i class="far fa-thumbs-up mr-1"></i></span>
                         <span class="ml-1" id='${value.id}'>${value.likeCount}</span>
                     </button>
-                    <button class="ml-3" style="background-color:Transparent" id="btnCommentReply" data-toggle="tooltip" data-placement="top" title="Reply">
+                    <button class="ml-3" style="background-color:Transparent" id="btnCommentReply" data-toggle="tooltip" data-placement="top" title="Reply" value=${value.id}>
                         Reply
                     </button>
                         <h1 id='${value.id}'>${value.id}</h1>
+                </div>
+                <div id='txtReply${value.id}' style='display:none'>
+                   <input  class='form-control'  type='text' >
+                      <button type="submit" class="btn btn-success btn-sm float-right ml-2 mt-2">Reply</button>
+                      <button type="submit" class="btn btn-success btn-sm float-right mt-2">Cancel</button>
                 </div>
             </div>`
                             $('#comments').append(div);
@@ -336,7 +348,7 @@
         //Get Comment Like from Database
       /*  //$.ajax*//*({*/
         //    dataType: 'JSON',
-        //    url: '/CommentLike/GetAllCommentsLike', 
+        //    url: '/CommentLike/GetAllCommentsLike',
         //    data: {
         //        commentId: commentId,
         //    },
@@ -388,7 +400,7 @@
                     },
                 }),
 
-              
+
             )
         })
 
