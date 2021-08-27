@@ -17,6 +17,8 @@ using CommentBO = YoutubeClone.Foundation.BusinessObjects.Comments;
 using CommentEO = YoutubeClone.Foundation.Entities.Comments;
 using CommentsLikeBO = YoutubeClone.Foundation.BusinessObjects.CommentsLike;
 using CommentsLikeEO = YoutubeClone.Foundation.Entities.CommentsLike;
+using CommentsReplyEO = YoutubeClone.Foundation.Entities.CommentsReply; 
+using CommentsReplyBO = YoutubeClone.Foundation.BusinessObjects.CommentsReplyBO;
 
 namespace YoutubeClone.Foundation.Services
 {
@@ -299,6 +301,24 @@ namespace YoutubeClone.Foundation.Services
             var likes = _channelUnitOfWork.CommentLikeRepository.GetAll();
             var count = likes.Where(x => x.Comments.Id == commentId).Count();
             return count;
+        }
+
+        public async Task AddCommentsReply(CommentsReplyBO commentsReplyBO)
+        {
+            var user = await _userManager.FindByNameAsync(commentsReplyBO.UserName);
+
+            var commentReply = _channelUnitOfWork.CommentRepository.GetById(commentsReplyBO.CommentId);
+
+            var commentReplyEo = new CommentsReplyEO 
+            {
+                Description = commentsReplyBO.Description,
+                Comments = commentReply,
+                User = user
+            };
+
+            _channelUnitOfWork.BeginTransaction();
+            _channelUnitOfWork.CommentReplyRepository.Add(commentReplyEo);
+            _channelUnitOfWork.Commit();
         }
     }
 }

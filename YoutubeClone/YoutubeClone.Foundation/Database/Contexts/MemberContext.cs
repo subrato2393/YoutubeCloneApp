@@ -32,6 +32,7 @@ namespace YoutubeClone.Foundation.Database.Contexts
             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Dislikes>())
             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Comments>())
 
+
             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ApplicationUser>())
             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<UserRole>())
             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<UserLogin>())

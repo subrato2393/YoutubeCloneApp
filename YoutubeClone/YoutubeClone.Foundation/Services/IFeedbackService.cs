@@ -20,6 +20,7 @@ namespace YoutubeClone.Foundation.Services
         IList<VideoViewChart> GetVideoViewCountonDateForChart(Guid channelId);
         Task AddVideoLike(LikeBO likeBO);
         int GetCommentsLikesCount(Guid commentId);
+        Task AddCommentsReply(CommentsReplyBO commentsReplyBO);
         bool IsCommentDisliked(Guid commentId, string name);
         int GetLikesCount(Guid id);
         bool IsCommentLiked(Guid commentId, string name);
