@@ -264,7 +264,7 @@
                             //else {
                             //    $('#btnCommentLike').html("<span><i class='fas fa-thumbs-up mr-1'></i></span>" + data.likeCount)
                             //}
-                            console.log(value)
+                           // console.log(value)
                           //console.log(value)
                             var div = ` <div class="col-1">
                 <div><img class="channel-icon" src="/user/thumbnil.jpg" /></div>
@@ -315,26 +315,32 @@
                                 videoId: videoId,
                             },
                             success: function (data) {
-                              //  console.log(data);
+                               console.log(data);
 
-                                var div = `<div class="col-1">
-                            <div><img class="channel-icon" src="/user/thumbnil.jpg" /></div>
-                        </div>
-                        <div class="col-11 mb-4">
-                            <div>${data.userName}</div>
-                            <div>
-                             ${data.description}
-                            </div>
-                            <div>
-                                <a id="btnCommentLike" data-toggle="tooltip" data-placement="top" title="Like" ${data.Id}>
-                                    <span><i class="fas fa-thumbs-up mr-2"></i></span>
-                                    <h1 id='likeValue'>cc</h1>
-                                </a>
-                                <a id="btnReply" data-toggle="tooltip" data-placement="top" title="Reply">
-                                    Reply
-                                </a>
-                            </div>
-                        </div>`
+                                var div = ` <div class="col-1">
+                <div><img class="channel-icon" src="/user/thumbnil.jpg" /></div>
+            </div>
+            <div class="col-11 mb-4">
+                <div>${data.userName}</div>
+                <div>
+                 ${data.description}
+                </div>
+                <div>
+                    <button style="background-color:Transparent" id="btnCommentLike" data-toggle="tooltip" data-placement="top" title="Like" value=${data.id}>
+                        <span><i class="far fa-thumbs-up mr-1"></i></span>
+                        <span class="ml-1" id='${data.id}'>${data.likeCount}</span>
+                    </button>
+                    <button class="ml-3" style="background-color:Transparent" id="btnCommentReply" data-toggle="tooltip" data-placement="top" title="Reply" value=${data.id}>
+                        Reply
+                    </button>
+                        <h1 id='${data.id}'>${data.id}</h1>
+                </div>
+                <div id='txtReply${data.id}' style='display:none'>
+                   <input  class='form-control'  type='text' >
+                      <button type="submit" class="btn btn-success btn-sm float-right ml-2 mt-2">Reply</button>
+                      <button type="submit" class="btn btn-success btn-sm float-right mt-2">Cancel</button>
+                </div>
+            </div>`
                                 $('#comments').prepend(div);
                             },
                         })

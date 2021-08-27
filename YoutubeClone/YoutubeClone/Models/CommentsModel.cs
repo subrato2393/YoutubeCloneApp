@@ -14,6 +14,7 @@ namespace YoutubeClone.Models
         public string Description { get; set; }
         public Guid VideoId { get; set; }
         public string UserName { get; set; }
+        public int LikeCount { get; set; }
         public IList<CommentBO> CommentList {get; set;}
         public CommentBO Comment {get; set;}
 
@@ -44,6 +45,7 @@ namespace YoutubeClone.Models
             Description = commentBo.Description;
             VideoId = commentBo.VideoId;
             UserName = commentBo.User.UserName;
+            LikeCount = 0;
         }
 
         public void GetAllComments(Guid id, string name)
