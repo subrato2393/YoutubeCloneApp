@@ -17,6 +17,7 @@ namespace YoutubeClone.Models
         public Guid VideoId { get; set; }
         public Comments Comments { get; set; }
         public ApplicationUser User { get; set; }
+        public string UserName { get; set; }
 
         private readonly IFeedbackService _feedbackService;
 
@@ -24,7 +25,7 @@ namespace YoutubeClone.Models
         {
             _feedbackService = feedbackService;
         }
-
+     
         public CommentsReplyModel()
         {
             _feedbackService = Startup.AutofacContainer.Resolve<IFeedbackService>();
@@ -40,5 +41,14 @@ namespace YoutubeClone.Models
                 UserName = userName
             });
         }
+        public void GetCommentReply(string userName)
+        {
+            var commentReplyBo = _feedbackService.GetCurrentCommentReply();
+            Id = commentReplyBo.Id;
+            Description = commentReplyBo.Description;
+            CommentId = commentReplyBo.CommentId;
+            UserName = userName;
+        }
+
     }
 }

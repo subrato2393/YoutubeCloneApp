@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using YoutubeClone.Models;
 
@@ -7,11 +8,16 @@ namespace YoutubeClone.Controllers
 {
     public class CommentController : Controller
     {
+        private readonly ILogger<CommentController> _logger;
+        public CommentController(ILogger<CommentController> logger)
+        {
+            _logger = logger;
+        }
         public IActionResult Index()
         {
             return View();
         }
-      
+
         [Authorize(Roles = "Member")]
         public IActionResult AddComment([FromBody] CommentsModel model)
         {
@@ -22,7 +28,15 @@ namespace YoutubeClone.Controllers
         public IActionResult GetComments(Guid videoId)
         {
             CommentsModel model = new CommentsModel();
-            model.GetAllComments(videoId, User.Identity.Name);
+            try
+            {
+                model.GetAllComments(videoId, User.Identity.Name);
+                return Json(model.CommentList);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,"Error Getting comment failed");
+            }
             return Json(model.CommentList);
         }
 
@@ -30,7 +44,7 @@ namespace YoutubeClone.Controllers
         {
             CommentsModel model = new CommentsModel();
             model.GetCurrentComment();
-           // model.GetAllComments(model.VideoId, User.Identity.Name);
+            // model.GetAllComments(model.VideoId, User.Identity.Name);
             return Json(model);
         }
     }

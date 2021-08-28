@@ -28,6 +28,7 @@ namespace YoutubeClone.Foundation.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
         private Guid _commentId;
+        private Guid _commentReplyId;
 
         public FeedbackService(IChannelUnitOfWork channelUnitOfWork,
             UserManager<ApplicationUser> userManager,
@@ -311,6 +312,7 @@ namespace YoutubeClone.Foundation.Services
 
             var commentReplyEo = new CommentsReplyEO 
             {
+                Id=commentsReplyBO.Id,
                 Description = commentsReplyBO.Description,
                 Comments = commentReply,
                 User = user
@@ -319,6 +321,14 @@ namespace YoutubeClone.Foundation.Services
             _channelUnitOfWork.BeginTransaction();
             _channelUnitOfWork.CommentReplyRepository.Add(commentReplyEo);
             _channelUnitOfWork.Commit();
+            _commentReplyId = commentReplyEo.Id;
+        }
+
+        public CommentsReplyBO GetCurrentCommentReply()
+        {
+            var commentReplyEo = _channelUnitOfWork.CommentReplyRepository.GetById(_commentReplyId);
+            var commentReplyBo = _mapper.Map<CommentsReplyBO>(commentReplyEo);
+            return commentReplyBo;
         }
     }
 }

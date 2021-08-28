@@ -274,6 +274,26 @@
 
                     success: function (data) {
                         hideCommentReply(commentId);
+
+                        //Get Current comment reply
+                        $.ajax(
+                            {
+                                type: 'POST',
+                                dataType: 'JSON',
+                                url: '/CommentsReply/GetCurrentCommentReply',
+                                data: { commentId: commentId },
+                                success: function (data) {
+                                    console.log(data)
+                                    $('#divCommentReply' + commentId).append(`<div>${data.userName}</div><div>${data.description}</div><button style="background-color:Transparent" id="btnCommentLike" data-toggle="tooltip" data-placement="top" title="Like" value=${data.id}>
+                        <span><i class="far fa-thumbs-up mr-1"></i></span>
+                        <span class="ml-1"></span>
+                    </button>
+                    <button class="ml-3" style="background-color:Transparent" id="btnCommentReply" data-toggle="tooltip" data-placement="top" title="Reply" value=${data.id}>
+                                            Reply
+                    </button>`)
+                                }
+                            });
+
                         // $('#btnLike').html("<span><i class='fas fa-thumbs-up mr-1'></i></span>" + data.likeCount)
                     }
                 })
@@ -319,8 +339,8 @@
                     <input id='txtBoxReply${value.id}' class='form-control'  type='text' >
                       <button id='btnReply${value.id}' type="submit" class="btn btn-success btn-sm float-right ml-2 mt-2">Reply</button>
                       <button id='btnCancel${value.id}' type="submit" class="btn btn-success btn-sm float-right mt-2">Cancel</button>
-                    <div style='display:none'><h1>h1lllllllllll</h1></div>
                  </div>
+                    <div class='ml-5' id='divCommentReply${value.id}'></div>
             </div>`
                             $('#comments').append(div);
                         });

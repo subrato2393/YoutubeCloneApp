@@ -11,5 +11,6 @@ namespace YoutubeClone.Foundation.Entities
         public virtual Video Video { get; set; }
         public virtual ApplicationUser User { get; set; }
         public virtual IList<CommentsLike> CommentsLikes { get; set; }
+        public virtual IList<CommentsReply> CommentsReplies { get; set; } 
     }
 }

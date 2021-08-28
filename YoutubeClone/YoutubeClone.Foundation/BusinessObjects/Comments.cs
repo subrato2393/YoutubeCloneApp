@@ -15,5 +15,6 @@ namespace YoutubeClone.Foundation.BusinessObjects
         public bool IsUserLikedCommentBefore { get; set; }
         public ApplicationUser User { get; set; }
         public CommentsLike CommentsLike { get; set; }
+        public CommentsReplyBO CommentsReplyBO { get; set; }
     }
 }

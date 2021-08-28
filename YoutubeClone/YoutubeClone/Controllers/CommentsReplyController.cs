@@ -19,6 +19,14 @@ namespace YoutubeClone.Controllers
             model.AddCommentsReplyIntoDatabase(User.Identity.Name);
             return Json(model);
         }
+
+        public IActionResult GetCurrentCommentReply(Guid commentId)
+        {
+            CommentsReplyModel model = new CommentsReplyModel();
+            model.GetCommentReply(User.Identity.Name);
+            return Json(model);
+        }
+
     }
 }
 
