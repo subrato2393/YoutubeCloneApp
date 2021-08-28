@@ -17,7 +17,7 @@ using CommentBO = YoutubeClone.Foundation.BusinessObjects.Comments;
 using CommentEO = YoutubeClone.Foundation.Entities.Comments;
 using CommentsLikeBO = YoutubeClone.Foundation.BusinessObjects.CommentsLike;
 using CommentsLikeEO = YoutubeClone.Foundation.Entities.CommentsLike;
-using CommentsReplyEO = YoutubeClone.Foundation.Entities.CommentsReply; 
+using CommentsReplyEO = YoutubeClone.Foundation.Entities.CommentsReply;
 using CommentsReplyBO = YoutubeClone.Foundation.BusinessObjects.CommentsReplyBO;
 
 namespace YoutubeClone.Foundation.Services
@@ -224,12 +224,17 @@ namespace YoutubeClone.Foundation.Services
         {
             var comments = _channelUnitOfWork.CommentRepository.GetAll();
             var commentsLike = _channelUnitOfWork.CommentLikeRepository.GetAll();
+            var commentsReply = _channelUnitOfWork.CommentReplyRepository.GetAll();
 
             var comment = (from c in comments
                            join cl in commentsLike
                            on c.Id equals cl.Comments.Id into f
+                           join cr in commentsReply
+                           on c.Id equals cr.Comments.Id
                            from fNull in f.DefaultIfEmpty()
-                           group fNull by new { Id = c.Id, c.Description, c.User.UserName, VideoId = c.Video.Id } into g
+                          // from rNull in r.DefaultIfEmpty()
+
+                           group  fNull by new { Id = c.Id, c.Description, c.User.UserName, VideoId = c.Video.Id, CommentReplyDescription = cr.Description } into g
                            let fCount = g.Count(x => x != null)
                            select new CommentBO()
                            {
@@ -238,6 +243,7 @@ namespace YoutubeClone.Foundation.Services
                                Id = g.Key.Id,
                                UserName = g.Key.UserName,
                                VideoId = g.Key.VideoId,
+                               CommentReplyDescription = g.Key.CommentReplyDescription
                            }).ToList();
 
             var filterComment = comment.Where(x => x.VideoId == id);
@@ -310,9 +316,9 @@ namespace YoutubeClone.Foundation.Services
 
             var commentReply = _channelUnitOfWork.CommentRepository.GetById(commentsReplyBO.CommentId);
 
-            var commentReplyEo = new CommentsReplyEO 
+            var commentReplyEo = new CommentsReplyEO
             {
-                Id=commentsReplyBO.Id,
+                Id = commentsReplyBO.Id,
                 Description = commentsReplyBO.Description,
                 Comments = commentReply,
                 User = user
