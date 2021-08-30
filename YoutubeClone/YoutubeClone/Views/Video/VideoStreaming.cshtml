@@ -5,24 +5,25 @@
 @section styles{
     <link rel="stylesheet" href="/user/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-<style>
-    #btnCommentLike{
-        background-color: Transparent;
-        background-repeat: no-repeat;
-        border: none;
-        cursor: pointer;
-        overflow: hidden;
-        outline: none;
-    }
-    #btnCommentReply {
-        background-color: Transparent;
-        background-repeat: no-repeat;
-        border: none;
-        cursor: pointer;
-        overflow: hidden;
-        outline: none;
-    }
-</style>
+    <style>
+        #btnCommentLike {
+            background-color: Transparent;
+            background-repeat: no-repeat;
+            border: none;
+            cursor: pointer;
+            overflow: hidden;
+            outline: none;
+        }
+
+        #btnCommentReply {
+            background-color: Transparent;
+            background-repeat: no-repeat;
+            border: none;
+            cursor: pointer;
+            overflow: hidden;
+            outline: none;
+        }
+    </style>
 }
 <div class="col-10">
     <h1 id="btnlike"></h1>
@@ -153,450 +154,26 @@
     </div>
     <div id="comments" class="row">
         <div id="commentData">
-         
-        </div>
-        @*@foreach (var item in Model.CommentList)
-            {
-                <div class="col-1">
-                    <div><img class="channel-icon" src="/user/thumbnil.jpg" /></div>
-                </div>
-                <div class="col-11 mb-4">
-                    <div>@item.User.Email</div>
-                    <div>
-                        @item.Description
-                    </div>
-                    <div>
-                        <a id="btnLikes" data-toggle="tooltip" data-placement="top" title="Like">
-                            <span><i class="fas fa-thumbs-up mr-2"></i></span>
-                        </a>
-                        <a id="btnReply" data-toggle="tooltip" data-placement="top" title="Reply">
-                            Reply
-                        </a>
-                    </div>
-                </div>
 
-            }*@
+        </div>
     </div>
     <br /><br /><br />
 </div>
 @section scripts{
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     <script type="text/javascript">
-
-        $(function () {
+      $(function () {
                 $('[data-toggle="tooltip"]').tooltip()
             })
 
             var videoId = '@Model.Id'
             var Id = null;
-
-            //for demo purpose when this site will go live then use this site url
-            var pageURL = 'https://www.c-sharpcorner.com/UploadFile/cd7c2e/sharing-url-on-facebok-using-Asp-Net/';
-
-
-           //If click share button textbox will fill url link
-                $('#btnShares').click(function () {
-                    var pageURL = $(location).attr('href');
-                    $('#txtUrl').val(pageURL);
-                });
-
-                $('#linkFacebook').click(function () {
-                    var link = $('#linkFacebook');
-                    link.attr('href', link.attr('href') + pageURL);
-                })
-
-                $('#linkLinkdin').click(function () {
-                    var link = $('#linkLinkdin');
-                    link.attr('href', link.attr('href') + pageURL);
-                })
-
-                $('#linkTwitter').click(function () {
-                    var link = $('#linkTwitter');
-                    link.attr('href', link.attr('href') + pageURL);
-                })
-
-                $('#linkGooglePlus').click(function () {
-                     var link = $('#linkGooglePlus');
-                     link.attr('href', link.attr('href') + pageURL);
-                })
-
-                //copy to clipboard
-        $(document).on('click', '#btnCopy', function () {
-            var value = $('#txtUrl').val();
-            $('#btnCopy').html("Copied");
-            $('#btnCopy').prop('disabled', true);
-            copytext(value, this);
-        })
-
-        function copytext(text, context) {
-            var textField = document.createElement('textarea');
-            textField.innerText = text;
-
-            if (context) {
-                context.parentNode.insertBefore(textField, context);
-            } else {
-                document.body.appendChild(textField);
-            }
-
-            textField.select();
-            document.execCommand('copy');
-            textField.parentNode.removeChild(textField);
-        }
-        //Insert and Get replay from instantly
-        function hideCommentReply(commentId) {
-            $('#txtBoxReply' + commentId).hide();
-            $('#btnCancel' + commentId).hide();
-            $('#btnReply' + commentId).hide();
-        }
-
-        $("#comments").on('click', '#btnCommentReply', function () {
-            var commentId = jQuery(this).val();
-
-           
-           // alert(commentId)
-            $('#txtReply' + commentId).show();
-            $('#btnCancel' + commentId).click(function () {
-                hideCommentReply(commentId);
-            });
-           
-            $('#btnReply' + commentId).click(function () {
-                var commentReply = {
-                    commentId: commentId,
-                    videoId: videoId,
-                    description: $('#txtBoxReply' + commentId).val(),
-                };
-                $.ajax({
-                    dataType: 'JSON',
-                    method:'POST',
-                    url: '/CommentsReply/AddCommentsReply',
-                    contentType: "application/json",
-                    data: JSON.stringify(commentReply),
-
-                    success: function (data) {
-                        hideCommentReply(commentId);
-
-                        //Get Current comment reply
-                        $.ajax(
-                            {
-                                type: 'POST',
-                                dataType: 'JSON',
-                                url: '/CommentsReply/GetCurrentCommentReply',
-                                data: { commentId: commentId },
-                                success: function (data) {
-                                    console.log(data)
-                                    $('#divCommentReply' + commentId).append(`<div>${data.userName}</div><div>${data.description}</div><button style="background-color:Transparent" id="btnCommentLike" data-toggle="tooltip" data-placement="top" title="Like" value=${data.id}>
-                        <span><i class="far fa-thumbs-up mr-1"></i></span>
-                        <span class="ml-1"></span>
-                    </button>
-                    <button class="ml-3" style="background-color:Transparent" id="btnCommentReply" data-toggle="tooltip" data-placement="top" title="Reply" value=${data.id}>
-                                            Reply
-                    </button>`)
-                                }
-                            });
-
-                        // $('#btnLike').html("<span><i class='fas fa-thumbs-up mr-1'></i></span>" + data.likeCount)
-                    }
-                })
-            })
-        })
-
-            //Get All comments from Database
-                $.ajax({
-                   dataType: 'JSON',
-                   url: '/Comment/GetComments',
-                   data: {
-                      videoId: videoId,
-                   },
-                    success: function (data) {
-                        $.each(data, function (key, value) {
-                            console.log(value);
-                            //if (value.isUserLikedCommentBefore == true) {
-                            //    $('#btnCommentLike').html("<span><i class='far fa-thumbs-up mr-1'></i></span>" + data.likeCount)
-                            //}
-                            //else {
-                            //    $('#btnCommentLike').html("<span><i class='fas fa-thumbs-up mr-1'></i></span>" + data.likeCount)
-                            //}
-                           // console.log(value)
-                          //console.log(value)
-                            var div = ` <div class="col-1">
-                <div><img class="channel-icon" src="/user/thumbnil.jpg" /></div>
-            </div>
-            <div class="col-11 mb-4">
-                <div>${value.userName}</div>
-                <div>
-                 ${value.description}
-                </div>
-                <div>
-                    <button style="background-color:Transparent" id="btnCommentLike" data-toggle="tooltip" data-placement="top" title="Like" value=${value.id}>
-                        <span><i class="far fa-thumbs-up mr-1"></i></span>
-                        <span class="ml-1" id='${value.id}'>${value.likeCount}</span>
-                    </button>
-                    <button class="ml-3" style="background-color:Transparent" id="btnCommentReply" data-toggle="tooltip" data-placement="top" title="Reply" value=${value.id}>
-                        Reply
-                    </button>
-                </div>
-<div class='row mt-3'>
-                 <div id='txtReply${value.id}' style='display:none'>
-                    <input id='txtBoxReply${value.id}' class='form-control'  type='text' >
-                      <button id='btnReply${value.id}' type="submit" class="btn btn-success btn-sm float-right ml-2 mt-2">Reply</button>
-                      <button id='btnCancel${value.id}' type="submit" class="btn btn-success btn-sm float-right mt-2">Cancel</button>
-                 </div>
-                  <div><img class="channel-icon" src="/user/thumbnil.jpg" /></div>
-                    <div class='ml-4' id='divCommentReply${value.id}'><div>${value.userName}</div><div>${value.commentReplyDescription}</div><button style="background-color:Transparent" id="btnCommentLike" data-toggle="tooltip" data-placement="top" title="Like" value=${value.id}>
-                        <span><i class="far fa-thumbs-up mr-1"></i></span>
-                        <span class="ml-1"></span>
-                    </button>
-                    <button class="ml-3" style="background-color:Transparent" id="btnCommentReply" data-toggle="tooltip" data-placement="top" title="Reply" value=${value.id}>
-                                            Reply
-                    </button></div>
-</div>
-            </div>`
-                            $('#comments').append(div);
-                        });
-                   }
-                })
-            //Insert and get Comments
-            $('#btnComment').click(function () {
-                var comment = {
-                    videoId: videoId,
-                    description: $('#txtComment').val(),
-                };
-
-                $('#txtComment').val('');
-                $.ajax({
-                    method: 'POST',
-                    url: '/Comment/AddComment',
-                    contentType: "application/json",
-                    data: JSON.stringify(comment),
-                    success: function (data) {
-                        $.ajax({
-                            method: 'POST',
-                            url: '/Comment/GetCurrentComment',
-                            data: {
-                                videoId: videoId,
-                            },
-                            success: function (data) {
-                               console.log(data);
-
-                                var div = ` <div class="col-1">
-                <div><img class="channel-icon" src="/user/thumbnil.jpg" /></div>
-            </div>
-            <div class="col-11 mb-4">
-                <div>${data.userName}</div>
-                <div>
-                 ${data.description}
-                </div>
-                <div>
-                    <button style="background-color:Transparent" id="btnCommentLike" data-toggle="tooltip" data-placement="top" title="Like" value=${data.id}>
-                        <span><i class="far fa-thumbs-up mr-1"></i></span>
-                        <span class="ml-1" id='${data.id}'>${data.likeCount}</span>
-                    </button>
-                    <button class="ml-3" style="background-color:Transparent" id="btnCommentReply" data-toggle="tooltip" data-placement="top" title="Reply" value=${data.id}>
-                        Reply
-                    </button>
-                        <h1 id='${data.id}'>${data.id}</h1>
-                </div>
-                <div id='txtReply${data.id}' style='display:none'>
-                   <input id='txtBoxReply${data.id}' class='form-control'  type='text' >
-                      <button id='btnReply${data.id}' type="submit" class="btn btn-success btn-sm float-right ml-2 mt-2">Reply</button>
-                      <button id='btnCancel${data.id}' type="submit" class="btn btn-success btn-sm float-right mt-2">Cancel</button>
-                    <div style='display:none'><h1>h1lllllllllll</h1></div>
-                 </div>
-            </div>`
-                                $('#comments').prepend(div);
-                            },
-                        })
-                    },
-                    error: function () {
-                       window.location.href = '/Account/Login'
-                    }
-                })
-
-            })
-        //Get Comment Like from Database
-      /*  //$.ajax*//*({*/
-        //    dataType: 'JSON',
-        //    url: '/CommentLike/GetAllCommentsLike',
-        //    data: {
-        //        commentId: commentId,
-        //    },
-        //    success: function (data) {
-        //        console.log(data)
-        //        var id = commentId;
-        //        alert(id)
-        //        $('#' + id).text(data.likeCount)
-        //        //  window.location.href = '/CommentLike/GetAllCommentsLike'
-        //        // $('#likeValue').text(data.likeCount)
-        //        // $('#btnCommentLike').html("<span><i class='fas fa-thumbs-up mr-1'></i></span>" + data.likeCount)
-        //    }
-        //})
-        // Insert CommentLike Into Database
-        $("#comments").on('click', '#btnCommentLike', function () {
-            var commentId = jQuery(this).val();
-            $.when(
-                //add comment like
-                $.ajax({
-                    method: 'POST',
-                    url: '/CommentLike/AddCommentsLike',
-                    data: {
-                        commentId: commentId,
-                    },
-                    beforeSend: function () {
-                        $('#' + commentId).html("<i class='fas fa-circle-notch fa-spin'></i>");
-                    },
-                    success: function (data) {
-                       // console.log(data)
-                        //Get comment like
-                        $.ajax({
-                            dataType: 'JSON',
-                            url: '/CommentLike/GetCommentLike',
-                            data: {
-                                commentId: commentId,
-                            },
-                            success: function (data) {
-                                var id = commentId;
-                                //alert(id)
-                                $('#' + id).text(data.likeCount)
-                              //  window.location.href = '/CommentLike/GetAllCommentsLike'
-                               // $('#likeValue').text(data.likeCount)
-                                // $('#btnCommentLike').html("<span><i class='fas fa-thumbs-up mr-1'></i></span>" + data.likeCount)
-                            }
-                        })
-                    },
-                    complete: function () {
-                        /* $("#loads").hide();*/
-                    },
-                }),
-
-
-            )
-        })
-
-        //Insert Like into Database
-        $('#btnLike').click(function () {
-             $.when(
-                 $.ajax({
-                    method: 'POST',
-                    dataType: 'JSON',
-                    url: '/Like/AddLike',
-                    data: {
-                        videoId: videoId,
-                     },
-                     beforeSend: function () {
-                         $("#btnLike").html("<i class='fas fa-circle-notch fa-spin'></i>");
-                     },
-                     success: function (data) {
-                        if (data.isLikedBefore == true) {
-                            $.ajax({
-                                dataType: 'JSON',
-                                url: '/Like/Deletelike',
-                                data: {
-                                    videoId: videoId,
-                                },
-                                success: function (data) {
-                                    $('#btnLike').html("<span><i class='fas fa-thumbs-up mr-1'></i></span>" + data.likeCount)
-                                    $("#btnLike").removeClass("btn btn-success").addClass("btn btn-outline-success");
-                                }
-                            })
-                        }
-                        else {
-                            $("#btnLike").removeClass("btn btn-outline-success").addClass("btn btn-success");
-                        }
-                        $.ajax({
-                            dataType: 'JSON',
-                            url: '/Like/GetLike',
-                            data: {
-                                videoId: videoId,
-                            },
-                            success: function (data) {
-                                $('#btnLike').html("<span><i class='fas fa-thumbs-up mr-1'></i></span>" + data.likeCount)
-                            }
-                        })
-                     },
-                     complete: function () {
-                        /* $("#loads").hide();*/
-                     },
-                    error: function () {
-                        window.location.href = '/Account/Login';
-                    }
-                }),
-                );
-
-            })
-
-            //Insert Dislike into Database
-            //$('#btndislike').click(function () {
-            //    $.when(
-            //        $.ajax(
-            //            {
-            //              /*  type: 'POST',*/
-            //                dataType: 'JSON',
-            //                url: '/Dislike/AddDisLike',
-            //                data: {
-            //                    videoId: videoId,
-            //                },
-            //                success: function (data) {
-            //                    if (data.isLikedBefore) {
-            //                        $.ajax({
-            //                            dataType: 'JSON',
-            //                            url: '/Like/Deletelike',
-            //                            data: {
-            //                                videoId: videoId,
-            //                            },
-            //                            success: function (data) {
-            //                                $('#btnLike').html("<span><i class='fas fa-thumbs-up mr-1'></i></span>" + data.likeCount)
-            //                                $("#btnLike").removeClass("btn btn-success").addClass("btn btn-outline-success");
-            //                                console.log(data);
-            //                            }
-            //                        })
-            //                    }
-            //                    $.ajax({
-            //                        dataType: 'JSON',
-            //                        url: '/Dislike/GetDislike',
-            //                        data: {
-            //                            videoId: videoId,
-            //                        },
-            //                        success: function (data) {
-            //                            $('#btndislike').html("<span><i class='fas fa-thumbs-down mr-1'></i></span>" + data.dislikesCount)
-            //                            $("#btndislike").removeClass("btn btn-outline-success").addClass("btn btn-success");
-            //                        }
-            //                    })
-            //                },
-            //                error: function () {
-            //                    window.location.href = '/Account/Login';
-            //                }
-            //            }),
-            //    );
-
-            //})
-
-            //Insert video view into Database
-            function reset() {
-                startTime = new Date();
-            }
-
-            $('video')[0].addEventListener('play', reset);
-            $('video')[0].addEventListener('pause', reset);
-            $('video')[0].addEventListener('stop', reset);
-
-            var IsPlayed = true;
-
-            $('video')[0].addEventListener('timeupdate', (e) => {
-                let elapsedSeconds = (new Date() - startTime) / 1000;
-                if (elapsedSeconds > 10 && IsPlayed) {
-                    IsPlayed = false;
-
-                    $.ajax(
-                        {
-                            type: 'POST',
-                            dataType: 'JSON',
-                            url: '/VideoView/AddVideoView',
-                            data: { videoId: videoId },
-                        });
-                }
-            });
-       /* });*/
-
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <script src="~/App/VideoStreaming/SocialShare.js"></script>
+    <script src="~/App/VideoStreaming/CopyToClipboard.js"></script>
+    <script src="~/App/VideoStreaming/InsertAndGetComment.js"></script>
+    <script src="~/App/VideoStreaming/InsertAndGetCommentReply.js"></script>
+    <script src="~/App/VideoStreaming/InsertAndGetCommentLike.js"></script>
+    <script src="~/App/VideoStreaming/InsertVideoLike.js"></script>
+    <script src="~/App/VideoStreaming/InsertVideoView.js"></script>
 }
-
