@@ -12,29 +12,23 @@
                 $('#' + commentId).html("<i class='fas fa-circle-notch fa-spin'></i>");
             },
             success: function (data) {
-                // console.log(data)
-                //Get comment like
-                $.ajax({
-                    dataType: 'JSON',
-                    url: '/CommentLike/GetCommentLike',
-                    data: {
-                        commentId: commentId,
-                    },
-                    success: function (data) {
-                        var id = commentId;
-                        //alert(id)
-                        $('#' + id).text(data.likeCount)
-                        //  window.location.href = '/CommentLike/GetAllCommentsLike'
-                        // $('#likeValue').text(data.likeCount)
-                        // $('#btnCommentLike').html("<span><i class='fas fa-thumbs-up mr-1'></i></span>" + data.likeCount)
-                    }
-                })
+                getCommentLike(data);
             },
             complete: function () {
-                /* $("#loads").hide();*/
             },
         }),
-
-
     )
+    function getCommentLike(result) {
+        $.ajax({
+            dataType: 'JSON',
+            url: '/CommentLike/GetCommentLike',
+            data: {
+                commentId: commentId,
+            },
+            success: function (data) {
+                var id = commentId;
+                $('#' + id).text(data.likeCount)
+            }
+        })
+    }
 })

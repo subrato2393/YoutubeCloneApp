@@ -20,37 +20,41 @@ $("#comments").on('click', '#btnCommentReply', function () {
             videoId: videoId,
             description: $('#txtBoxReply' + commentId).val(),
         };
-        $.ajax({
-            dataType: 'JSON',
-            method: 'POST',
-            url: '/CommentsReply/AddCommentsReply',
-            contentType: "application/json",
-            data: JSON.stringify(commentReply),
+        addCommentReply(commentReply)
 
-            success: function (data) {
-                hideCommentReply(commentId);
+        function addCommentReply(commentReply) {
+            $.ajax({
+                dataType: 'JSON',
+                method: 'POST',
+                url: '/CommentsReply/AddCommentsReply',
+                contentType: "application/json",
+                data: JSON.stringify(commentReply),
 
-                //Get Current comment reply
-                $.ajax(
-                    {
-                        type: 'POST',
-                        dataType: 'JSON',
-                        url: '/CommentsReply/GetCurrentCommentReply',
-                        data: { commentId: commentId },
-                        success: function (data) {
-                            console.log(data)
-                            $('#divCommentReply' + commentId).append(`<div>${data.userName}</div><div>${data.description}</div><button style="background-color:Transparent" id="btnCommentLike" data-toggle="tooltip" data-placement="top" title="Like" value=${data.id}>
+                success: function (data) {
+                    hideCommentReply(commentId);
+                    getCurrentCommentReply(commentId);
+                }
+            })
+
+        }
+        function getCurrentCommentReply() {
+            $.ajax(
+                {
+                    type: 'POST',
+                    dataType: 'JSON',
+                    url: '/CommentsReply/GetCurrentCommentReply',
+                    data: { commentId: commentId },
+                    success: function (data) {
+                        console.log(data)
+                        $('#divCommentReply' + commentId).append(`<div>${data.userName}</div><div>${data.description}</div><button style="background-color:Transparent" id="btnCommentLike" data-toggle="tooltip" data-placement="top" title="Like" value=${data.id}>
                         <span><i class="far fa-thumbs-up mr-1"></i></span>
                         <span class="ml-1"></span>
                     </button>
                     <button class="ml-3" style="background-color:Transparent" id="btnCommentReply" data-toggle="tooltip" data-placement="top" title="Reply" value=${data.id}>
                                             Reply
                     </button>`)
-                        }
-                    });
-
-                // $('#btnLike').html("<span><i class='fas fa-thumbs-up mr-1'></i></span>" + data.likeCount)
-            }
-        })
+                    }
+                });
+        }
     })
 })
