@@ -81,11 +81,26 @@ namespace YoutubeClone.Foundation.Services
 
         public IList<VideoViewCount> GetAllVideoView()
         {
-            var videoView = _channelUnitOfWork.ViewRepository.GetAll();
+            var views = _channelUnitOfWork.ViewRepository.GetAll();
+            var video = _channelUnitOfWork.VideoRepository.GetAll();
+             
+            var videoView = (from v in video 
+                           join vi in views
+                           on v.Id equals vi.Video.Id into viewGroup
+                           from videoGroup in viewGroup.DefaultIfEmpty()
+                               // from rNull in r.DefaultIfEmpty()
 
-            var videoViewBo = _mapper.Map<IList<VideoViewCount>>(videoView);
+                           group videoGroup by new { Id = v.Id,} into g
+                           let viewCount = g.Count(x => x != null)
+                           select new VideoViewCount()
+                           {
+                               ViewCount = viewCount,
+                               Id = g.Key.Id,
+                           }).ToList();
 
-            return videoViewBo;
+            // var videoViewBo = _mapper.Map<IList<VideoViewCount>>(videoView);
+
+            return videoView;
         }
 
         public int GetAllSubscriberCount(Guid channelId)

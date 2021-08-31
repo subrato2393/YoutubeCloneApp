@@ -93,7 +93,8 @@ namespace YoutubeClone.Foundation.Services
                             VideoName = item.Name,
                             VideoTitle = dbVideo.VideoTitle,
                             ChannelName = dbVideo.ChannelName,
-                            Id = dbVideo.Id
+                            Id = dbVideo.Id,
+                            ViewCount=dbVideo.ViewCount
                         });
                     }
                 }
@@ -104,10 +105,33 @@ namespace YoutubeClone.Foundation.Services
 
         private IList<VideoBO> GetVideos()
         {
-            var videoList = _channelUnitOfWork.VideoRepository.GetAll();
+            var video = _channelUnitOfWork.VideoRepository.GetAll();
+            var views = _channelUnitOfWork.ViewRepository.GetAll(); 
 
-            var VideoBoList = _mapper.Map<IList<VideoBO>>(videoList);
-            return VideoBoList;
+            var videoBo = (from v in video
+                             join vi in views
+                             on v.Id equals vi.Video.Id into viewGroup
+                             from videoGroup in viewGroup.DefaultIfEmpty()
+                                 // from rNull in r.DefaultIfEmpty()
+
+                             group videoGroup by new { Id = v.Id,v.Channel.Name,v.Description,v.PublishDate,v.VideoTitle,v.VideoName } into g
+                             let viewCount = g.Count(x => x != null)
+                             select new VideoBO()
+                             {
+                                 ViewCount = viewCount,
+                                 Id = g.Key.Id,
+                                 ChannelName=g.Key.Name,
+                                 Description=g.Key.Description,
+                                 PublishDate=g.Key.PublishDate,
+                                 VideoTitle=g.Key.VideoTitle,
+                                 VideoName=g.Key.VideoName
+                             }).ToList();
+
+            // var videoViewBo = _mapper.Map<IList<VideoViewCount>>(videoView);
+
+
+           // var VideoBoList = _mapper.Map<IList<VideoBO>>(video);
+            return videoBo;
         }
 
         public ChannelBO GetChannelById(Guid channelId)
