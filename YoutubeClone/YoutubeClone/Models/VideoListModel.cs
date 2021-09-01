@@ -31,6 +31,7 @@ namespace YoutubeClone.Models
         {
             Videos = _channelService.GetAllVideos();
         }
+
         public void GetVideoViewCount()
         {
             VideoViewCounts = _feedbackService.GetAllVideoView();

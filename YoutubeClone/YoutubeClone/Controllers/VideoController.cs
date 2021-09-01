@@ -20,7 +20,6 @@ namespace YoutubeClone.Controllers
             var model = new VideoListModel();
             try
             {
-                model.GetVideoList();
                 model.GetVideoViewCount();
                 
                 return View(model);
@@ -31,15 +30,12 @@ namespace YoutubeClone.Controllers
             }
             return View(model);
         }
-        public IActionResult GetData(int pageIndex,int pageSize) 
+        public IActionResult GetData()  
         {
-            System.Threading.Thread.Sleep(3000);
             var model = new VideoListModel();
             try
             {
                 model.GetVideoList();
-              //  model.GetVideoViewCount();
-
                 return Json(model);
             }
             catch (Exception ex)
@@ -61,10 +57,6 @@ namespace YoutubeClone.Controllers
             model.GetVideoDisLikesCount(id);
             model.IsDislikedVideoBefore(id, User.Identity.Name);
             
-          //  model.GetAllComments(id,User.Identity.Name);
-
-
-
             return View(model);
         }
 

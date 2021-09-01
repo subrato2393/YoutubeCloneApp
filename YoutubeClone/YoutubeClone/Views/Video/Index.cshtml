@@ -7,79 +7,32 @@
     <link rel="stylesheet" href="/user/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 }
+
 <div id="loadVideo" class="videos row">
-    @*@{
-       @Model.VideoViewCounts.Where(x => x.Video.Id == item.Id).Count() views</span>
-    }*@
-    @*<section class="video-section">
-            @{
-                if (Model.Videos.Count <= 0)
-                {
-                    <h1>No Video found </h1>
-                }
-            }
 
-            @foreach (var item in Model.Videos)
-            {
-                <div class="row col-4">
-                    <article class="video-container">
-                        <input type="hidden" value="@item.Id" />
-                        <div onclick="window.location.href = '/Video/VideoStreaming/@item.Id'">
-                            <a class="thumbnail">
-                                @{
-                                    var iVideoUrl = "/Video/" + item.VideoName;
-                                    <video width="290" height="170">
-                                        <source src="@iVideoUrl" type="video/mp4">
-                                    </video>
-                                }
-                            </a>
-                            <div class="video-bottom-section">
-                                <a href="#">
-                                    <img class="channel-icon" src="/user/thumbnil.jpg" />
-                                </a>
-                                <div class="video-details">
-                                    <a href="#" class="video-title">@item.VideoTitle</a>
-                                    <a href="#" class="video-channel-name">@item.ChannelName</a>
-                                    <div class="video-metadata">
-                                        @{
-                                            <span>@Model.VideoViewCounts.Where(x => x.Video.Id == item.Id).Count() views</span>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-                </div>
-
-            }
-        </section>*@
 </div>
-@section scripts{ 
+<div id="container">
+    <div id="progress" style="display:none">
+        <h4>Loading...</h4>
+    </div>
+</div>
+
+@section scripts{
     <script type="text/javascript">
-    var pageSize = 10;
-    var pageIndex = 0;
-    $(document).ready(function () {
+        $(document).ready(function () {
         GetData();
-        $(window).scroll(function () {
-            if ($(window).scrollTop() ==
-                $(document).height() - $(window).height()) {
-                GetData();
-            }
-        });
     })
-    function GetData() {
+        function GetData() {
         $.ajax({
             method: 'GET',
             url: '/Video/GetData',
-            data: { "pageindex": pageIndex, "pagesize": pageSize },
+            data: {},
             dataType: 'json',
             beforeSend: function () {
                 $("#progress").show();
             },
             success: function (data) {
-              
                 $.each(data.videos, function (key, value) {
-
                     var section = `
             <div class="col-4">
                 <article class="video-container">
@@ -107,50 +60,8 @@
         `
                     $('#loadVideo').append(section);
                 });
-           @*var section = `<section class="video-section">
-
-            if (Model.Videos.Count <= 0)
-            {
-                <h1>No Video found </h1>
-            }
-        @foreach (var item in Model.Videos)
-        {
-            <div class="row col-4">
-                <article class="video-container">
-                    <input type="hidden" value="@item.Id" />
-                    <div onclick="window.location.href = '/Video/VideoStreaming/@item.Id'">
-                        <a class="thumbnail">
-                            @{
-                                var iVideoUrl = "/Video/" + item.VideoName;
-                                <video width="290" height="170">
-                                    <source src="@iVideoUrl" type="video/mp4">
-                                </video>
-                            }
-                        </a>
-                        <div class="video-bottom-section">
-                            <a href="#">
-                                <img class="channel-icon" src="/user/thumbnil.jpg" />
-                            </a>
-                            <div class="video-details">
-                                <a href="#" class="video-title">@item.VideoTitle</a>
-                                <a href="#" class="video-channel-name">@item.ChannelName</a>
-                                <div class="video-metadata">
-                                    @{
-                                        <span>@Model.VideoViewCounts.Where(x => x.Video.Id == item.Id).Count() views</span>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-        }
-    </section>`*@
-
-
             },
-          
+
             complete: function () {
                 $("#progress").hide();
             },

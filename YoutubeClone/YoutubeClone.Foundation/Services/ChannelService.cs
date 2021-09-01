@@ -106,6 +106,8 @@ namespace YoutubeClone.Foundation.Services
         private IList<VideoBO> GetVideos()
         {
             var video = _channelUnitOfWork.VideoRepository.GetAll();
+            //var video = _channelUnitOfWork.VideoRepository.GetAll().Skip(pageIndex * pageSize)
+            //     .Take(pageSize);
             var views = _channelUnitOfWork.ViewRepository.GetAll(); 
 
             var videoBo = (from v in video
