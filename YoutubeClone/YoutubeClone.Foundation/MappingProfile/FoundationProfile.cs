@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using System.Collections.Generic;
 using YoutubeClone.Foundation.BusinessObjects;
 using YoutubeClone.Foundation.Entities;
 using BO = YoutubeClone.Foundation.BusinessObjects;

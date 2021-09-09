@@ -1,9 +1,7 @@
 ﻿using Autofac;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using YoutubeClone.Foundation.Services;
-using YoutubeClone.Membership.Entities;
 using CommentBO = YoutubeClone.Foundation.BusinessObjects.Comments;
 
 namespace YoutubeClone.Models

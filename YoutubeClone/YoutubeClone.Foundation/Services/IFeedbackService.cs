@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using YoutubeClone.Foundation.BusinessObjects;
-using LikeBO = YoutubeClone.Foundation.BusinessObjects.Likes;
-using LikeEO = YoutubeClone.Foundation.Entities.Likes;
-using DislikeBO = YoutubeClone.Foundation.BusinessObjects.Dislikes;
+using BO = YoutubeClone.Foundation.BusinessObjects;
 
 namespace YoutubeClone.Foundation.Services
 {
@@ -18,7 +16,7 @@ namespace YoutubeClone.Foundation.Services
         int GetAllSubscriberCount(Guid channelId);
         Task AddComments(Comments comments);
         IList<VideoViewChart> GetVideoViewCountonDateForChart(Guid channelId);
-        Task AddVideoLike(LikeBO likeBO);
+        Task AddVideoLike(BO.Likes likeBO);
         int GetCommentsLikesCount(Guid commentId);
         Task AddCommentsReply(CommentsReplyBO commentsReplyBO);
         bool IsCommentDisliked(Guid commentId, string name);
@@ -30,7 +28,7 @@ namespace YoutubeClone.Foundation.Services
         void DeleteDislike(Guid videoId, string name);
         CommentsReplyBO GetCurrentCommentReply();
         void DeleteCommentLike(Guid commentId, string name);
-        Task AddVideoDislike(DislikeBO dislikeBO);
+        Task AddVideoDislike(BO.Dislikes dislikeBO);
         int GetDislikesCount(Guid id);
         Comments GetComment();
         IList<Comments> GetAllComments(Guid id,string name);

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using YoutubeClone.Membership.Entities;
 
 namespace YoutubeClone.Foundation.Entities
