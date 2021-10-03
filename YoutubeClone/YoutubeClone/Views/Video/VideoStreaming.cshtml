@@ -4,19 +4,112 @@
 }
 @section styles{
     <link rel="stylesheet" href="/user/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <style>
+        #btnCommentLike {
+            background-color: Transparent;
+            background-repeat: no-repeat;
+            border: none;
+            cursor: pointer;
+            overflow: hidden;
+            outline: none;
+        }
+
+        #btnCommentReply {
+            background-color: Transparent;
+            background-repeat: no-repeat;
+            border: none;
+            cursor: pointer;
+            overflow: hidden;
+            outline: none;
+        }
+    </style>
 }
 <div class="col-10">
+    <h1 id="btnlike"></h1>
     @{
         var iVideoUrl = "/Video/" + Model.VideoName;
-    
+
         <video id="video" width="900" height="560" controls>
             <source src="@iVideoUrl" type='video/mp4;codecs="avc1.4D401E, mp4a.40.2"'>
         </video>
     }
     <h4 class="mt-2">@Model.VideoTitle</h4>
+    @*<div id="load" class="spinner-border spinner-border-sm" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>*@
     <div class="video-metadata">
-        <span>@Model.VideoViewCount  views</span>
+        <span>@Model.VideoViewCount  views . @Model.PublishDate.ToString("dd MMMM yyyy")</span>
+    </div>
+    <div id="feedback" class="row">
+        <div class="col-12">
+            <button id="btnShares" data-toggle="modal" data-target="#btnShare" class="btn btn-outline-success float-right ml-1">
+                <span><i class="fas fa-share"></i></span>
+                <span>Share</span>
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="btnShare" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div id="modalBody" class="modal-dialog" style="width:360px" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="btnShareLabel">Share</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body ml-3">
+                            <a id="linkFacebook" href="http://www.facebook.com/sharer/sharer.php?s=100&p[url]="><i class="fab fa-facebook-square fa-3x mr-3" style="color:#3b5998"></i></a>
+                            <a id="linkLinkdin" href="http://www.linkedin.com/shareArticle?mini=true&url="><i class="fab fa-linkedin fa-3x mr-3" style="color:#0976b4"></i></a>
+                            <a id="linkTwitter" href="https://twitter.com/intent/tweet?text="><i class="fab fa-twitter-square fa-3x mr-3" style="color:#55acee"></i></a>
+                            <a id="linkGooglePlus" href="https://plus.google.com/share?url="><i class="fab fa-google-plus-square fa-3x mr-3" style="color:#dd4b39"></i></a>
+                            <a href="#"><i class="fab fa-instagram-square fa-3x mr-3" style="color:#f77737"></i></a>
+                        </div>
+                        <div>
+                            <input id="txtUrl" type="text" class="form-control col-11 ml-3" />
+                            <button id="btnCopy" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard" type="button" class="btn btn-success float-right mr-3 mb-3 mt-2">Copy</button>
+                            <br />
+                        </div>
+                        @*<div>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+            @{
+                if (Model.IsDislikedBefore)
+                {
+                    @*<button id="btndislike" data-toggle="tooltip" data-placement="top" title="Dislike" class="btn btn-success float-right ml-1">
+                            <span><i class="fas fa-thumbs-down"></i></span>
+                            <span>@Model.DislikesCount</span>
+                        </button>*@
+                }
+                else
+                {
+                    @*<button id="btndislike" data-toggle="tooltip" data-placement="top" title="Dislike" class="btn btn-outline-success float-right ml-1">
+                            <span><i class="fas fa-thumbs-down"></i></span>
+                            <span>@Model.DislikesCount</span>
+                        </button>*@
+                }
+            }
+
+            @{
+                if (Model.IsLikedBefore)
+                {
+                    <button id="btnLike" data-toggle="tooltip" data-placement="top" title="Unlike" class="btn btn-success float-right">
+                        <span><i class="fas fa-thumbs-up"></i></span>
+                        <span>@Model.LikesCount</span>
+                    </button>
+                }
+                else
+                {
+                    <button id="btnLike" data-toggle="tooltip" data-placement="top" title="Like" class="btn btn-outline-success float-right">
+                        <span><i class="fas fa-thumbs-up"></i></span>
+                        <span>@Model.LikesCount</span>
+                    </button>
+                }
+            }
+        </div>
     </div>
     <hr>
     <div class="video-bottom-section row">
@@ -44,39 +137,43 @@
             }
         </div>
     </div>
+    <hr />
+    <p>@Html.Raw(Model.Description)</p>
+    <hr />
+    <h5>Comments</h5>
+    <div class="row">
+        <div class="col-12">
+            <input id="txtComment" type="text" class="form-control" placeholder="Add a public comments" />
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-12">
+            <button id="btnComment" class="btn btn-outline-success float-right ml-2">Comment</button>
+            <button class="btn btn-outline-success float-right">Cancel</button>
+        </div>
+    </div>
+    <div id="comments" class="row">
+        <div id="commentData">
+
+        </div>
+    </div>
     <br /><br /><br />
 </div>
 @section scripts{
     <script type="text/javascript">
-        $(document).ready(function () {
+      $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
 
             var videoId = '@Model.Id'
-
-            function reset() {
-                startTime = new Date();
-            }
-
-            $('video')[0].addEventListener('play', reset);
-            $('video')[0].addEventListener('pause', reset);
-            $('video')[0].addEventListener('stop', reset);
-
-            var IsPlayed = true;
-
-            $('video')[0].addEventListener('timeupdate', (e) => {
-                let elapsedSeconds = (new Date() - startTime) / 1000;
-                if (elapsedSeconds > 10 && IsPlayed) {
-                    IsPlayed = false;
-
-                    $.ajax(
-                        {
-                            type: 'POST',
-                            dataType: 'JSON',
-                            url: '/VideoView/AddVideoView',
-                            data: { videoId: videoId },
-                        });
-                }
-            });
-        });
+            var Id = null;
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <script src="~/App/VideoStreaming/SocialShare.js"></script>
+    <script src="~/App/VideoStreaming/CopyToClipboard.js"></script>
+    <script src="~/App/VideoStreaming/InsertAndGetComment.js"></script>
+    <script src="~/App/VideoStreaming/InsertAndGetCommentReply.js"></script>
+    <script src="~/App/VideoStreaming/InsertAndGetCommentLike.js"></script>
+    <script src="~/App/VideoStreaming/InsertVideoLike.js"></script>
+    <script src="~/App/VideoStreaming/InsertVideoView.js"></script>
 }
-

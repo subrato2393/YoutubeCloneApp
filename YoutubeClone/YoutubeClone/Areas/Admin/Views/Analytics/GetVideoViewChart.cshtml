@@ -1,0 +1,72 @@
+﻿@model YoutubeClone.Areas.Admin.Models.ChartModel
+@{
+    var XLabels = Newtonsoft.Json.JsonConvert.SerializeObject(Model.ChartModels.Select(x => x.ViewDate.ToShortDateString()).ToList());
+    var YValues = Newtonsoft.Json.JsonConvert.SerializeObject(Model.ChartModels.Select(x => x.ViewCount).ToList());
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+@section styles{
+    <link rel="stylesheet" href="/admin/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="/admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+}
+
+<div class="container">
+    <h1 style="text-align:center">Analytics for video view </h1>
+    <div class="row">
+        <div class="col">
+            <div class="col-4 float-right">
+                <form method="post" asp-action="GetVideoViewChart">
+                    <select asp-for="ChannelId" asp-items="Model.Channels" class="form-control select2bs4">
+                        <option selected="selected">Please Select Channel</option>
+                    </select> <br />
+                    <button type="submit" class="btn btn-primary float-right">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="box-body">
+        <div class="chart-container">
+            <canvas id="chart" style="width:70%; height:300px"></canvas>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/admin/plugins/select2/js/select2.full.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(function () {
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            })
+        })
+
+            $(function () {
+            var ctx = $('#chart');
+                var data = {
+                    labels: @Html.Raw(XLabels),
+                    datasets: [
+                        {
+                            label: "Video View Chart",
+                            backgroundColor: 'rgba(0, 118, 0, 0.5)',
+                            borderColor: 'rgba(255,99,132,1)',
+                            borderWidth: 1,
+                            data: @Html.Raw(YValues),
+                            fill: true
+                        }
+                    ]
+                };    
+
+           var myChart = new  Chart(ctx, {
+                    data: data,
+                    type:'line'
+                });
+            });
+    </script>
+}
+
+
+

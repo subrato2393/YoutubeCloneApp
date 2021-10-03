@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using System.Collections.Generic;
 using YoutubeClone.Foundation.BusinessObjects;
 using YoutubeClone.Foundation.Entities;
 using BO = YoutubeClone.Foundation.BusinessObjects;
@@ -17,6 +16,9 @@ namespace YoutubeClone.Foundation.MappingProfile
             CreateMap<EO.Video, BO.Video>();
             CreateMap<VideoViewCount,Views>();
             CreateMap<Views, VideoViewCount>();
+            CreateMap<BO.Likes, EO.Likes>();
+            CreateMap<EO.Comments, BO.Comments>();
+            CreateMap<EO.CommentsReply, CommentsReplyBO>();
         }
     }
 }

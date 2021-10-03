@@ -1,7 +1,5 @@
-﻿using ChannelBO = YoutubeClone.Foundation.BusinessObjects.Channel;
-using ChannelEO = YoutubeClone.Foundation.Entities.Channel;
-using VideoBO = YoutubeClone.Foundation.BusinessObjects.Video;
-using VideoEO = YoutubeClone.Foundation.Entities.Video;
+﻿using BO = YoutubeClone.Foundation.BusinessObjects;
+using EO = YoutubeClone.Foundation.Entities;
 using YoutubeClone.Foundation.UnitOfWorks;
 using AutoMapper;
 using System;
@@ -27,11 +25,11 @@ namespace YoutubeClone.Foundation.Services
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public void AddChannelInfo(ChannelBO channelBo)
+        public void AddChannelInfo(BO.Channel channelBo)
         {
             if (channelBo != null)
             {
-                var channelEO = _mapper.Map<ChannelEO>(channelBo);
+                var channelEO = _mapper.Map<EO.Channel>(channelBo);
 
                 _channelUnitOfWork.BeginTransaction();
 
@@ -45,11 +43,11 @@ namespace YoutubeClone.Foundation.Services
             }
         }
 
-        private void AddVideoInfoIntoDatabase(VideoBO videoBo)
+        private void AddVideoInfoIntoDatabase(BO.Video videoBo)
         {
             if (videoBo != null)
             {
-                var videoEo = _mapper.Map<VideoEO>(videoBo);
+                var videoEo = _mapper.Map<EO.Video>(videoBo);
 
                 _channelUnitOfWork.BeginTransaction();
 
@@ -63,18 +61,18 @@ namespace YoutubeClone.Foundation.Services
             }
         }
 
-        public IList<ChannelBO> GetAllChannel()
+        public IList<BO.Channel> GetAllChannel()
         {
             var channelEoList = _channelUnitOfWork.ChannelRepository.GetAll();
 
-            var channelBoList = _mapper.Map<IList<ChannelEO>, IList<ChannelBO>>(channelEoList);
+            var channelBoList = _mapper.Map<IList<EO.Channel>, IList<BO.Channel>>(channelEoList);
 
             return channelBoList;
         }
 
-        public IList<VideoBO> GetAllVideos()
+        public IList<BO.Video> GetAllVideos()
         {
-            List<VideoBO> videos = new List<VideoBO>();
+            List<BO.Video> videos = new List<BO.Video>();
             string wwwRootPath = _webHostEnvironment.WebRootPath;
             string path = Path.Combine("Video");
 
@@ -88,12 +86,13 @@ namespace YoutubeClone.Foundation.Services
                 {
                     if (item.Name == dbVideo.VideoName)
                     {
-                        videos.Add(new VideoBO()
+                        videos.Add(new BO.Video()
                         {
                             VideoName = item.Name,
                             VideoTitle = dbVideo.VideoTitle,
                             ChannelName = dbVideo.ChannelName,
-                            Id = dbVideo.Id
+                            Id = dbVideo.Id,
+                            ViewCount=dbVideo.ViewCount
                         });
                     }
                 }
@@ -102,22 +101,43 @@ namespace YoutubeClone.Foundation.Services
             return videos;
         }
 
-        private IList<VideoBO> GetVideos()
+        private IList<BO.Video> GetVideos()
         {
-            var videoList = _channelUnitOfWork.VideoRepository.GetAll();
+            var video = _channelUnitOfWork.VideoRepository.GetAll();
+            //var video = _channelUnitOfWork.VideoRepository.GetAll().Skip(pageIndex * pageSize)
+            //     .Take(pageSize);
+            var views = _channelUnitOfWork.ViewRepository.GetAll(); 
 
-            var VideoBoList = _mapper.Map<IList<VideoBO>>(videoList);
-            return VideoBoList;
+            var videoBo = (from v in video
+                             join vi in views
+                             on v.Id equals vi.Video.Id into viewGroup
+                             from videoGroup in viewGroup.DefaultIfEmpty()
+                                 // from rNull in r.DefaultIfEmpty()
+
+                             group videoGroup by new { Id = v.Id,v.Channel.Name,v.Description,v.PublishDate,v.VideoTitle,v.VideoName } into g
+                             let viewCount = g.Count(x => x != null)
+                             select new BO.Video()
+                             {
+                                 ViewCount = viewCount,
+                                 Id = g.Key.Id,
+                                 ChannelName=g.Key.Name,
+                                 Description=g.Key.Description,
+                                 PublishDate=g.Key.PublishDate,
+                                 VideoTitle=g.Key.VideoTitle,
+                                 VideoName=g.Key.VideoName
+                             }).ToList();
+
+            return videoBo;
         }
 
-        public ChannelBO GetChannelById(Guid channelId)
+        public BO.Channel GetChannelById(Guid channelId)
         {
             var channelEo = _channelUnitOfWork.ChannelRepository.GetById(channelId);
-            var channelBo = _mapper.Map<ChannelBO>(channelEo);
+            var channelBo = _mapper.Map<BO.Channel>(channelEo);
             return channelBo;
         }
 
-        public void UploadVideoToFolder(VideoBO video)
+        public void UploadVideoToFolder(BO.Video video)
         {
             string wwwRootPath = _webHostEnvironment.WebRootPath;
             string fileName = Path.GetFileNameWithoutExtension(video.VideoFile.FileName);
@@ -133,12 +153,12 @@ namespace YoutubeClone.Foundation.Services
             }
         }
 
-        public VideoBO GetVideoById(Guid id)
+        public BO.Video GetVideoById(Guid id)
         {
-            VideoBO video = new VideoBO();
+            BO.Video video = new BO.Video();
 
             var videoEo = _channelUnitOfWork.VideoRepository.GetById(id);
-            var videoBo = _mapper.Map<VideoBO>(videoEo);
+            var videoBo = _mapper.Map<BO.Video>(videoEo);
 
             string wwwRootPath = _webHostEnvironment.WebRootPath;
             string path = Path.Combine("Video");
@@ -156,6 +176,7 @@ namespace YoutubeClone.Foundation.Services
                     video.VideoTitle = videoBo.VideoTitle;
                     video.Description = videoBo.Description;
                     video.ChannelId = videoBo.ChannelId;
+                    video.PublishDate = videoBo.PublishDate;
                     video.Id = videoBo.Id;
                 };
             }

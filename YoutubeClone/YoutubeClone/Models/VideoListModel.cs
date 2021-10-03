@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using System;
 using System.Collections.Generic;
 using YoutubeClone.Foundation.BusinessObjects;
 using YoutubeClone.Foundation.Services;
@@ -31,6 +30,7 @@ namespace YoutubeClone.Models
         {
             Videos = _channelService.GetAllVideos();
         }
+
         public void GetVideoViewCount()
         {
             VideoViewCounts = _feedbackService.GetAllVideoView();

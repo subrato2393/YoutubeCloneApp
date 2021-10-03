@@ -14,5 +14,6 @@ namespace YoutubeClone.Foundation.BusinessObjects
         public Channel Channel { get; set; }
         public string ChannelName { get; set; } 
         public Guid ChannelId { get; set; } 
+        public int ViewCount { get; set; }
     }
 }

@@ -35,6 +35,21 @@ namespace YoutubeClone.Foundation
             builder.RegisterType<ViewRepository>().As<IViewRepository>()
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<LikeRepository>().As<ILikeRepository>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<DislikeRepository>().As<IDislikeRepository>()
+                .InstancePerLifetimeScope();
+           
+            builder.RegisterType<CommentRepository>().As<ICommentRepository>()
+                .InstancePerLifetimeScope();
+           
+            builder.RegisterType<CommentLikeRepository>().As<ICommentLikeRepository>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<CommentsReplyRepository>().As<ICommentReplyRepository>()
+                .InstancePerLifetimeScope();
+
             base.Load(builder);
         }
     }

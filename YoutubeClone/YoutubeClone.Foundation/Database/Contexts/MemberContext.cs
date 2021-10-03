@@ -29,6 +29,9 @@ namespace YoutubeClone.Foundation.Database.Contexts
             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Likes>())
             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Subscriber>())
             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Views>())
+            .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Dislikes>())
+            .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Comments>())
+
 
             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ApplicationUser>())
             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<UserRole>())
@@ -40,8 +43,8 @@ namespace YoutubeClone.Foundation.Database.Contexts
 
             .ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(false, true))
             .BuildSessionFactory();
-            
-             return sessionFactory;
+
+            return sessionFactory;
         }
         public static ISession OpenSession()
         {

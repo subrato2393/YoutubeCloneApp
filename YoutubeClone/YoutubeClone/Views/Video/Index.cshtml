@@ -7,40 +7,68 @@
     <link rel="stylesheet" href="/user/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 }
-<div class="videos col-12">
-    <section class="video-section">
-        @foreach (var item in Model.Videos)
-        {
-            <div class="row col-4">
+
+<div id="loadVideo" class="videos row">
+
+</div>
+<div id="container">
+    <div id="progress" style="display:none">
+        <h4>Loading...</h4>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+        GetData();
+    })
+        function GetData() {
+        $.ajax({
+            method: 'GET',
+            url: '/Video/GetData',
+            data: {},
+            dataType: 'json',
+            beforeSend: function () {
+                $("#progress").show();
+            },
+            success: function (data) {
+                $.each(data.videos, function (key, value) {
+                    var section = `
+            <div class="col-4">
                 <article class="video-container">
-                    <input type="hidden" value="@item.Id" />
-                    <div onclick="window.location.href = '/Video/VideoStreaming/@item.Id'">
-                        <a class="thumbnail">
-                            @{
-                                var iVideoUrl = "/Video/" + item.VideoName;
+                    <input type="hidden" value="${value.id}" />
+                    <div onclick="window.location.href = '/Video/VideoStreaming/${value.id}'">
                                 <video width="290" height="170">
-                                    <source src="@iVideoUrl" type="video/mp4">
+                                    <source src=/Video/${value.videoName} type="video/mp4">
                                 </video>
-                            }
-                        </a>
                         <div class="video-bottom-section">
                             <a href="#">
                                 <img class="channel-icon" src="/user/thumbnil.jpg" />
                             </a>
                             <div class="video-details">
-                                <a href="#" class="video-title">@item.VideoTitle</a>
-                                <a href="#" class="video-channel-name">@item.ChannelName</a>
+                                <a href="#" class="video-title">${value.videoTitle}</a>
+                                <a href="#" class="video-channel-name">${value.channelName}</a>
                                 <div class="video-metadata">
-                                    @{
-                                        <span>@Model.VideoViewCounts.Where(x => x.Video.Id == item.Id).Count() views</span>
-                                    }
+                                     <span>${value.viewCount} views</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </article>
             </div>
+         </section>
+        `
+                    $('#loadVideo').append(section);
+                });
+            },
 
-        }
-    </section>
-</div>
+            complete: function () {
+                $("#progress").hide();
+            },
+            error: function () {
+                alert("Error while retrieving data!");
+            }
+        });
+    }
+    </script>
+}

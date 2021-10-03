@@ -17,10 +17,9 @@ namespace YoutubeClone.Controllers
 
         public IActionResult Index()
         {
+            var model = new VideoListModel();
             try
             {
-                var model = new VideoListModel();
-                model.GetVideoList();
                 model.GetVideoViewCount();
                 
                 return View(model);
@@ -29,9 +28,22 @@ namespace YoutubeClone.Controllers
             {
                 _logger.LogError(ex, "Failed to get Video list");
             }
-            return View();
+            return View(model);
         }
-         
+        public IActionResult GetData()  
+        {
+            var model = new VideoListModel();
+            try
+            {
+                model.GetVideoList();
+                return Json(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to get Video list");
+            }
+            return Json(model);
+        }
         public IActionResult VideoStreaming(Guid id)
         {
             var model = new VideoViewModel();
@@ -39,6 +51,12 @@ namespace YoutubeClone.Controllers
             model.GetVideoViewCount(id);
             model.GetSubscriberCount();
 
+            model.GetVideoLikesCount(id);
+            model.IsLikedVideoBefore(id, User.Identity.Name);
+
+            model.GetVideoDisLikesCount(id);
+            model.IsDislikedVideoBefore(id, User.Identity.Name);
+            
             return View(model);
         }
 
