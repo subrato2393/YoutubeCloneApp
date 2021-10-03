@@ -25,9 +25,7 @@ function generateDivForGetAllComments(value) {
                         <span><i class="far fa-thumbs-up mr-1"></i></span>
                         <span class="ml-1" id='${value.id}'>${value.likeCount}</span>
                     </button>
-                    <button class="ml-3" style="background-color:Transparent" id="btnCommentReply" data-toggle="tooltip" data-placement="top" title="Reply" value=${value.id}>
-                        Reply
-                    </button>
+                
                 </div>
                 <div class='row mt-3'>
                  <div id='txtReply${value.id}' style='display:none'>
@@ -35,18 +33,13 @@ function generateDivForGetAllComments(value) {
                       <button id='btnReply${value.id}' type="submit" class="btn btn-success btn-sm float-right ml-2 mt-2">Reply</button>
                       <button id='btnCancel${value.id}' type="submit" class="btn btn-success btn-sm float-right mt-2">Cancel</button>
                  </div>
-                  <div><img class="channel-icon" src="/user/thumbnil.jpg" /></div>
-                    <div class='ml-4' id='divCommentReply${value.id}'><div>${value.userName}</div><div>${value.commentReplyDescription}</div><button style="background-color:Transparent" id="btnCommentLike" data-toggle="tooltip" data-placement="top" title="Like" value=${value.id}>
-                        <span><i class="far fa-thumbs-up mr-1"></i></span>
-                        <span class="ml-1"></span>
-                    </button>
-                    <button class="ml-3" style="background-color:Transparent" id="btnCommentReply" data-toggle="tooltip" data-placement="top" title="Reply" value=${value.id}>
-                                            Reply
-                    </button></div>
+                  <div>
+                   
                    </div>
                    </div>`
     return div;
 }
+
 //Insert and get Comments
 $('#btnComment').click(function () {
     var comment = {
